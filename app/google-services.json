@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1056077314533",
+    "firebase_url": "https://infinitescrol.firebaseio.com",
+    "project_id": "infinitescrol",
+    "storage_bucket": "infinitescrol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056077314533:android:949b8a9d7b52ce7d02170c",
+        "android_client_info": {
+          "package_name": "com.example.infinitescroling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056077314533-39jos1ts943a7nj1dk3hrsud0gbghv7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.infinitescroling",
+            "certificate_hash": "ec426b032a6afcc66484379476509ab218be8966"
+          }
+        },
+        {
+          "client_id": "1056077314533-cr00fgk3prhvae2l7k5io0to54q99j86.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_b_ZQiIraTc7ktXXlG8sr54Nav9AhAkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056077314533-cr00fgk3prhvae2l7k5io0to54q99j86.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
