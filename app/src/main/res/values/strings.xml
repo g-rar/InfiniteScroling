@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">InfiniteScroling</string>
+    <string name="str_loginLabel">¡Accede para ver qué hay de nuevo con tus amigos!</string>
+    <string name="str_emailhint">Correo electrónico</string>
+    <string name="str_passwordHint">Contraseña</string>
+    <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
+    <string name="str_login">Ingresar</string>
+    <string name="str_register">Registrarse</string>
+    <string name="str_googleLogin"><u>Ingresar con google</u></string>
 </resources>
