@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">InfiniteScroling</string>
+    <string name="str_loginLabel">¡Accede para ver qué hay de nuevo con tus amigos!</string>
+    <string name="str_emailhint">Correo electrónico:</string>
+    <string name="str_passwordHint">Contraseña:</string>
+    <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
+    <string name="str_login">Ingresar</string>
+    <string name="str_register">Registrarse</string>
+    <string name="str_googleLogin"><u>Ingresar con google</u></string>
+    <string name="str_createAccountText">¡Crea tu cuenta para siempre estar al tanto!</string>
+    <string name="str_nameLbl">Nombre:</string>
+    <string name="str_lastNamesLbl">Apellidos:</string>
+    <string name="str_genderLbl">Género</string>
+    <string name="str_birthDateLbl">Fecha de nacimiento:</string>
+    <string name="str_cityLbl">Ciudad:</string>
+    <string name="str_emailLbl">Correo electrónico</string>
+    <string name="str_phoneLbl">Número de teléfono:</string>
+    <string name="str_passwordLbl">Contraseña</string>
+    <string name="str_repeatPasswordLbl">Repetir contraseña:</string>
+    <string name="str_nameHint">Ingrese aquí su nombre</string>
+    <string name="str_lastnamesHint">Ingrese aquí sus apellidos</string>
+    <string-array name="strArr_genders">
+        <item>Masculino</item>
+        <item>Femenino</item>
+        <item>Otro</item>
+    </string-array>
+    <string name="str_birthDateHint">DD/MM/AAAA</string>
+    <string name="str_cityHint">Ciudad</string>
+    <string name="str_phoneNumberHint">Número de teléfono</string>
+    <string name="str_repeatPasswordHint">Repita la contraseña</string>
+    <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google.</string>
+    <string name="str_googleRegister">Registrarme con Google</string>
 </resources>
