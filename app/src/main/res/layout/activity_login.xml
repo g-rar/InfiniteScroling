@@ -91,6 +91,7 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:onClick="registerAccount"
                 android:text="@string/str_register"
                 app:layout_constraintEnd_toEndOf="@+id/button_login"
                 app:layout_constraintStart_toStartOf="@+id/button_login"
