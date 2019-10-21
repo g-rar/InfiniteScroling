@@ -29,5 +29,10 @@
     <string name="str_phoneNumberHint">Número de teléfono</string>
     <string name="str_repeatPasswordHint">Repita la contraseña</string>
     <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google.</string>
+    <string name="str_editAccountText">Mantén tu cuenta al día</string>
+    <string name="str_editAccountDescription">Acutalizá tu información de contacto o añadí información académica. Aquí podés actualizar tus datos.</string>
+    <string name="str_editPasswordLbl">Cambiar contraseña:</string>
+    <string name="str_editAccountSubmit">Actualizar cuenta</string>
+    <string name="str_repeatEditPassword">Repetir nueva contraseña:</string>
     <string name="str_googleRegister">Registrarme con Google</string>
 </resources>
