@@ -30,4 +30,5 @@
     <string name="str_repeatPasswordHint">Repita la contraseña</string>
     <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google.</string>
     <string name="str_googleRegister">Registrarme con Google</string>
+    <string name="what_are_you_thinking">What are you thinking?</string>
 </resources>
