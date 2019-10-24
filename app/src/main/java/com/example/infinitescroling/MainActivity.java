@@ -1,10 +1,13 @@
 package com.example.infinitescroling;
 
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference reference = storage.getReferenceFromUrl("gs://infinitescrol.appspot.com");
+
 
     }
 }
