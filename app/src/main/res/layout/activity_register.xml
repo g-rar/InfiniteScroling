@@ -143,8 +143,8 @@
                     android:layout_marginStart="16dp"
                     android:ems="10"
                     android:inputType="date"
-                    android:hint="@string/str_birthDateHint"
-                    android:autofillHints="@string/str_birthDateHint"
+                    android:hint="@string/str_dateHint"
+                    android:autofillHints="@string/str_dateHint"
                     app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regBirthDateLbl" />
 

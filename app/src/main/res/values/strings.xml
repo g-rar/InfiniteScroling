@@ -24,7 +24,7 @@
         <item>Femenino</item>
         <item>Otro</item>
     </string-array>
-    <string name="str_birthDateHint">DD/MM/AAAA</string>
+    <string name="str_dateHint">DD/MM/AAAA</string>
     <string name="str_cityHint">Ciudad</string>
     <string name="str_phoneNumberHint">Número de teléfono</string>
     <string name="str_repeatPasswordHint">Repita la contraseña</string>
@@ -35,4 +35,15 @@
     <string name="str_editAccountSubmit">Actualizar cuenta</string>
     <string name="str_repeatEditPassword">Repetir nueva contraseña:</string>
     <string name="str_googleRegister">Registrarme con Google</string>
+    <string name="str_addAcademic">Añadir info académica</string>
+    <string name="str_academicRecordsLbl">Logros académicos:</string>
+    <string name="str_institutionLbl">Institución:</string>
+    <string name="str_tituloLbl">Título:</string>
+    <string name="str_startDateLbl">Inicio:</string>
+    <string name="str_endDateLbl">Finaliza:</string>
+    <string name="str_institutionHint">ej: Liceo del Carmen</string>
+    <string name="str_titleHint">ej: Bahillerato</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
