@@ -43,4 +43,7 @@
     <string name="str_endDateLbl">Finaliza:</string>
     <string name="str_institutionHint">ej: Liceo del Carmen</string>
     <string name="str_titleHint">ej: Bahillerato</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
