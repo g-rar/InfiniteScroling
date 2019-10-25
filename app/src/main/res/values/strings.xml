@@ -53,4 +53,8 @@
     <string name="str_information">Información</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_editProfile">Actualizar perfil</string>
+    <string name="str_warning">¡Cuidado!</string>
+    <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
+    <string name="str_deleteAccount">Borrar cuenta</string>
 </resources>
