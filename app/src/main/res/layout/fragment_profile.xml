@@ -104,6 +104,20 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp" />
+
+            <Button
+                android:id="@+id/button_updateProfilePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView_name_profile"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_toEndOf="@+id/button_editProfile"
+                android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
+                android:text="@string/str_updateProfilePicture"
+                android:textAllCaps="false" />
         </RelativeLayout>
 
     </ScrollView>
