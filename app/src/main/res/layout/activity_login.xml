@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView_loginText" />
 
             <EditText
-                android:id="@+id/editText_passwordInput"
+                android:id="@+id/editText_editPasswordInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -71,8 +71,8 @@
                 android:textColor="@color/colorHiperLink"
                 android:textSize="12sp"
                 android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="@+id/editText_passwordInput"
-                app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
+                app:layout_constraintStart_toStartOf="@+id/editText_editPasswordInput"
+                app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
 
             <Button
                 android:id="@+id/button_login"
@@ -80,12 +80,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
-                android:onClick="loginOnClick"
                 android:text="@string/str_login"
-                app:layout_constraintEnd_toEndOf="@+id/editText_passwordInput"
+                app:layout_constraintEnd_toEndOf="@+id/editText_editPasswordInput"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/editText_passwordInput"
-                app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
+                app:layout_constraintStart_toStartOf="@+id/editText_editPasswordInput"
+                app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
 
             <Button
                 android:id="@+id/button_register"
