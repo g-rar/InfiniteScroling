@@ -43,7 +43,22 @@
     <string name="str_endDateLbl">Finaliza:</string>
     <string name="str_institutionHint">ej: Liceo del Carmen</string>
     <string name="str_titleHint">ej: Bahillerato</string>
-
+    <string name="str_userName">Nombre usuario</string>
+    <string name="str_commentText">Texto de ejemplo para comentario</string>
+    <string name="str_buttonComment">Comentar</string>
+    <string name="str_edtitTextCommentHint">Escribe un comentatio...</string>
+    <string name="str_addFriend">Agregar</string>
+    <string name="str_seeFriends">Ver amigos</string>
+    <string name="str_seePhotos">Ver fotos</string>
+    <string name="str_information">Información</string>
+    <string name="str_friends">Amigos</string>
+    <string name="str_buttonAllFriends">Todos</string>
+    <string name="str_buttonCommonFriends">En común</string>
+    <string name="str_buttonAcceptFriend">Acptar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_editProfile">Actualizar perfil</string>
+    <string name="str_warning">¡Cuidado!</string>
+    <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
+    <string name="str_deleteAccount">Borrar cuenta</string>
 </resources>
