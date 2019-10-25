@@ -54,7 +54,7 @@
     <string name="str_friends">Amigos</string>
     <string name="str_buttonAllFriends">Todos</string>
     <string name="str_buttonCommonFriends">En común</string>
-    <string name="str_buttonAcceptFriend">Acptar</string>
+    <string name="str_buttonAcceptFriend">Aceptar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_editProfile">Actualizar perfil</string>
