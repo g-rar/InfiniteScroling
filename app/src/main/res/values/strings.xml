@@ -65,4 +65,8 @@
     <string name="str_warning">¡Cuidado!</string>
     <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
     <string name="str_deleteAccount">Borrar cuenta</string>
+    <string name="str_postdescTest"><![CDATA[Post description.  Multiline option. Look that cute boy <3]]></string>
+    <string name="str_buscar">Buscar</string>
+    <string name="str_optionsPosts">Posts</string>
+    <string name="str_optionsUsers">Personas</string>
 </resources>

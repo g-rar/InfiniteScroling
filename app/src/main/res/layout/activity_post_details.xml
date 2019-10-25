@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/txtUserName"
             android:layout_marginTop="50dp"
-            android:text="Post description. \nMultiline option. Look that cute boy <3"
+            android:text="@string/str_postdescTest"
             android:textSize="20sp"
             android:layout_centerHorizontal="true"/>
 
@@ -43,7 +43,7 @@
             android:id="@+id/btnLike"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:srcCompat="@android:drawable/btn_star"
+            app:srcCompat="@drawable/ic_like"
             android:layout_alignTop="@+id/imgPhoto"
             android:layout_marginTop="270dp"
             android:layout_marginLeft="90dp"/>
@@ -80,11 +80,12 @@
             android:id="@+id/btnDislike"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:srcCompat="@android:drawable/ic_menu_more"
+            app:srcCompat="@drawable/ic_dislike"
             android:layout_alignStart="@+id/btnLike"
             android:layout_alignBottom="@+id/btnLike"
             android:layout_alignLeft="@+id/btnLike"
             android:layout_marginLeft="150dp"/>
+
         <TextView
             android:id="@+id/txtDislikeCount"
             android:layout_width="wrap_content"
