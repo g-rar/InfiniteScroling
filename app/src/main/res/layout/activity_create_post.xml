@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="New post"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/txtPost"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/lblTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="42sp"
+            android:gravity="start|top"
+            android:hint="@string/what_are_you_thinking"
+            android:inputType="textMultiLine" />
+
+        <ImageButton
+            android:id="@+id/btnAddPhoto"
+            android:layout_width="66dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgPhoto"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="300dp"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+        <ImageView
+            android:id="@+id/imgPhoto"
+            android:layout_width="273dp"
+            android:layout_height="280dp"
+            android:layout_centerInParent="true"
+            tools:srcCompat="@tools:sample/avatars[3]" />
+
+        <Button
+            android:id="@+id/btnPublish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="35dp"
+            android:text="Post" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

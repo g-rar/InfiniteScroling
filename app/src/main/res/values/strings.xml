@@ -37,6 +37,9 @@
     <string name="str_editAccountSubmit">Actualizar cuenta</string>
     <string name="str_repeatEditPassword">Repetir nueva contraseña:</string>
     <string name="str_googleRegister">Registrarme con Google</string>
+    <string name="what_are_you_thinking">What are you thinking?</string>
+    <string name="ForgotPassTitle">Reestablecer contraseña</string>
+    <string name="ForgotPassInstructions">Digite su correo electrónico para reestablecer la contraseña.</string>
     <string name="str_addAcademic">Añadir info académica</string>
     <string name="str_academicRecordsLbl">Logros académicos:</string>
     <string name="str_institutionLbl">Institución:</string>
@@ -53,6 +56,11 @@
     <string name="str_seeFriends">Ver amigos</string>
     <string name="str_seePhotos">Ver fotos</string>
     <string name="str_information">Información</string>
+    <string name="str_friends">Amigos</string>
+    <string name="str_buttonAllFriends">Todos</string>
+    <string name="str_buttonCommonFriends">En común</string>
+    <string name="str_buttonAcceptFriend">Aceptar</string>
+    <string name="str_stateFriend">Estado de amistad</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_editProfile">Actualizar perfil</string>
@@ -62,4 +70,7 @@
     <string name="str_updateProfilePicture">Cambiar foto de perfil</string>
     <string name="str_beginningLbl">Comienzo:</string>
     <string name="str_conclussionLbl">Conclusión:</string>
+    <string name="str_buscar">Buscar</string>
+    <string name="str_optionsPosts">Posts</string>
+    <string name="str_optionsUsers">Personas</string>
 </resources>
