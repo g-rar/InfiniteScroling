@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User name"
+            android:layout_alignParentStart="true"
+            android:textSize="20sp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="30dp"/>
+
+        <TextView
+            android:id="@+id/txtPostDescription"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtUserName"
+            android:layout_marginTop="50dp"
+            android:text="Post description. \nMultiline option. Look that cute boy <3"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/imgPhoto"
+            android:layout_width="271dp"
+            android:layout_height="260dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp"
+            tools:srcCompat="@tools:sample/avatars[2]" />
+
+        <ImageButton
+            android:id="@+id/btnLike"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/btn_star"
+            android:layout_alignTop="@+id/imgPhoto"
+            android:layout_marginTop="270dp"
+            android:layout_marginLeft="90dp"/>
+
+        <TextView
+            android:id="@+id/txtLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="20sp"
+            android:layout_alignStart="@+id/btnLike"
+            android:layout_alignTop="@+id/btnLike"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="13dp"/>
+
+        <ListView
+            android:id="@+id/commentsLv"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="3dp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:layout_alignBottom="@+id/txtUserName"
+            android:textSize="20sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"/>
+
+        <ImageButton
+            android:id="@+id/btnDislike"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_menu_more"
+            android:layout_alignStart="@+id/btnLike"
+            android:layout_alignBottom="@+id/btnLike"
+            android:layout_alignLeft="@+id/btnLike"
+            android:layout_marginLeft="150dp"/>
+        <TextView
+            android:id="@+id/txtDislikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="20sp"
+            android:layout_alignStart="@+id/btnDislike"
+            android:layout_alignTop="@+id/btnDislike"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="13dp"/>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

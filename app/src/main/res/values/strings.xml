@@ -35,6 +35,9 @@
     <string name="str_editAccountSubmit">Actualizar cuenta</string>
     <string name="str_repeatEditPassword">Repetir nueva contraseña:</string>
     <string name="str_googleRegister">Registrarme con Google</string>
+    <string name="what_are_you_thinking">What are you thinking?</string>
+    <string name="ForgotPassTitle">Reestablecer contraseña</string>
+    <string name="ForgotPassInstructions">Digite su correo electrónico para reestablecer la contraseña.</string>
     <string name="str_addAcademic">Añadir info académica</string>
     <string name="str_academicRecordsLbl">Logros académicos:</string>
     <string name="str_institutionLbl">Institución:</string>
