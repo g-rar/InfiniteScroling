@@ -41,12 +41,12 @@
 
         <ImageButton
             android:id="@+id/btnLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@android:drawable/btn_star"
             android:layout_alignTop="@+id/imgPhoto"
             android:layout_marginTop="270dp"
-            android:layout_marginLeft="50dp"/>
+            android:layout_marginLeft="90dp"/>
 
         <TextView
             android:id="@+id/txtLikeCount"
@@ -75,6 +75,26 @@
             android:textSize="20sp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="40dp"/>
+
+        <ImageButton
+            android:id="@+id/btnDislike"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_menu_more"
+            android:layout_alignStart="@+id/btnLike"
+            android:layout_alignBottom="@+id/btnLike"
+            android:layout_alignLeft="@+id/btnLike"
+            android:layout_marginLeft="150dp"/>
+        <TextView
+            android:id="@+id/txtDislikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="20sp"
+            android:layout_alignStart="@+id/btnDislike"
+            android:layout_alignTop="@+id/btnDislike"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="13dp"/>
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
