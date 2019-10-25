@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:maxWidth="250sp"
                     android:text="@string/str_createAccountText"
@@ -143,8 +143,8 @@
                     android:layout_marginStart="16dp"
                     android:ems="10"
                     android:inputType="date"
-                    android:hint="@string/str_birthDateHint"
-                    android:autofillHints="@string/str_birthDateHint"
+                    android:hint="@string/str_dateHint"
+                    android:autofillHints="@string/str_dateHint"
                     app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regBirthDateLbl" />
 
@@ -212,7 +212,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView_emailLbl" />
 
                 <TextView
-                    android:id="@+id/textView_passwordLbl"
+                    android:id="@+id/textView_editPasswordLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -221,7 +221,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
 
                 <EditText
-                    android:id="@+id/editText_passwordInput"
+                    android:id="@+id/editText_editPasswordInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -229,17 +229,17 @@
                     android:inputType="textPassword"
                     android:hint="@string/str_passwordHint"
                     android:autofillHints="@string/str_passwordHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_passwordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_passwordLbl" />
+                    app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_editPasswordLbl" />
 
                 <TextView
-                    android:id="@+id/textView_repeatPasswordLbl"
+                    android:id="@+id/textView_repeatEditPasswordLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_repeatPasswordLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_passwordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
+                    app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
 
                 <EditText
                     android:id="@+id/editText_repeatPasswordInput"
@@ -250,11 +250,11 @@
                     android:inputType="textPassword"
                     android:hint="@string/str_repeatPasswordHint"
                     android:autofillHints="@string/str_repeatPasswordHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_repeatPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_repeatPasswordLbl" />
+                    app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_repeatEditPasswordLbl" />
 
                 <Button
-                    android:id="@+id/button_registerSubmit"
+                    android:id="@+id/button_editAccountSubmit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
