@@ -34,7 +34,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:layout_toEndOf="@+id/imageView_perfilComment"
-                android:text="Nombre del usuario"
+                android:text="@string/str_userName"
                 android:textSize="20sp" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
-                android:text="Este sera el texto que contendra el comentario"
+                android:text="@string/str_commentText"
                 android:textSize="25sp" />
 
             <ListView
@@ -67,7 +67,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="41dp"
                 android:layout_marginEnd="30dp"
-                android:hint="Escribe un comentario..."
+                android:hint="@string/str_edtitTextCommentHint"
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine" />
@@ -80,7 +80,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="33dp"
-                android:text="Comentar" />
+                android:text="@string/str_buttonComment" />
         </RelativeLayout>
     </ScrollView>
 
