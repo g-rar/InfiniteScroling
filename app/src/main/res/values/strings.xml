@@ -24,10 +24,40 @@
         <item>Femenino</item>
         <item>Otro</item>
     </string-array>
-    <string name="str_birthDateHint">DD/MM/AAAA</string>
+    <string name="str_dateHint">DD/MM/AAAA</string>
     <string name="str_cityHint">Ciudad</string>
     <string name="str_phoneNumberHint">Número de teléfono</string>
     <string name="str_repeatPasswordHint">Repita la contraseña</string>
     <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google.</string>
+    <string name="str_editAccountText">Mantén tu cuenta al día</string>
+    <string name="str_editAccountDescription">Acutalizá tu información de contacto o añadí información académica. Aquí podés actualizar tus datos.</string>
+    <string name="str_editPasswordLbl">Cambiar contraseña:</string>
+    <string name="str_editAccountSubmit">Actualizar cuenta</string>
+    <string name="str_repeatEditPassword">Repetir nueva contraseña:</string>
     <string name="str_googleRegister">Registrarme con Google</string>
+    <string name="str_addAcademic">Añadir info académica</string>
+    <string name="str_academicRecordsLbl">Logros académicos:</string>
+    <string name="str_institutionLbl">Institución:</string>
+    <string name="str_tituloLbl">Título:</string>
+    <string name="str_startDateLbl">Inicio:</string>
+    <string name="str_endDateLbl">Finaliza:</string>
+    <string name="str_institutionHint">ej: Liceo del Carmen</string>
+    <string name="str_titleHint">ej: Bahillerato</string>
+    <string name="str_userName">Nombre usuario</string>
+    <string name="str_commentText">Texto de ejemplo para comentario</string>
+    <string name="str_buttonComment">Comentar</string>
+    <string name="str_edtitTextCommentHint">Escribe un comentatio...</string>
+    <string name="str_addFriend">Agregar</string>
+    <string name="str_seeFriends">Ver amigos</string>
+    <string name="str_seePhotos">Ver fotos</string>
+    <string name="str_information">Información</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_editProfile">Actualizar perfil</string>
+    <string name="str_warning">¡Cuidado!</string>
+    <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
+    <string name="str_deleteAccount">Borrar cuenta</string>
+    <string name="str_updateProfilePicture">Cambiar foto de perfil</string>
+    <string name="str_beginningLbl">Comienzo:</string>
+    <string name="str_conclussionLbl">Conclusión:</string>
 </resources>
