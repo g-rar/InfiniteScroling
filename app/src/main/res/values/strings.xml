@@ -65,9 +65,6 @@
     <string name="str_warning">¡Cuidado!</string>
     <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
     <string name="str_deleteAccount">Borrar cuenta</string>
-    <string name="str_updateProfilePicture">Cambiar foto de perfil</string>
-    <string name="str_beginningLbl">Comienzo:</string>
-    <string name="str_conclussionLbl">Conclusión:</string>
     <string name="str_buscar">Buscar</string>
     <string name="str_optionsPosts">Posts</string>
     <string name="str_optionsUsers">Personas</string>
