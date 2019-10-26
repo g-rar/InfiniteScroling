@@ -78,4 +78,6 @@
     <string name="str_updateProfilePicture">Actualizar foto de perfil</string>
     <string name="str_loginIncomplete">Por favor llenar todos los campos para acceder</string>
     <string name="str_loginFailed">Algo falló. Comprueba el correo y la contraseña e intenta de nuevo</string>
+    <string name="str_actionlogout">Salir</string>
+    <string name="str_logoutSuc">Se ha cerrado sesión con éxito</string>
 </resources>

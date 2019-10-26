@@ -3,12 +3,14 @@ package com.example.infinitescroling;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailInput;
     private EditText passwordInput;
+    private ConstraintLayout loadingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +47,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         if(firebaseAuth.getCurrentUser() != null){
-            //TODO go to main activity
+            gotoMainActivity();
         }
 
         emailInput = findViewById(R.id.editText_emailInput);
         passwordInput = findViewById(R.id.editText_passwordInput);
+        loadingLayout = findViewById(R.id.ConstraintLayout_loading);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -63,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginOnClick(View view){
+        loadingLayout.setVisibility(View.VISIBLE);
+
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
 
@@ -74,16 +80,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
                 gotoMainActivity();
+                loadingLayout.setVisibility(View.GONE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(LoginActivity.this, R.string.str_loginFailed, Toast.LENGTH_LONG).show();
+                loadingLayout.setVisibility(View.GONE);
             }
         });
     }
 
     public void signInWithGoogle(View vIew){
+        loadingLayout.setVisibility(View.VISIBLE);
         Intent gSignInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(gSignInIntent, RC_SIGN_IN);
     }
@@ -111,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.w(TAG, "Sign in with credential: Fail", e);
                 Toast.makeText(this, R.string.str_loginFailed, Toast.LENGTH_LONG).show();
             }
+            loadingLayout.setVisibility(View.GONE);
         }
     }
 
