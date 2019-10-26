@@ -8,6 +8,10 @@
     <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
     <string name="str_login">Ingresar</string>
     <string name="str_register">Registrarse</string>
+    <string name="str_registerIncomplete">Por favor, rellene todos los campos para poder registrarse</string>
+    <string name="str_passwordConfirmFailed">Las contraseñas indicadas no coinciden. Por favor intente de nuevo</string>
+    <string name="str_registrationFailed">No se ha podido registrar el usuario, intenta de nuevo mas tarde</string>
+    <string name="str_unvalidDate">La fecha que se ha ingresado es invalida. Compruebe que tiene el formato dd/mm/aaaa</string>
     <string name="str_googleLogin"><u>Ingresar con google</u></string>
     <string name="str_createAccountText">¡Crea tu cuenta para siempre estar al tanto!</string>
     <string name="str_nameLbl">Nombre:</string>

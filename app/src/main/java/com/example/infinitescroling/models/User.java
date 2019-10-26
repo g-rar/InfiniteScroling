@@ -3,20 +3,20 @@ package com.example.infinitescroling.models;
 import java.util.Date;
 
 public class User {
-    private String name;
+    private String firstName;
     private String lastName;
     private String city;
     private String gender;
     private String email;
     private Date birthDate;
-    private int phoneNumber;
+    private String phoneNumber;
 
     public User(){
 
     }
 
-    public User(String name, String lastName, String city, String gender, String email, Date birthDate, int phoneNumber) {
-        this.name = name;
+    public User(String firstName, String lastName, String city, String gender, String email, Date birthDate, String phoneNumber) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
         this.gender = gender;
@@ -25,12 +25,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -73,11 +73,11 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

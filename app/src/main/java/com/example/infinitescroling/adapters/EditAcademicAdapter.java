@@ -13,9 +13,12 @@ import androidx.annotation.Nullable;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.AcademicInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class EditAcademicAdapter extends ArrayAdapter {
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public EditAcademicAdapter(Context context, ArrayList<AcademicInfo> academics){
         super(context, 0, academics);
@@ -36,8 +39,8 @@ public class EditAcademicAdapter extends ArrayAdapter {
 
         tvTitle.setText(academicInfo.getTitle());
         tvInst.setText(academicInfo.getInstitution());
-        tvBeginDate.setText(academicInfo.getBeginDate().toString());
-        tvEndDate.setText(academicInfo.getConclusionDate().toString());
+        tvBeginDate.setText(simpleDateFormat.format(academicInfo.getBeginDate()));
+        tvEndDate.setText(simpleDateFormat.format(academicInfo.getConclusionDate()));
 
         return convertView;
     }
