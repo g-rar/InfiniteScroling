@@ -221,7 +221,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
 
                 <EditText
-                    android:id="@+id/editText_editPasswordInput"
+                    android:id="@+id/editText_passwordInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -239,7 +239,7 @@
                     android:layout_marginTop="24dp"
                     android:text="@string/str_repeatPasswordLbl"
                     app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
 
                 <EditText
                     android:id="@+id/editText_repeatPasswordInput"
@@ -253,16 +253,17 @@
                     app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_repeatEditPasswordLbl" />
 
-                <Button
-                    android:id="@+id/button_editAccountSubmit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:text="@string/str_register"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/editText_repeatPasswordInput"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_repeatPasswordInput" />
+            <Button
+                android:id="@+id/button_editAccountSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:onClick="registerBtnOnClick"
+                android:text="@string/str_register"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/editText_repeatPasswordInput"
+                app:layout_constraintTop_toBottomOf="@+id/editText_repeatPasswordInput" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

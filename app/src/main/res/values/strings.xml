@@ -6,6 +6,10 @@
     <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
     <string name="str_login">Ingresar</string>
     <string name="str_register">Registrarse</string>
+    <string name="str_registerIncomplete">Por favor, rellene todos los campos para poder registrarse</string>
+    <string name="str_passwordConfirmFailed">Las contraseñas indicadas no coinciden. Por favor intente de nuevo</string>
+    <string name="str_registrationFailed">No se ha podido registrar el usuario, intenta de nuevo mas tarde</string>
+    <string name="str_unvalidDate">La fecha que se ha ingresado es invalida. Compruebe que tiene el formato dd/mm/aaaa</string>
     <string name="str_googleLogin"><u>Ingresar con google</u></string>
     <string name="str_createAccountText">¡Crea tu cuenta para siempre estar al tanto!</string>
     <string name="str_nameLbl">Nombre:</string>
@@ -58,7 +62,9 @@
     <string name="str_buttonAllFriends">Todos</string>
     <string name="str_buttonCommonFriends">En común</string>
     <string name="str_buttonAcceptFriend">Aceptar</string>
+    <string name="str_buttonRejectFriend">Rechazar</string>
     <string name="str_stateFriend">Estado de amistad</string>
+    <string name="str_buttonMakePost">Crear publicación</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_editProfile">Actualizar perfil</string>
@@ -69,4 +75,7 @@
     <string name="str_optionsPosts">Posts</string>
     <string name="str_optionsUsers">Personas</string>
     <string name="str_postdescTest">Posts descriptions. \nTiene para multiline xdxdxd</string>
+    <string name="str_updateProfilePicture">Actualizar foto de perfil</string>
+    <string name="str_loginIncomplete">Por favor llenar todos los campos para acceder</string>
+    <string name="str_loginFailed">Algo falló. Comprueba el correo y la contraseña e intenta de nuevo</string>
 </resources>
