@@ -105,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:drawableLeft="@drawable/common_google_signin_btn_icon_dark"
+                android:onClick="signInWithGoogle"
                 android:text="@string/str_googleLogin"
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="@+id/button_register"
