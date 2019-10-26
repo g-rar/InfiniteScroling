@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">InfiniteScroling</string>
     <string name="str_loginLabel">¡Accede para ver qué hay de nuevo con tus amigos!</string>
-    <string name="str_loginIncomplete">Por favor rellena todos los campos para acceder</string>
-    <string name="str_loginFailed">No se ha podido acceder. Comprueba que el correo y contraseña sean correctos</string>
     <string name="str_emailhint">Correo electrónico:</string>
     <string name="str_passwordHint">Contraseña:</string>
     <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
@@ -67,9 +65,6 @@
     <string name="str_warning">¡Cuidado!</string>
     <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
     <string name="str_deleteAccount">Borrar cuenta</string>
-    <string name="str_updateProfilePicture">Cambiar foto de perfil</string>
-    <string name="str_beginningLbl">Comienzo:</string>
-    <string name="str_conclussionLbl">Conclusión:</string>
     <string name="str_buscar">Buscar</string>
     <string name="str_optionsPosts">Posts</string>
     <string name="str_optionsUsers">Personas</string>
