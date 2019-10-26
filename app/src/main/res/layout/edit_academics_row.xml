@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="@string/str_beginningLbl"
+        android:text="@string/str_startDateLbl"
         app:layout_constraintStart_toStartOf="@+id/textView_intitutionName"
         app:layout_constraintTop_toBottomOf="@+id/textView_intitutionName" />
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/str_conclussionLbl"
+        android:text="@string/str_endDateLbl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView_startLabl"
         app:layout_constraintTop_toBottomOf="@+id/textView_startLabl" />
