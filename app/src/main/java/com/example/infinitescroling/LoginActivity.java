@@ -22,6 +22,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailInput;
     private EditText passwordInput;
 
+    public void onClickForgotPass(View view){
+        Intent i = new Intent(LoginActivity.this, ForgotPassword.class);
+        this.startActivity(i);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
