@@ -75,4 +75,5 @@
     <string name="str_optionsPosts">Posts</string>
     <string name="str_optionsUsers">Personas</string>
     <string name="str_postdescTest">Posts descriptions. \nTiene para multiline xdxdxd</string>
+    <string name="str_updateProfilePicture">Actualizar foto de perfil</string>
 </resources>
