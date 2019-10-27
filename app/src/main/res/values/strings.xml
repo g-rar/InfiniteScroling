@@ -81,4 +81,9 @@
     <string name="str_actionlogout">Salir</string>
     <string name="str_logoutSuc">Se ha cerrado sesión con éxito</string>
     <string name="str_registrationSuccess">Se ha creado la cuenta con éxito</string>
+    <string name="str_somethingWentWrong">Algo salió mal</string>
+    <string name="alert_deleteAccount">¿Borrar cuenta?</string>
+    <string name="alert_deleteAccountDes">¿Estás seguro de que quieres borrar la cuenta? Tus amigos te van a extrañar :\'(</string>
+    <string name="str_deleteAccountConfirm">Sí, estoy seguro.</string>
+    <string name="str_deleteAccountCancel">Mejor no. Volver.</string>
 </resources>

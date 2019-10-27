@@ -80,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void registerBtnOnClick(View view){
+        loadingLayout.setVisibility(View.VISIBLE);
         final String name = nameInput.getText().toString();
         final String lastName = lastNameInput.getText().toString();
         final String gender = ((TextView) genderSpinner.getSelectedView()).getText().toString();
@@ -94,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                 | city.equals("") | phoneNumberStr.equals("") | email.equals("")
                 | password.equals("") | repeatPassword.equals("")){
             Toast.makeText(this, R.string.str_registerIncomplete, Toast.LENGTH_LONG).show();
+            loadingLayout.setVisibility(View.GONE);
             return;
         }
 
@@ -104,11 +106,13 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (ParseException e) {
             Log.d(TAG , "Ha ocurrido un error con el parseo de la fecha: \n" + e.getStackTrace().toString());
             Toast.makeText(this, R.string.str_unvalidDate, Toast.LENGTH_LONG).show();
+            loadingLayout.setVisibility(View.GONE);
             return;
         }
 
         if(!password.equals(repeatPassword)){
             Toast.makeText(this, R.string.str_passwordConfirmFailed, Toast.LENGTH_LONG).show();
+            loadingLayout.setVisibility(View.GONE);
             return;
         }
 
@@ -121,12 +125,14 @@ public class RegisterActivity extends AppCompatActivity {
                 )).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        //TODO goto  login activity
+                        loadingLayout.setVisibility(View.GONE);
+                        finish();
                         Toast.makeText(RegisterActivity.this, R.string.str_registrationSuccess, Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        loadingLayout.setVisibility(View.GONE);
                         firebaseAuth.getCurrentUser().delete();
                         Log.d(TAG, "onFailure: " + e.getStackTrace().toString());
                         Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
@@ -136,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                loadingLayout.setVisibility(View.GONE);
                 Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
             }
         });

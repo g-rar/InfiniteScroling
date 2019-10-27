@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         if(firebaseAuth.getCurrentUser() == null){
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
+            finish();
         }
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();

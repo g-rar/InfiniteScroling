@@ -163,5 +163,6 @@ public class LoginActivity extends AppCompatActivity {
     private void gotoMainActivity(){
         Intent intent =  new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }
