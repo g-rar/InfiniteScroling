@@ -2,6 +2,7 @@ package com.example.infinitescroling.models;
 
 import android.net.Uri;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -13,6 +14,7 @@ public class User {
     private Date birthDate;
     private String phoneNumber;
     private String profilePicture;
+    private ArrayList<String> friendIds;
 
     public User(){
 
@@ -26,6 +28,7 @@ public class User {
         this.email = email;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
+        friendIds = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String city, String gender, String email, Date birthDate, String phoneNumber, String profilePicture) {
@@ -37,6 +40,7 @@ public class User {
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
+        friendIds = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -101,5 +105,13 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public ArrayList<String> getFriendIds() {
+        return friendIds;
+    }
+
+    public void setFriendIds(ArrayList<String> friendIds) {
+        this.friendIds = friendIds;
     }
 }

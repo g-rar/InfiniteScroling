@@ -156,6 +156,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
         emailInput.setText(user.getEmail());
         academicsReference = documentSnapshot.getReference().collection(ACADEMICS_KEY);
         refreshAcademics();
+
     }
 
     private void refreshAcademics(){
