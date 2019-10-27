@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.infinitescroling.fragments.FeedFragment;
 import com.example.infinitescroling.fragments.PageAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        FeedFragment.main = this;
     }
 
     @Override
