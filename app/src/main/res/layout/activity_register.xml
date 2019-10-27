@@ -1,257 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RegisterActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
-    <LinearLayout
+    android:layout_height="match_parent">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:maxWidth="250sp"
-                    android:text="@string/str_createAccountText"
-                    android:textAlignment="center"
-                    android:textSize="24sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView_registerDescription"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="24dp"
-                    android:text="@string/str_registerDescription"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-                <Button
-                    android:id="@+id/button_googleLogin2"
-                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:drawableLeft="@drawable/common_google_signin_btn_icon_dark"
-                    android:text="@string/str_googleRegister"
-                    android:textAllCaps="false"
-                    app:layout_constraintEnd_toEndOf="@+id/textView_registerDescription"
-                    app:layout_constraintStart_toStartOf="@+id/textView_registerDescription"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_registerDescription" />
+                                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:maxWidth="250sp"
+                        android:text="@string/str_createAccountText"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView_registerDescription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="24dp"
+                        android:text="@string/str_registerDescription"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                 <View
                     android:id="@+id/divider"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="32dp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_googleLogin2" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_registerDescription" />
 
-                <TextView
-                    android:id="@+id/textView_regNameLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/str_nameLbl"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider" />
+                    <TextView
+                        android:id="@+id/textView_regNameLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/str_nameLbl"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-                <EditText
-                    android:id="@+id/editText_nameInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:hint="@string/str_nameHint"
-                    android:autofillHints="@string/str_nameHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regNameLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regNameLbl" />
+                    <EditText
+                        android:id="@+id/editText_nameInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:hint="@string/str_nameHint"
+                        android:autofillHints="@string/str_nameHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regNameLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regNameLbl" />
 
-                <TextView
-                    android:id="@+id/textView_regLastNameLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_lastNamesLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regNameLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_nameInput" />
+                    <TextView
+                        android:id="@+id/textView_regLastNameLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_lastNamesLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regNameLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_nameInput" />
 
-                <EditText
-                    android:id="@+id/editText_lastNamesInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:autofillHints="@string/str_lastnamesHint"
-                    android:hint="@string/str_lastnamesHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regLastNameLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regLastNameLbl" />
+                    <EditText
+                        android:id="@+id/editText_lastNamesInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:autofillHints="@string/str_lastnamesHint"
+                        android:hint="@string/str_lastnamesHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regLastNameLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regLastNameLbl" />
 
-                <TextView
-                    android:id="@+id/textView_regGenderLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_genderLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regLastNameLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_lastNamesInput" />
+                    <TextView
+                        android:id="@+id/textView_regGenderLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_genderLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regLastNameLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_lastNamesInput" />
 
-                <Spinner
-                    android:id="@+id/spinner_genderSelection"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintEnd_toEndOf="@+id/editText_lastNamesInput"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regGenderLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regGenderLbl" />
+                    <Spinner
+                        android:id="@+id/spinner_genderSelection"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintEnd_toEndOf="@+id/editText_lastNamesInput"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regGenderLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regGenderLbl" />
 
-                <TextView
-                    android:id="@+id/textView_regBirthDateLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
-                    android:text="@string/str_birthDateLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regGenderLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_genderSelection" />
+                    <TextView
+                        android:id="@+id/textView_regBirthDateLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:text="@string/str_birthDateLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regGenderLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_genderSelection" />
 
-                <EditText
-                    android:id="@+id/editText_birthDateInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:hint="@string/str_dateHint"
-                    android:autofillHints="@string/str_dateHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regBirthDateLbl" />
+                    <EditText
+                        android:id="@+id/editText_birthDateInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="date"
+                        android:hint="@string/str_dateHint"
+                        android:autofillHints="@string/str_dateHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regBirthDateLbl" />
 
-                <TextView
-                    android:id="@+id/textView_regCityLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_cityLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_birthDateInput" />
+                    <TextView
+                        android:id="@+id/textView_regCityLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_cityLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_birthDateInput" />
 
-                <EditText
-                    android:id="@+id/editText_cityInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:hint="@string/str_cityHint"
-                    android:autofillHints="@string/str_cityHint"
-                    android:inputType="textPersonName"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regCityLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regCityLbl" />
+                    <EditText
+                        android:id="@+id/editText_cityInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:hint="@string/str_cityHint"
+                        android:autofillHints="@string/str_cityHint"
+                        android:inputType="textPersonName"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regCityLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regCityLbl" />
 
-                <TextView
-                    android:id="@+id/textView_regPhoneLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_phoneLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regCityLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_cityInput" />
+                    <TextView
+                        android:id="@+id/textView_regPhoneLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_phoneLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regCityLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_cityInput" />
 
-                <EditText
-                    android:id="@+id/editText_phoneNumberInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="phone"
-                    android:hint="@string/str_phoneNumberHint"
-                    android:autofillHints="@string/str_phoneNumberHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_regPhoneLbl" />
+                    <EditText
+                        android:id="@+id/editText_phoneNumberInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="phone"
+                        android:hint="@string/str_phoneNumberHint"
+                        android:autofillHints="@string/str_phoneNumberHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_regPhoneLbl" />
 
-                <TextView
-                    android:id="@+id/textView_emailLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_emailLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_phoneNumberInput" />
+                    <TextView
+                        android:id="@+id/textView_emailLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_emailLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_phoneNumberInput" />
 
-                <EditText
-                    android:id="@+id/editText_emailInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textWebEmailAddress"
-                    android:hint="@string/str_emailhint"
-                    android:autofillHints="@string/str_emailhint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_emailLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_emailLbl" />
+                    <EditText
+                        android:id="@+id/editText_emailInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="textWebEmailAddress"
+                        android:hint="@string/str_emailhint"
+                        android:autofillHints="@string/str_emailhint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_emailLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_emailLbl" />
 
-                <TextView
-                    android:id="@+id/textView_editPasswordLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_passwordLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_emailLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
+                    <TextView
+                        android:id="@+id/textView_editPasswordLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_passwordLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_emailLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
 
-                <EditText
-                    android:id="@+id/editText_editPasswordInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:hint="@string/str_passwordHint"
-                    android:autofillHints="@string/str_passwordHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_editPasswordLbl" />
+                    <EditText
+                        android:id="@+id/editText_passwordInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:hint="@string/str_passwordHint"
+                        android:autofillHints="@string/str_passwordHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_editPasswordLbl" />
 
-                <TextView
-                    android:id="@+id/textView_repeatEditPasswordLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_repeatPasswordLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
+                    <TextView
+                        android:id="@+id/textView_repeatEditPasswordLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/str_repeatPasswordLbl"
+                        app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
 
-                <EditText
-                    android:id="@+id/editText_repeatPasswordInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:hint="@string/str_repeatPasswordHint"
-                    android:autofillHints="@string/str_repeatPasswordHint"
-                    app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_repeatEditPasswordLbl" />
+                    <EditText
+                        android:id="@+id/editText_repeatPasswordInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:hint="@string/str_repeatPasswordHint"
+                        android:autofillHints="@string/str_repeatPasswordHint"
+                        app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_repeatEditPasswordLbl" />
 
                 <Button
                     android:id="@+id/button_editAccountSubmit"
@@ -259,11 +252,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
+                    android:onClick="registerBtnOnClick"
                     android:text="@string/str_register"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/editText_repeatPasswordInput"
                     app:layout_constraintTop_toBottomOf="@+id/editText_repeatPasswordInput" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-</ScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+    </ScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLoading"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
