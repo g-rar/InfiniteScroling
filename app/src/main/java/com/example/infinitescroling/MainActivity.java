@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private TabItem tabSearch;
     private ViewPager viewPager;
     private PageAdapter pageAdapter;
-    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
