@@ -84,8 +84,8 @@
     <string name="str_somethingWentWrong">Algo salió mal</string>
     <string name="alert_deleteAccount">¿Borrar cuenta?</string>
     <string name="alert_deleteAccountDes">¿Estás seguro de que quieres borrar la cuenta? Tus amigos te van a extrañar :\'(</string>
-    <string name="str_deleteAccountConfirm">Sí, estoy seguro.</string>
-    <string name="str_deleteAccountCancel">Mejor no. Volver.</string>
+    <string name="alert_imSureConfirm">Sí, estoy seguro.</string>
+    <string name="alert_backCancel">Mejor no. Volver.</string>
     <string name="str_regAcademicIncomplete">Rellene los cuatro espacios del logro academico para poder anadirlo</string>
     <string name="str_fetchAcademicFail">Hubo un problema al obtener la información académica</string>
     <string name="str_addAcademicSucces">Se ha añadido la información académica</string>
@@ -97,4 +97,11 @@
     <string name="str_deleteAcademicSucces">Se ha borrado el logro academico.</string>
     <string name="str_deleteAcademicFail">No se ha podido borrar el logro académico. Intenta de nuevo más tarde.</string>
     <string name="str_passwordIncomplete">Por favor. Ingrese la contraseña</string>
+    <string name="str_editAccountIncomplete">No se puede dejar el nombre, apellido, o correo vacios</string>
+    <string name="str_editLoginInfo">Cambiar información de acceso</string>
+    <string name="str_editAccountSuccess">Se ha editado correctamente la informacion del usuario.</string>
+    <string name="str_editAccountFail">No se pudo editar la información del usuario. Intenta de nuevo más tarde.</string>
+    <string name="str_actualPasswordLbl">Contraseña actual:</string>
+    <string name="alert_modifyLoginAccount">Modificar información de acceso.</string>
+    <string name="alert_modifyLoginDes">Si aceptas a continuación, vas a tener que acceder nuevamente con la nueva información de acceso. ¿Estás seguro?</string>
 </resources>

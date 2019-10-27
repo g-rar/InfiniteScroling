@@ -60,10 +60,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:hint="@string/str_nameHint"
                     android:autofillHints="@string/str_nameHint"
+                    android:ems="10"
+                    android:hint="@string/str_nameHint"
+                    android:inputType="textPersonName"
                     app:layout_constraintStart_toStartOf="@+id/textView_regNameLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regNameLbl" />
 
@@ -81,10 +81,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
                     android:autofillHints="@string/str_lastnamesHint"
+                    android:ems="10"
                     android:hint="@string/str_lastnamesHint"
+                    android:inputType="textPersonName"
                     app:layout_constraintStart_toStartOf="@+id/textView_regLastNameLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regLastNameLbl" />
 
@@ -121,10 +121,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:hint="@string/str_dateHint"
                     android:autofillHints="@string/str_dateHint"
+                    android:ems="10"
+                    android:hint="@string/str_dateHint"
+                    android:inputType="date"
                     app:layout_constraintStart_toStartOf="@+id/textView_regBirthDateLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regBirthDateLbl" />
 
@@ -142,9 +142,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:autofillHints="@string/str_cityHint"
                     android:ems="10"
                     android:hint="@string/str_cityHint"
-                    android:autofillHints="@string/str_cityHint"
                     android:inputType="textPersonName"
                     app:layout_constraintStart_toStartOf="@+id/textView_regCityLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regCityLbl" />
@@ -163,31 +163,51 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="phone"
-                    android:hint="@string/str_phoneNumberHint"
                     android:autofillHints="@string/str_phoneNumberHint"
+                    android:ems="10"
+                    android:hint="@string/str_phoneNumberHint"
+                    android:inputType="phone"
                     app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_regPhoneLbl" />
+
+                <TextView
+                    android:id="@+id/textView_actualPasswordInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/str_actualPasswordLbl"
+                    app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_repeatPasswordInput" />
+
+                <EditText
+                    android:id="@+id/editText_actualPasswordInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:ems="10"
+                    android:hint="@string/str_passwordHint"
+                    android:inputType="textPassword"
+                    app:layout_constraintStart_toStartOf="@+id/textView_actualPasswordInput"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_actualPasswordInput" />
 
                 <TextView
                     android:id="@+id/textView_emailLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/str_emailLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_phoneNumberInput" />
+                    app:layout_constraintStart_toStartOf="@+id/button_editAccountSubmit"
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
                 <EditText
                     android:id="@+id/editText_emailInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textWebEmailAddress"
-                    android:hint="@string/str_emailhint"
                     android:autofillHints="@string/str_emailhint"
+                    android:ems="10"
+                    android:hint="@string/str_emailhint"
+                    android:inputType="textWebEmailAddress"
                     app:layout_constraintStart_toStartOf="@+id/textView_emailLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_emailLbl" />
 
@@ -205,10 +225,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:hint="@string/str_passwordHint"
                     android:autofillHints="@string/str_passwordHint"
+                    android:ems="10"
+                    android:hint="@string/str_passwordHint"
+                    android:inputType="textPassword"
                     app:layout_constraintStart_toStartOf="@+id/textView_editPasswordLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_editPasswordLbl" />
 
@@ -226,12 +246,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:hint="@string/str_repeatPasswordHint"
                     android:autofillHints="@string/str_repeatPasswordHint"
+                    android:ems="10"
+                    android:hint="@string/str_repeatPasswordHint"
+                    android:inputType="textPassword"
                     app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
                     app:layout_constraintTop_toBottomOf="@+id/textView_repeatEditPasswordLbl" />
+
+                <Button
+                    android:id="@+id/button_editLoginInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:onClick="editLoginInfoOnClick"
+                    android:text="@string/str_editLoginInfo"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
+                    app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_actualPasswordInput" />
 
                 <TextView
                     android:id="@+id/textView_academicsLbl"
@@ -239,8 +273,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_academicRecordsLbl"
-                    app:layout_constraintStart_toStartOf="@+id/textView_repeatEditPasswordLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_repeatPasswordInput" />
+                    app:layout_constraintStart_toStartOf="@+id/textView_regPhoneLbl"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_phoneNumberInput" />
 
                 <ListView
                     android:id="@+id/ListView_academics"
@@ -286,12 +320,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:layout_marginBottom="24dp"
+                    android:onClick="editAccountSubmitOnClick"
                     android:text="@string/str_editAccountSubmit"
-                    app:layout_constraintBottom_toTopOf="@+id/divider2"
                     app:layout_constraintStart_toStartOf="@+id/textView_academicsLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/button_submitAcademic"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toBottomOf="@+id/button_submitAcademic" />
 
                 <TextView
                     android:id="@+id/textView_institutionLbl"
@@ -375,6 +407,18 @@
                     app:layout_constraintStart_toStartOf="@+id/editText_dateStart" />
 
                 <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/button_editAccountSubmit" />
+
+                <View
                     android:id="@+id/divider2"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -427,9 +471,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/str_passwordHint"
                     android:autofillHints="@string/str_passwordHint"
                     android:ems="10"
+                    android:hint="@string/str_passwordHint"
                     android:inputType="textPassword"
                     app:layout_constraintBottom_toTopOf="@+id/button"
                     app:layout_constraintStart_toStartOf="@+id/textView_deleteProfileDescription" />
