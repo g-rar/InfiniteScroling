@@ -7,13 +7,15 @@ public class AcademicInfo {
     private String title;
     private String institution;
     private Date beginDate;
-    private Date conclusionDate;
+    private Date endDate;
+
+    public AcademicInfo(){}
 
     public AcademicInfo(String title, String institution, Date beginDate, Date conclusionDate) {
         this.title = title;
         this.institution = institution;
         this.beginDate = beginDate;
-        this.conclusionDate = conclusionDate;
+        this.endDate = conclusionDate;
     }
 
     public String getTitle() {
@@ -40,11 +42,11 @@ public class AcademicInfo {
         this.beginDate = beginDate;
     }
 
-    public Date getConclusionDate() {
-        return conclusionDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setConclusionDate(Date conclusionDate) {
-        this.conclusionDate = conclusionDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

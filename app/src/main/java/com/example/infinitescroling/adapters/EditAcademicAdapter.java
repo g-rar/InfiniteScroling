@@ -40,7 +40,7 @@ public class EditAcademicAdapter extends ArrayAdapter {
         tvTitle.setText(academicInfo.getTitle());
         tvInst.setText(academicInfo.getInstitution());
         tvBeginDate.setText(simpleDateFormat.format(academicInfo.getBeginDate()));
-        tvEndDate.setText(simpleDateFormat.format(academicInfo.getConclusionDate()));
+        tvEndDate.setText(simpleDateFormat.format(academicInfo.getEndDate()));
 
         return convertView;
     }

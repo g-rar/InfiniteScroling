@@ -86,4 +86,5 @@
     <string name="alert_deleteAccountDes">¿Estás seguro de que quieres borrar la cuenta? Tus amigos te van a extrañar :\'(</string>
     <string name="str_deleteAccountConfirm">Sí, estoy seguro.</string>
     <string name="str_deleteAccountCancel">Mejor no. Volver.</string>
+    <string name="str_regAcademicIncomplete">Rellene los cuatro espacios del logro academico para poder anadirlo</string>
 </resources>
