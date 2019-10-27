@@ -32,7 +32,7 @@
     <string name="str_cityHint">Ciudad</string>
     <string name="str_phoneNumberHint">Número de teléfono</string>
     <string name="str_repeatPasswordHint">Repita la contraseña</string>
-    <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google.</string>
+    <string name="str_registerDescription">Podés registrarte llenando el siguiente formulario o utilizando tu cuenta de Google. Para registrarte usando la cuenta de Google, vuelve a la pantalla anterior y presiona el boton \"Ingresar con Google\". \n\n¡Adelante, tus amigos te esperan!</string>
     <string name="str_editAccountText">Mantén tu cuenta al día</string>
     <string name="str_editAccountDescription">Acutalizá tu información de contacto o añadí información académica. Aquí podés actualizar tus datos.</string>
     <string name="str_editPasswordLbl">Cambiar contraseña:</string>
@@ -78,4 +78,7 @@
     <string name="str_updateProfilePicture">Actualizar foto de perfil</string>
     <string name="str_loginIncomplete">Por favor llenar todos los campos para acceder</string>
     <string name="str_loginFailed">Algo falló. Comprueba el correo y la contraseña e intenta de nuevo</string>
+    <string name="str_actionlogout">Salir</string>
+    <string name="str_logoutSuc">Se ha cerrado sesión con éxito</string>
+    <string name="str_registrationSuccess">Se ha creado la cuenta con éxito</string>
 </resources>

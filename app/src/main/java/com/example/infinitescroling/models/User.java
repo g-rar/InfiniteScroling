@@ -1,5 +1,7 @@
 package com.example.infinitescroling.models;
 
+import android.net.Uri;
+
 import java.util.Date;
 
 public class User {
@@ -10,6 +12,7 @@ public class User {
     private String email;
     private Date birthDate;
     private String phoneNumber;
+    private String profilePicture;
 
     public User(){
 
@@ -23,6 +26,17 @@ public class User {
         this.email = email;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
+    }
+
+    public User(String firstName, String lastName, String city, String gender, String email, Date birthDate, String phoneNumber, String profilePicture) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.gender = gender;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
     }
 
     public String getFirstName() {
@@ -79,5 +93,13 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }
