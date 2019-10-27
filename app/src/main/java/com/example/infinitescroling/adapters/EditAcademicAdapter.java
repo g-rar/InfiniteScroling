@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,14 +20,16 @@ import java.util.ArrayList;
 public class EditAcademicAdapter extends ArrayAdapter {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private AcademicEditable academicEditable;
 
-    public EditAcademicAdapter(Context context, ArrayList<AcademicInfo> academics){
+    public EditAcademicAdapter(Context context, AcademicEditable academicEditable, ArrayList<AcademicInfo> academics){
         super(context, 0, academics);
+        this.academicEditable = academicEditable;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AcademicInfo academicInfo = (AcademicInfo) getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.edit_academics_row, parent, false);
@@ -36,12 +39,32 @@ public class EditAcademicAdapter extends ArrayAdapter {
         TextView tvInst = convertView.findViewById(R.id.textView_intitutionName);
         TextView tvBeginDate = convertView.findViewById(R.id.textView_startDate);
         TextView tvEndDate = convertView.findViewById(R.id.textView_endDate);
+        ImageButton btnEdit = convertView.findViewById(R.id.imageButton_editAcadmic);
+        ImageButton btnDel = convertView.findViewById(R.id.imageButton_deleteAcademic);
 
         tvTitle.setText(academicInfo.getTitle());
         tvInst.setText(academicInfo.getInstitution());
         tvBeginDate.setText(simpleDateFormat.format(academicInfo.getBeginDate()));
         tvEndDate.setText(simpleDateFormat.format(academicInfo.getEndDate()));
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                academicEditable.editAcademicOnClick(position);
+            }
+        });
+        btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                academicEditable.deleteAcademicOnClick(position);
+            }
+        });
+
 
         return convertView;
+    }
+
+    public interface AcademicEditable{
+        void editAcademicOnClick(int position);
+        void deleteAcademicOnClick(int position);
     }
 }

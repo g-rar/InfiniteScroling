@@ -256,17 +256,30 @@
                 </ListView>
 
                 <Button
-                    android:id="@+id/button_addAcademic"
+                    android:id="@+id/button_submitAcademic"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:drawableLeft="@drawable/ic_add_black_24dp"
-                    android:onClick="createAcademic"
+                    android:drawableLeft="@android:drawable/ic_input_add"
+                    android:onClick="submitAcademic"
                     android:text="@string/str_addAcademic"
                     android:textAllCaps="false"
                     app:layout_constraintStart_toStartOf="@+id/editText_repeatPasswordInput"
                     app:layout_constraintTop_toBottomOf="@+id/editText_title" />
+
+                <Button
+                    android:id="@+id/button_editAcademicCancel"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:drawableLeft="@android:drawable/ic_delete"
+                    android:onClick="resetEditAcademic"
+                    android:text="@string/str_cancel"
+                    android:textAllCaps="false"
+                    app:layout_constraintStart_toEndOf="@+id/button_submitAcademic"
+                    app:layout_constraintTop_toTopOf="@+id/button_submitAcademic" />
 
                 <Button
                     android:id="@+id/button_editAccountSubmit"
@@ -277,7 +290,7 @@
                     android:text="@string/str_editAccountSubmit"
                     app:layout_constraintBottom_toTopOf="@+id/divider2"
                     app:layout_constraintStart_toStartOf="@+id/textView_academicsLbl"
-                    app:layout_constraintTop_toBottomOf="@+id/button_addAcademic"
+                    app:layout_constraintTop_toBottomOf="@+id/button_submitAcademic"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -390,9 +403,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/str_deleteProfileDescription"
-                    app:layout_constraintBottom_toTopOf="@+id/button"
+                    app:layout_constraintBottom_toTopOf="@+id/editText_deleteAccountPassword"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -406,6 +419,19 @@
                     android:text="@string/str_deleteAccount"
                     android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView_deleteProfileDescription" />
+
+                <EditText
+                    android:id="@+id/editText_deleteAccountPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/str_passwordHint"
+                    android:autofillHints="@string/str_passwordHint"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    app:layout_constraintBottom_toTopOf="@+id/button"
                     app:layout_constraintStart_toStartOf="@+id/textView_deleteProfileDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

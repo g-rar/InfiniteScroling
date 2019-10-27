@@ -2,7 +2,7 @@
     <string name="app_name">InfiniteScroling</string>
     <string name="str_loginLabel">¡Accede para ver qué hay de nuevo con tus amigos!</string>
     <string name="str_emailhint">Correo electrónico:</string>
-    <string name="str_passwordHint">Contraseña:</string>
+    <string name="str_passwordHint">Contraseña</string>
     <string name="str_forgotPassword"> <u> ¿Olvidó la constraseña? </u> </string>
     <string name="str_login">Ingresar</string>
     <string name="str_register">Registrarse</string>
@@ -69,7 +69,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_editProfile">Actualizar perfil</string>
     <string name="str_warning">¡Cuidado!</string>
-    <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción.</string>
+    <string name="str_deleteProfileDescription">Si se presiona el siguiente botón la cuenta va a borrarse y no podrás seguir usando nuestra aplicación con ella. No podrás revertir esta acción. \n\nSi usted se registró usando contraseña ingrésela para borrar la cuenta.</string>
     <string name="str_deleteAccount">Borrar cuenta</string>
     <string name="str_buscar">Buscar</string>
     <string name="str_optionsPosts">Posts</string>
@@ -87,4 +87,14 @@
     <string name="str_deleteAccountConfirm">Sí, estoy seguro.</string>
     <string name="str_deleteAccountCancel">Mejor no. Volver.</string>
     <string name="str_regAcademicIncomplete">Rellene los cuatro espacios del logro academico para poder anadirlo</string>
+    <string name="str_fetchAcademicFail">Hubo un problema al obtener la información académica</string>
+    <string name="str_addAcademicSucces">Se ha añadido la información académica</string>
+    <string name="str_cancel">Cancelar</string>
+    <string name="str_editAcademicSuccess">Se ha editado la información académica</string>
+    <string name="str_editAcademicFail">No se ha podido editar el academico. Intenta de neuvo más tarde.</string>
+    <string name="str_addAcademicFail">No se ha podido añadir el logro académico. Por favor intenta de nuevo más tarde.</string>
+    <string name="str_editAcademic">Editar info académica</string>
+    <string name="str_deleteAcademicSucces">Se ha borrado el logro academico.</string>
+    <string name="str_deleteAcademicFail">No se ha podido borrar el logro académico. Intenta de nuevo más tarde.</string>
+    <string name="str_passwordIncomplete">Por favor. Ingrese la contraseña</string>
 </resources>
