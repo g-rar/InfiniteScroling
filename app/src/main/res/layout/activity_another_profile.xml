@@ -74,7 +74,6 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="-45dp"
                 android:layout_toStartOf="@+id/imageView_profile"
-                android:drawableLeft="@drawable/ic_people_black_24dp"
                 android:text="@string/str_seeFriends" />
 
             <Button
@@ -87,7 +86,6 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_toEndOf="@+id/imageView_profile"
-                android:drawableLeft="@drawable/ic_image_black_24dp"
                 android:text="@string/str_seePhotos" />
 
             <androidx.recyclerview.widget.RecyclerView

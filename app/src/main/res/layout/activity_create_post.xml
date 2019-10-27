@@ -40,8 +40,7 @@
             android:layout_alignTop="@+id/imgPhoto"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="300dp"
-            app:srcCompat="@android:drawable/ic_menu_camera"
-            android:onClick="addPicture"/>
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
         <ImageView
             android:id="@+id/imgPhoto"
@@ -57,7 +56,6 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="35dp"
-            android:text="Post"
-            android:onClick="createPost"/>
+            android:text="Post" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

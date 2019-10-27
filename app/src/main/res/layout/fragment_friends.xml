@@ -4,8 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FriendsFragment">
-
-    <ListView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView_friends"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:text="@string/str_friends"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/button_allFriends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_friends"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="-54dp"
+            android:layout_toStartOf="@+id/textView_friends"
+            android:text="@string/str_buttonAllFriends" />
+
+        <Button
+            android:id="@+id/button_commonFriends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_friends"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="-54dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_toEndOf="@+id/textView_friends"
+            android:text="@string/str_buttonCommonFriends" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/button_allFriends"
+            android:layout_marginTop="30dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </RelativeLayout>
+
 </FrameLayout>
