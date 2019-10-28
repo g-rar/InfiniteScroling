@@ -32,6 +32,9 @@
         <activity android:name=".CreatePostActivity"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity android:name=".PostDetailsActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity android:name=".MainActivity"
             android:parentActivityName=".LoginActivity">
         </activity>

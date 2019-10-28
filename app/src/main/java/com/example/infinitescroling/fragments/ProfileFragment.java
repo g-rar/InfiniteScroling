@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -81,7 +82,11 @@ public class ProfileFragment extends Fragment {
         recyclerViewProfile.setLayoutManager(new LinearLayoutManager(getContext()));
 
         listProfile = new ArrayList<Posts>();
-        adapterList = new FeedAdapter(view.getContext(), listProfile);
+        adapterList = new FeedAdapter(view.getContext(), listProfile, new FeedAdapter.OnItemClickListener() {
+            @Override public void onItemClick(Posts item) {
+
+            }
+        });
         recyclerViewProfile .setAdapter(adapterList);
         searchPosts();
         loadUser();
@@ -116,18 +121,17 @@ public class ProfileFragment extends Fragment {
 
     private void searchPosts(){
         listProfile.clear();
-        CollectionReference documentPosts = db.collection("posts");
-        documentPosts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Query documentPosts = db.collection("posts").whereEqualTo("postedBy",firebaseAuth.getUid());
+        documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(QueryDocumentSnapshot taskPost : task.getResult()){
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
                     Posts post = taskPost.toObject(Posts.class);
-                    if(post.getPostedBy().equals(firebaseAuth.getUid()))
-                        listProfile.add(post);
+                    listProfile.add(post);
                 }
                 Collections.sort(listProfile, new Comparator<Posts>() {
                     public int compare(Posts o1, Posts o2) {
-                        return o1.getDatePublication().compareTo(o2.getDatePublication());
+                        return o2.getDatePublication().compareTo(o1.getDatePublication());
                     }
                 });
                 adapterList.notifyDataSetChanged();

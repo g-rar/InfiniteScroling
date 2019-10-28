@@ -17,8 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +60,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private DocumentReference userDoc;
     private FirebaseAuth firebaseAuth;
     private ImageView img_post;
+    private VideoView video_post;
     private ImageButton btn_deleteImg;
     private final int MY_PERMISSIONS = 100;
     private final int PHOTO_CODE = 200;
@@ -65,6 +68,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private Uri path;
     private User user;
     private Posts newPost;
+    private Uri pathVideo;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +79,15 @@ public class CreatePostActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         img_post = findViewById(R.id.imgPhoto);
+        video_post = findViewById(R.id.videoView_videoPost);
         btn_deleteImg = findViewById(R.id.btnDeletePhoto);
+        video_post.setMediaController(new MediaController(this));
 
         userDoc = db.collection("users").document(firebaseAuth.getUid());
 
         myRequestStoragePermission();
         path = null;
+        pathVideo = null;
 
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -103,7 +110,7 @@ public class CreatePostActivity extends AppCompatActivity {
         newPost.setDescription(text);
         newPost.setDatePublication(new Date());
         if(path != null){
-            StorageReference file = storageReference.child(path.getLastPathSegment());
+            StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
             file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -122,7 +129,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     public void removeImg(View view){
         btn_deleteImg.setVisibility(View.GONE);
-        img_post.setImageResource(0);
+        img_post.setVisibility(View.GONE);
         path = null;
     }
 
@@ -227,6 +234,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     break;
             }
             img_post.setImageURI(path);
+            img_post.setVisibility(View.VISIBLE);
             btn_deleteImg.setVisibility(View.VISIBLE);
         }
     }
