@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.Posts;
 
@@ -50,7 +51,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
         Posts post = posts.get(position);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         holder.textView_nameUser.setText(post.getFirstNameUser()+" "+ post.getLastNameUser());
-        holder.textView_datePost.setText(formatter.format(post.getDatePublication()));
+        holder.textView_datePost.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
         holder.textView_description.setText(post.getDescription());
         if(post.getImgProfile() != null ){
             Uri path = Uri.parse(post.getImgProfile());
