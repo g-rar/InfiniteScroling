@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infinitescroling.adapters.EditAcademicAdapter;
@@ -51,6 +52,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
 
     public static final String TAG = "Edit profile Activity: ";
     public static final String ACADEMICS_KEY = "academicInfo";
+    private boolean isGoogleLoged = false;
     private int ACCOUNT_DELETED = 6;
     private int academicEdited = -1;
     private int RC_SIGN_IN = 7;
@@ -63,6 +65,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     private EditAcademicAdapter adapter;
     private FirebaseAuth firebaseAuth;
     private Button submitAcademic;
+    private Button editLoginInfoBtn;
     private FirebaseFirestore db;
     private DocumentReference userDoc;
     private User user;
@@ -81,6 +84,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     private EditText endDateInput;
     private EditText passwordInput;
     private EditText repeatPasswordInput;
+    private EditText passwordForEditLogin;
     private EditText passwordForDeleteInput;
 
     private GoogleSignInOptions gso;
@@ -121,6 +125,8 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
         passwordInput = findViewById(R.id.editText_passwordInput);
         repeatPasswordInput = findViewById(R.id.editText_repeatPasswordInput);
         passwordForDeleteInput = findViewById(R.id.editText_deleteAccountPassword);
+        editLoginInfoBtn = findViewById(R.id.button_editLoginInfo);
+        passwordForEditLogin = findViewById(R.id.editText_actualPasswordInput);
 
         //User info
         firebaseAuth = FirebaseAuth.getInstance();
@@ -139,9 +145,129 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(EditProfileActivity.this, R.string.str_somethingWentWrong, Toast.LENGTH_SHORT).show();
                 loadingLayout.setVisibility(View.GONE);
+                finish();
             }
         });
+        for(UserInfo userInfo : firebaseAuth.getCurrentUser().getProviderData()){
+            if(userInfo.getProviderId().equals("google.com")){
+                isGoogleLoged = true;
+                emailInput.setEnabled(false);
+                passwordInput.setEnabled(false);
+                repeatPasswordInput.setEnabled(false);
+                editLoginInfoBtn.setEnabled(false);
+            }
+        }
         //TODO submit editions for user data
+    }
+
+    public void editAccountSubmitOnClick(View view){
+        loadingLayout.setVisibility(View.VISIBLE);
+        final String name = nameInput.getText().toString();
+        final String lastName = lastNameInput.getText().toString();
+        final String birthDateStr = birthDateInput.getText().toString();
+
+        if(name.equals("") | lastName.equals("")){
+            Toast.makeText(this, R.string.str_editAccountIncomplete, Toast.LENGTH_LONG).show();
+            loadingLayout.setVisibility(View.GONE);
+            return;
+        }
+        try{
+            Date birthDate = birthDateStr.equals("") ? null :simpleDateFormat.parse(birthDateStr);
+            user.setBirthDate(birthDate);
+            user.setFirstName(name);
+            user.setLastName(lastName);
+            user.setGender(((TextView) genderSpinner.getSelectedView()).getText().toString());
+            user.setCity(cityInput.getText().toString());
+            user.setPhoneNumber(phoneNumberInput.getText().toString());
+            userDoc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(EditProfileActivity.this, R.string.str_editAccountSuccess, Toast.LENGTH_SHORT).show();
+                    loadingLayout.setVisibility(View.GONE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditProfileActivity.this, R.string.str_editAccountFail, Toast.LENGTH_SHORT).show();
+                    Log.w(TAG, "onFailure: editAccount", e);
+                    loadingLayout.setVisibility(View.GONE);
+                }
+            });
+        } catch (ParseException e) {
+            Toast.makeText(this, R.string.str_unvalidDate, Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "editAccountSubmitOnClick: DatePaarse error",e);
+            loadingLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void editLoginInfoOnClick(View view){
+        if(!isGoogleLoged){
+            loadingLayout.setVisibility(View.VISIBLE);
+            final String actualPassword = passwordForEditLogin.getText().toString();
+            String newPassword = passwordInput.getText().toString();
+            String newEmail = emailInput.getText().toString();
+            String repeatNewPassword = repeatPasswordInput.getText().toString();
+            if(actualPassword.equals("")){
+                Toast.makeText(this, R.string.str_passwordIncomplete, Toast.LENGTH_SHORT).show();
+                loadingLayout.setVisibility(View.GONE);
+                return;
+            }
+            if(newPassword.equals("") && repeatNewPassword.equals("")){
+                newPassword = actualPassword;
+            } else if(!newPassword.equals(repeatNewPassword)){
+                Toast.makeText(this, R.string.str_passwordConfirmFailed, Toast.LENGTH_SHORT).show();
+                loadingLayout.setVisibility(View.GONE);
+                return;
+            }
+            if(newEmail.equals("")){
+                newEmail = firebaseAuth.getCurrentUser().getEmail();
+            }
+            final String finalNewEmail = newEmail;
+            final String finalNewPassword = newPassword;
+            new AlertDialog.Builder(EditProfileActivity.this)
+                    .setTitle(R.string.alert_modifyLoginAccount)
+                    .setMessage(R.string.alert_modifyLoginDes)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(R.string.alert_imSureConfirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            firebaseAuth.signInWithEmailAndPassword(firebaseAuth.getCurrentUser().getEmail(),
+                                    actualPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    user.setEmail(finalNewEmail);
+                                    userDoc.set(user);
+                                    firebaseAuth.getCurrentUser().updateEmail(finalNewEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            firebaseAuth.signInWithEmailAndPassword(finalNewEmail, actualPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                                @Override
+                                                public void onSuccess(AuthResult authResult) {
+                                                    authResult.getUser().updatePassword(finalNewPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            firebaseAuth.signOut();
+                                                            Intent intent = getIntent();
+                                                            setResult(ACCOUNT_DELETED, intent);
+                                                            finish();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }).setNegativeButton(R.string.alert_backCancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+            }).show();
+        } else {
+            Toast.makeText(this, "No se puede editar la información de acceso para cuentas de Google", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fillWithUserInfo(DocumentSnapshot documentSnapshot) {
@@ -246,13 +372,10 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
         loadingLayout.setVisibility(View.VISIBLE);
         String passwordConfirm = passwordForDeleteInput.getText().toString();
         Log.d(TAG, "Inicio del for");
-        for(UserInfo userInfo : firebaseAuth.getCurrentUser().getProviderData()){
-            if(userInfo.getProviderId().equals("password")){
-                deletePasswordAccount(passwordConfirm);
-            }
-            if(userInfo.getProviderId().equals("google.com")){
-                deleteGoogleAccount();
-            }
+        if(isGoogleLoged){
+            deleteGoogleAccount();
+        } else {
+            deletePasswordAccount(passwordConfirm);
         }
     }
 
@@ -315,7 +438,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
             .setTitle(R.string.alert_deleteAccount)
             .setMessage(R.string.alert_deleteAccountDes)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(R.string.str_deleteAccountConfirm, new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.alert_imSureConfirm, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //TODO also delete posts
@@ -359,7 +482,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                     });
                 }
 
-            }).setNegativeButton(R.string.str_deleteAccountCancel, new DialogInterface.OnClickListener() {
+            }).setNegativeButton(R.string.alert_backCancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 loadingLayout.setVisibility(View.GONE);
