@@ -5,30 +5,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.infinitescroling.R;
+import com.example.infinitescroling.models.Posts;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.GenericArrayType;
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class SearchFragment extends Fragment {
 
     private boolean searchPeople = false;
+    private String TAG = "Search Fragment: ";
+    private List<User> usersFetched;
+    private List<Posts> postsFetched;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText searchEditText;
@@ -61,27 +61,34 @@ public class SearchFragment extends Fragment {
                         .concat(String.copyValueOf(new char[] {lastChar}));
                 if(searchPeople){
                     db.collection("users")
-                            .whereLessThan("firstName", upMargin)
-                            .whereGreaterThanOrEqualTo("firstName", searchText)
-                            .orderBy("firstName")
-                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<DocumentSnapshot> testArray = queryDocumentSnapshots.getDocuments();
+                        .whereLessThan("firstName", upMargin)
+                        .whereGreaterThanOrEqualTo("firstName", searchText)
+                        .orderBy("firstName")
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             //TODO use result to populate list and show it
-                            Log.d("PruebaGer", "onSuccess: " + testArray.size());
+                            List<DocumentSnapshot> testArray = queryDocumentSnapshots.getDocuments();
+                            Log.d(TAG, "onSuccess: " + testArray.size());
+                            for(DocumentSnapshot doc : testArray){
+                                usersFetched.add(doc.toObject(User.class));
+                            }
                         }
                     });
                 } else {
                     db.collection("posts")
-                            .whereLessThan("userName", upMargin)
-                            .whereGreaterThanOrEqualTo("userName", searchText)
-                            .orderBy("date").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<DocumentSnapshot> testArray = queryDocumentSnapshots.getDocuments();
+                        .whereLessThan("firstNameUser", upMargin)
+                        .whereGreaterThanOrEqualTo("firstNameUser", searchText)
+                        .orderBy("firstNameUser").orderBy("datePublication")
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             //TODO use result to populate list and show it
-                            Log.d("PruebaGer", "onSuccess: " + testArray.size());
+                            List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                            Log.d(TAG, "onSuccess: " + documents.size());
+                            for(DocumentSnapshot doc : documents){
+                                postsFetched.add(doc.toObject(Posts.class));
+                            }
                         }
                     });
                 }
