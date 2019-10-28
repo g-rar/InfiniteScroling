@@ -8,6 +8,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        FeedFragment.main = this;
     }
 
     @Override

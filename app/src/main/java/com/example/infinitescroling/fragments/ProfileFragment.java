@@ -11,21 +11,33 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.LoginActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.InfScrollUtil;
+import com.example.infinitescroling.adapters.FeedAdapter;
+import com.example.infinitescroling.models.Posts;
 import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class ProfileFragment extends Fragment {
@@ -41,6 +53,11 @@ public class ProfileFragment extends Fragment {
     private ArrayList<CharSequence> infos;
     private ArrayAdapter<CharSequence> infoAdapter;
     private ListView infoListView;
+
+    private FeedAdapter adapterList;
+    private RecyclerView recyclerViewProfile;
+    private ArrayList<Posts> listProfile;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +75,15 @@ public class ProfileFragment extends Fragment {
         infoAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, infos );
         infoListView = view.findViewById(R.id.listView_information_profile);
         infoListView.setAdapter(infoAdapter);
+
+        recyclerViewProfile = view.findViewById(R.id.RecyclerView_posts);
+        recyclerViewProfile.setHasFixedSize(true);
+        recyclerViewProfile.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        listProfile = new ArrayList<Posts>();
+        adapterList = new FeedAdapter(view.getContext(), listProfile);
+        recyclerViewProfile .setAdapter(adapterList);
+        searchPosts();
         loadUser();
         return view;
     }
@@ -86,6 +112,27 @@ public class ProfileFragment extends Fragment {
             infos.add("Número de teléfono: " + loggedUser.getPhoneNumber());
         infoAdapter.notifyDataSetChanged();
         InfScrollUtil.setListViewHeightBasedOnChildren(infoListView);
+    }
+
+    private void searchPosts(){
+        listProfile.clear();
+        CollectionReference documentPosts = db.collection("posts");
+        documentPosts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(QueryDocumentSnapshot taskPost : task.getResult()){
+                    Posts post = taskPost.toObject(Posts.class);
+                    if(post.getPostedBy().equals(firebaseAuth.getUid()))
+                        listProfile.add(post);
+                }
+                Collections.sort(listProfile, new Comparator<Posts>() {
+                    public int compare(Posts o1, Posts o2) {
+                        return o1.getDatePublication().compareTo(o2.getDatePublication());
+                    }
+                });
+                adapterList.notifyDataSetChanged();
+            }
+        });
     }
 
     private void loadImages() {
@@ -117,6 +164,7 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         }
+        searchPosts();
     }
 
 
