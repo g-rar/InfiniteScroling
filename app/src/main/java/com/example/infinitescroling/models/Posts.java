@@ -15,6 +15,7 @@ public class Posts {
     private ArrayList<String> dislikes;
     private ArrayList<String> friends;
     private Date datePublication;
+    private String id;
 
     public Posts(){
 
@@ -31,6 +32,25 @@ public class Posts {
         this.friends.add(this.postedBy);
     }
 
+    public void addFriend(String userId){
+        this.friends.add(userId);
+    }
+
+    public void addLike(String userId){
+        this.likes.add(userId);
+    }
+
+    public void addDislike(String userId){
+        this.dislikes.add(userId);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFirstNameUser() {
         return firstNameUser;

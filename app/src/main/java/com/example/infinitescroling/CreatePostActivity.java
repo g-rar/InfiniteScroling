@@ -94,6 +94,9 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user = documentSnapshot.toObject(User.class);
                 newPost = new Posts(user.getFirstName(),user.getLastName(),firebaseAuth.getUid(),user.getProfilePicture(),user.getFriendIds());
+                for(String friend : user.getFriendIds()){
+                    newPost.addFriend(friend);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -137,7 +140,6 @@ public class CreatePostActivity extends AppCompatActivity {
         db.collection("posts").document().set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
             }
         });
         finish();

@@ -2,6 +2,7 @@ package com.example.infinitescroling.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -74,14 +76,7 @@ public class FeedFragment extends Fragment {
         adapterList = new FeedAdapter(root.getContext(), listFeed, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Posts item) {
                 Intent intent = new Intent(root.getContext(), PostDetailsActivity.class);
-                intent.putExtra("firstName",item.getFirstNameUser());
-                intent.putExtra("lastName",item.getLastNameUser());
-                intent.putExtra("idUser",item.getPostedBy());
-                intent.putExtra("description",item.getDescription());
-                intent.putExtra("image",item.getImage());
-                intent.putExtra("video",item.getVideo());
-                intent.putExtra("date",item.getDatePublication());
-                intent.putExtra("profile",item.getImgProfile());
+                intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
         });
@@ -97,6 +92,7 @@ public class FeedFragment extends Fragment {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
                     Posts post = taskPost.toObject(Posts.class);
+                    post.setId(taskPost.getId());
                     listFeed.add(post);
                 }
                 Collections.sort(listFeed, new Comparator<Posts>() {
