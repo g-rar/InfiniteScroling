@@ -15,19 +15,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.infinitescroling.AnotherProfileActivity;
 import com.example.infinitescroling.CreatePostActivity;
 import com.example.infinitescroling.MainActivity;
+import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.FeedAdapter;
 import com.example.infinitescroling.models.Posts;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -46,10 +51,10 @@ public class FeedFragment extends Fragment {
     private final int CODPOST = 2;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_feed, container, false);
+        final View root = inflater.inflate(R.layout.fragment_feed, container, false);
         Button btn = root.findViewById(R.id.button_makePost);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,38 +71,37 @@ public class FeedFragment extends Fragment {
 
         listFeed = new ArrayList<Posts>();
         searchPosts();
-        adapterList = new FeedAdapter(root.getContext(), listFeed);
-        recyclerViewFeed .setAdapter(adapterList);
+        adapterList = new FeedAdapter(root.getContext(), listFeed, new FeedAdapter.OnItemClickListener() {
+            @Override public void onItemClick(Posts item) {
+                Intent intent = new Intent(root.getContext(), PostDetailsActivity.class);
+                intent.putExtra("firstName",item.getFirstNameUser());
+                intent.putExtra("lastName",item.getLastNameUser());
+                intent.putExtra("idUser",item.getPostedBy());
+                intent.putExtra("description",item.getDescription());
+                intent.putExtra("image",item.getImage());
+                intent.putExtra("video",item.getVideo());
+                intent.putExtra("date",item.getDatePublication());
+                intent.putExtra("profile",item.getImgProfile());
+                startActivity(intent);
+            }
+        });
+        recyclerViewFeed.setAdapter(adapterList);
         return root;
-    }
-
-    public void newPost(View view){
-        Intent intent = new Intent(getContext(), CreatePostActivity.class);
-
     }
 
     private void searchPosts(){
         listFeed.clear();
-        CollectionReference documentPosts = db.collection("posts");
-        documentPosts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Query documentPosts = db.collection("posts").whereArrayContains("friends",firebaseAuth.getUid());
+        documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(QueryDocumentSnapshot taskPost : task.getResult()){
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
                     Posts post = taskPost.toObject(Posts.class);
-                    if(post.getPostedBy().equals(firebaseAuth.getUid()))
-                        listFeed.add(post);
-                    else{
-                        for(String friend : post.getFriends()){
-                            if(friend.equals(firebaseAuth.getUid())){
-                                listFeed.add(post);
-                                break;
-                            }
-                        }
-                    }
+                    listFeed.add(post);
                 }
                 Collections.sort(listFeed, new Comparator<Posts>() {
                     public int compare(Posts o1, Posts o2) {
-                        return o1.getDatePublication().compareTo(o2.getDatePublication());
+                        return o2.getDatePublication().compareTo(o1.getDatePublication());
                     }
                 });
                 adapterList.notifyDataSetChanged();

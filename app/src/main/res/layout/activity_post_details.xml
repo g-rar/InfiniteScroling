@@ -7,95 +7,119 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/imageView_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp"/>
+
+    <TextView
+        android:id="@+id/textView_nameUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/str_userName"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_datePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp"
+        android:text="fecha"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintStart_toEndOf="@+id/textView_nameUser"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_descriptionPost"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:text="Comentario ejemplo"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profile" />
 
-        <TextView
-            android:id="@+id/txtUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User name"
-            android:layout_alignParentStart="true"
-            android:textSize="20sp"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="30dp"/>
+    <ImageView
+        android:id="@+id/imageView_imgPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_descriptionPost"/>
 
-        <TextView
-            android:id="@+id/txtPostDescription"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/txtUserName"
-            android:layout_marginTop="50dp"
-            android:text="@string/str_postdescTest"
-            android:textSize="20sp"
-            android:layout_centerHorizontal="true"/>
+    <VideoView
+        android:id="@+id/videoView_videoPost"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_descriptionPost" />
 
-        <ImageView
-            android:id="@+id/imgPhoto"
-            android:layout_width="271dp"
-            android:layout_height="260dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="180dp"
-            tools:srcCompat="@tools:sample/avatars[2]" />
+    <ImageButton
+        android:id="@+id/btnLike"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_imgPost"
+        app:srcCompat="@drawable/ic_like" />
 
-        <ImageButton
-            android:id="@+id/btnLike"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_like"
-            android:layout_alignTop="@+id/imgPhoto"
-            android:layout_marginTop="270dp"
-            android:layout_marginLeft="90dp"/>
+    <TextView
+        android:id="@+id/txtLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="0"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/btnLike"
+        app:layout_constraintTop_toTopOf="@+id/btnLike" />
 
-        <TextView
-            android:id="@+id/txtLikeCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="20sp"
-            android:layout_alignStart="@+id/btnLike"
-            android:layout_alignTop="@+id/btnLike"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="13dp"/>
+    <ImageButton
+        android:id="@+id/btnDislike"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toEndOf="@+id/txtLikeCount"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_imgPost"
+        app:srcCompat="@drawable/ic_dislike" />
 
-        <ListView
-            android:id="@+id/commentsLv"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp" />
+    <TextView
+        android:id="@+id/txtDislikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="0"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/btnDislike"
+        app:layout_constraintTop_toTopOf="@+id/btnDislike" />
 
-        <TextView
-            android:id="@+id/txtDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:layout_alignBottom="@+id/txtUserName"
-            android:textSize="20sp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="40dp"/>
 
-        <ImageButton
-            android:id="@+id/btnDislike"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_dislike"
-            android:layout_alignStart="@+id/btnLike"
-            android:layout_alignBottom="@+id/btnLike"
-            android:layout_alignLeft="@+id/btnLike"
-            android:layout_marginLeft="150dp"/>
-
-        <TextView
-            android:id="@+id/txtDislikeCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="20sp"
-            android:layout_alignStart="@+id/btnDislike"
-            android:layout_alignTop="@+id/btnDislike"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="13dp"/>
-
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

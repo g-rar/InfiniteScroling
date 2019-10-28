@@ -22,10 +22,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
 
     private Context context;
     private ArrayList<Posts> posts;
+    private final OnItemClickListener listener;
 
-    public FeedAdapter(Context context, ArrayList<Posts> posts) {
+
+    public interface OnItemClickListener {
+        void onItemClick(Posts item);
+    }
+
+    public FeedAdapter(Context context, ArrayList<Posts> posts, OnItemClickListener listener) {
         this.context = context;
         this.posts = posts;
+        this.listener = listener;
     }
 
 
@@ -59,12 +66,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
                     .load(path)
                     .into(holder.imageView_imgPost);
         }
+        holder.bind(posts.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
     }
+
+
 
     public class PostsHolder extends RecyclerView.ViewHolder{
 
@@ -82,6 +92,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
             textView_description = view.findViewById(R.id.textView_descriptionPost);
             imageView_Profile = view.findViewById(R.id.imageView_profileFeed);
             imageView_imgPost = view.findViewById(R.id.imageView_imgPost);
+        }
+
+        public void bind(final Posts item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 }
