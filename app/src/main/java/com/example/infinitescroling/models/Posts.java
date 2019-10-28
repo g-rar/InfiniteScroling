@@ -1,5 +1,6 @@
 package com.example.infinitescroling.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Posts {
@@ -7,31 +8,28 @@ public class Posts {
     private String lastNameUser;
     private String description;
     private String image;
+    private String imgProfile;
     private String video;
+    private String postedBy;
+    private ArrayList<String> likes;
+    private ArrayList<String> dislikes;
+    private ArrayList<String> friends;
     private Date datePublication;
 
     public Posts(){
 
     }
 
-    public Posts(String firstNameUser, String lastNameUser, String description, String multimedia, Date datePublication, boolean type){
+    public Posts(String firstNameUser, String lastNameUser, String postedBy, String imgProfile, ArrayList<String> friendsIds){
         this.firstNameUser = firstNameUser;
         this.lastNameUser = lastNameUser;
-        this.description = description;
-        this.datePublication = datePublication;
-        if(type)
-            this.image = multimedia;
-        else
-            this.video = multimedia;
-
+        this.likes = new ArrayList<String>();
+        this.dislikes = new ArrayList<String>();
+        this.friends = friendsIds;
+        this.postedBy = postedBy;
+        this.imgProfile = imgProfile;
     }
 
-    public Posts(String firstNameUser, String lastNameUser, String description, Date datePublication){
-        this.firstNameUser = firstNameUser;
-        this.lastNameUser = lastNameUser;
-        this.description = description;
-        this.datePublication = datePublication;
-    }
 
     public String getFirstNameUser() {
         return firstNameUser;
@@ -79,5 +77,45 @@ public class Posts {
 
     public void setDatePublication(Date datePublication) {
         this.datePublication = datePublication;
+    }
+
+    public String getImgProfile() {
+        return imgProfile;
+    }
+
+    public void setImgProfile(String imgProfile) {
+        this.imgProfile = imgProfile;
+    }
+
+    public String getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(String postedBy) {
+        this.postedBy = postedBy;
+    }
+
+    public ArrayList<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(ArrayList<String> likes) {
+        this.likes = likes;
+    }
+
+    public ArrayList<String> getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(ArrayList<String> dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
     }
 }
