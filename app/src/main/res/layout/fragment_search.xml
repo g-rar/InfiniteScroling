@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:singleLine="true"
-            android:text="Buscar"
+            android:hint="@string/str_buscar"
             android:textSize="20sp"
             android:layout_alignTop="@+id/lblSearch"
             android:layout_marginTop="50dp"
@@ -73,7 +73,8 @@
             android:id="@+id/lvData"
             android:layout_width="match_parent"
             android:layout_height="550dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_below="@+id/btnSwitchInformation"
+            android:layout_marginTop="24dp" />
 
     </RelativeLayout>
 
