@@ -13,18 +13,32 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -41,11 +55,16 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private StorageReference storageReference;
-    private Bitmap bitmapImg;
+    private DocumentReference userDoc;
+    private FirebaseAuth firebaseAuth;
+    private ImageView img_post;
+    private ImageButton btn_deleteImg;
     private final int MY_PERMISSIONS = 100;
     private final int PHOTO_CODE = 200;
     private final int SELECT_PICTURE = 300;
     private Uri path;
+    private User user;
+    private Posts newPost;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,30 +72,68 @@ public class CreatePostActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        img_post = findViewById(R.id.imgPhoto);
+        btn_deleteImg = findViewById(R.id.btnDeletePhoto);
+
+        userDoc = db.collection("users").document(firebaseAuth.getUid());
 
         myRequestStoragePermission();
         path = null;
+
+        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user = documentSnapshot.toObject(User.class);
+                newPost = new Posts(user.getFirstName(),user.getLastName(),firebaseAuth.getUid(),user.getProfilePicture(),user.getFriendIds());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreatePostActivity.this, R.string.str_somethingWentWrong, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     public void createPost(View view){
         EditText txt = findViewById(R.id.txtPost);
         String text = txt.getText().toString();
-        Posts newPost = new Posts("Adrian","Mora",text,new Date());
+        newPost.setDescription(text);
+        newPost.setDatePublication(new Date());
+        if(path != null){
+            StorageReference file = storageReference.child(path.getLastPathSegment());
+            file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                    while(!uri.isComplete());
+                    path = uri.getResult();
+                    newPost.setImage(path.toString());
+                    uploadPost(newPost);
+                }
+            });
+        }
+        else{
+            uploadPost(newPost);
+        }
+    }
+
+    public void removeImg(View view){
+        btn_deleteImg.setVisibility(View.GONE);
+        img_post.setImageResource(0);
+        path = null;
+    }
+
+    private void uploadPost(Posts newPost){
         db.collection("posts").document().set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
             }
         });
-        if(path != null){
-            StorageReference file = storageReference.child(path.getLastPathSegment());
-            file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                }
-            });
-        }
+        finish();
     }
 
     private void showExplanation() {
@@ -160,23 +217,17 @@ public class CreatePostActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             switch (requestCode){
                 case PHOTO_CODE:
-                    Bitmap pathl = (Bitmap) data.getExtras().get("data");
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
                     // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                    path = getImageUri(getApplicationContext(), pathl);
-                    if(path == null){
-                        Toast.makeText(CreatePostActivity.this,"sii",Toast.LENGTH_LONG).show();
-                    }
-                    else
-                        Toast.makeText(CreatePostActivity.this,"noo",Toast.LENGTH_LONG).show();
+                    path = getImageUri(getApplicationContext(), bitmap);
                     break;
                 case SELECT_PICTURE:
                     path = data.getData();
-                    ImageView imageView = new ImageView(this);
-                    imageView.setImageURI(path);
-                    bitmapImg = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                     break;
             }
+            img_post.setImageURI(path);
+            btn_deleteImg.setVisibility(View.VISIBLE);
         }
     }
 
