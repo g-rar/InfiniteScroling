@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.LoginActivity;
 import com.example.infinitescroling.R;
@@ -32,7 +33,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,9 +139,9 @@ public class ProfileFragment extends Fragment {
         if(loggedUser.getProfilePicture() != null && !loggedUser.getProfilePicture().equals("")){
             try {
                 ImageView iv = layout.findViewById(R.id.imageView_profile);
-                Picasso.with(getContext())
+                Glide.with(getContext())
                         .load(loggedUser.getProfilePicture())
-                        .centerCrop().fit().into(iv);
+                        .centerCrop().fitCenter().into(iv);
                 //TODO fill the rest of images
             } catch (Exception e) {
                 e.printStackTrace();

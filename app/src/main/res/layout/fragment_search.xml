@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:singleLine="true"
+            android:inputType="text"
             android:hint="@string/str_buscar"
             android:textSize="20sp"
             android:layout_alignTop="@+id/lblSearch"
@@ -70,7 +71,7 @@
             android:layout_marginLeft="50dp"/>
 
         <ListView
-            android:id="@+id/lvData"
+            android:id="@+id/listView_searchResults"
             android:layout_width="match_parent"
             android:layout_height="550dp"
             android:layout_below="@+id/btnSwitchInformation"
