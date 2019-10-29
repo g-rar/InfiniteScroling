@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.Comment;
 
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends ArrayAdapter {
 
-    private CommentRedirectable userRedirectable;
+    private UsersAdapter.UserRedirectable userRedirectable;
 
-    public CommentAdapter(Context context, CommentRedirectable userRedirectable, ArrayList<Comment> comments){
+    public CommentAdapter(Context context, UsersAdapter.UserRedirectable userRedirectable, ArrayList<Comment> comments){
         super(context, 0, comments);
         this.userRedirectable = userRedirectable;
     }
@@ -42,14 +43,13 @@ public class CommentAdapter extends ArrayAdapter {
         }
 
         TextView userName = convertView.findViewById(R.id.textView_nameUserRow);
-        userName.setText(comment.getFirstName() + " " + comment.getLastName());
+        userName.setText((comment.getFirstName() + " " + comment.getLastName()));
 
         TextView description = convertView.findViewById(R.id.textView_descriptionComment);
         description.setText(comment.getDescription());
 
         TextView date = convertView.findViewById(R.id.textView_dateComment);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        date.setText(formatter.format(comment.getDateComment()));
+        date.setText(InfScrollUtil.makeDateReadable(comment.getDateComment()));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +61,4 @@ public class CommentAdapter extends ArrayAdapter {
         return convertView;
     }
 
-    public interface CommentRedirectable {
-        void redirecToFriend(int position);
-    }
 }

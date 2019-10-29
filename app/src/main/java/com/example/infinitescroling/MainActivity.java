@@ -26,9 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO checklist [ ] https://developers.google.com/identity/sign-in/android/sign-in
-    //TODO checklist [ ] https://firebase.google.com/docs/auth/android/google-signin?utm_source=studio
-
     private FirebaseAuth firebaseAuth;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
@@ -43,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
