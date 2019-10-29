@@ -92,7 +92,6 @@ public class FeedFragment extends Fragment {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
                     Posts post = taskPost.toObject(Posts.class);
-                    post.setId(taskPost.getId());
                     listFeed.add(post);
                 }
                 Collections.sort(listFeed, new Comparator<Posts>() {

@@ -1,15 +1,26 @@
 
 package com.example.infinitescroling.fragments;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,8 +28,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.CreatePostActivity;
 import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.LoginActivity;
+import com.example.infinitescroling.MainActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.adapters.FeedAdapter;
@@ -34,30 +47,44 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
 
 
 public class ProfileFragment extends Fragment {
 
     private int MODIFY_ACCOUNT = 1;
     private int ACCOUNT_DELETED = 6;
+    private final int MY_PERMISSIONS = 100;
+    private final int PHOTO_CODE = 200;
+    private final int SELECT_PICTURE = 300;
 
     private SimpleDateFormat simpleDateFormat;
     private User loggedUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     private View layout;
     private ArrayList<CharSequence> infos;
     private ArrayAdapter<CharSequence> infoAdapter;
     private ListView infoListView;
+    private ImageView profile;
 
     private FeedAdapter adapterList;
     private RecyclerView recyclerViewProfile;
     private ArrayList<Posts> listProfile;
+    private Uri path;
 
 
     @Override
@@ -88,8 +115,17 @@ public class ProfileFragment extends Fragment {
             }
         });
         recyclerViewProfile .setAdapter(adapterList);
+        profile = view.findViewById(R.id.imageView_profile);
+        Button btn = view.findViewById(R.id.button_updateProfilePicture);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPicture();
+            }
+        });
         searchPosts();
         loadUser();
+        myRequestStoragePermission();
         return view;
     }
 
@@ -153,9 +189,99 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private void showExplanation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Permisos denegados");
+        builder.setMessage("Para usar las funciones de la app necesitas aceptar los permisos");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void addPicture(){
+        final CharSequence[] options = {"Tomar foto", "Elegir de galeria", "Cancelar"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Elige una opción");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(options[i].equals("Tomar foto"))
+                    openCamera();
+                else if(options[i].equals("Elegir de galeria")){
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(intent.createChooser(intent,"Selecciona la app:" ), SELECT_PICTURE);
+                }
+                else if (options[i].equals("Cancelar"))
+                    dialogInterface.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void openCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, PHOTO_CODE);
+    }
+
+    private boolean myRequestStoragePermission(){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return true;
+
+        if((getContext().checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) &&
+                (getContext().checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED))
+            return true;
+
+        if((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) || (shouldShowRequestPermissionRationale(CAMERA)))
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
+        else
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(requestCode == MY_PERMISSIONS){
+            if(grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(getContext(), "Permisos aceptados", Toast.LENGTH_SHORT).show();
+        }
+        else
+            showExplanation();
+    }
+
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
     public void editProfileOnClick(View view){
         Intent intent = new Intent(getContext(), EditProfileActivity.class);
         startActivityForResult(intent, MODIFY_ACCOUNT);
+    }
+
+    private void uploadUser(){
+        db.collection("users").document(firebaseAuth.getUid()).set(loggedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        });
     }
 
     @Override
@@ -166,6 +292,37 @@ public class ProfileFragment extends Fragment {
                 Intent loginIntent = new Intent(this.getContext(), LoginActivity.class);
                 startActivity(loginIntent);
                 getActivity().finish();
+            }
+        }
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case PHOTO_CODE:
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+                    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                    path = getImageUri(getContext().getApplicationContext(), bitmap);
+                    break;
+                case SELECT_PICTURE:
+                    path = data.getData();
+                    break;
+            }
+            if(path != null){
+                Glide
+                        .with(getContext())
+                        .load(path)
+                        .into(profile);
+                StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
+                file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uri.isComplete());
+                        path = uri.getResult();
+                        loggedUser.setProfilePicture(path.toString());
+                        uploadUser();
+                    }
+                });
+
             }
         }
         searchPosts();

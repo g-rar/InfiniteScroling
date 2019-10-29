@@ -30,7 +30,6 @@ public class Posts {
         this.friends = friendsIds;
         this.postedBy = postedBy;
         this.imgProfile = imgProfile;
-        this.friends.add(this.postedBy);
         this.comments = new ArrayList<Comment>();
     }
 
