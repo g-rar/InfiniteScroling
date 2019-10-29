@@ -23,8 +23,8 @@
                 app:srcCompat="@drawable/ic_account_circle_black_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
+                app:layout_constraintTop_toTopOf="parent" />
+          
             <TextView
                 android:id="@+id/textView_name_profile"
                 android:layout_width="wrap_content"
@@ -111,8 +111,7 @@
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/button_editProfile"
-                app:layout_constraintTop_toTopOf="@+id/button_editProfile"
-                android:onClick="addPicture"/>
+                app:layout_constraintTop_toTopOf="@+id/button_editProfile" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RecyclerView_posts"

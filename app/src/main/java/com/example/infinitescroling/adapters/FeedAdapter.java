@@ -49,16 +49,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
     @Override
     public void onBindViewHolder(@NonNull FeedAdapter.PostsHolder holder, int position) {
         Posts post = posts.get(position);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         holder.textView_nameUser.setText(post.getFirstNameUser()+" "+ post.getLastNameUser());
         holder.textView_datePost.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
         holder.textView_description.setText(post.getDescription());
+        holder.imageView_imgPost.setVisibility(View.GONE);
         if(post.getImgProfile() != null ){
             Uri path = Uri.parse(post.getImgProfile());
             Glide
                     .with(context)
                     .load(path)
                     .into(holder.imageView_Profile);
+
+        }
+        else   {
+            holder.imageView_Profile.setImageResource(R.drawable.ic_account_circle_black_24dp);
         }
         if(post.getImage() != null ){
             Uri path = Uri.parse(post.getImage());
@@ -66,7 +70,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
                     .with(context)
                     .load(path)
                     .into(holder.imageView_imgPost);
+            holder.imageView_imgPost.setVisibility(View.VISIBLE);
         }
+
         holder.bind(posts.get(position), listener);
     }
 
