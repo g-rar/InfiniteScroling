@@ -97,6 +97,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 for(String friend : user.getFriendIds()){
                     newPost.addFriend(friend);
                 }
+                newPost.addFriend(newPost.getPostedBy());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -137,9 +138,12 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void uploadPost(Posts newPost){
-        db.collection("posts").document().set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
+        DocumentReference ref = db.collection("posts").document();
+        newPost.setId(ref.getId());
+        ref.set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+
             }
         });
         finish();
