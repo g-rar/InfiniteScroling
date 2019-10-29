@@ -157,7 +157,6 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                 editLoginInfoBtn.setEnabled(false);
             }
         }
-        //TODO submit editions for user data
     }
 
     public void editAccountSubmitOnClick(View view){
@@ -298,6 +297,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                     academicIds.add(doc.getId());
                 }
                 adapter.notifyDataSetChanged();
+                InfScrollUtil.setListViewHeightBasedOnChildren(academicListView);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
