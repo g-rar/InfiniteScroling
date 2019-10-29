@@ -6,6 +6,12 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class InfScrollUtil {
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -28,5 +34,9 @@ public class InfScrollUtil {
         listView.setLayoutParams(params);
         listView.requestLayout();
 
+    }
+
+    public static String makeDateReadable(Date date){
+        return (new PrettyTime(new Locale("es"))).format(date);
     }
 }
