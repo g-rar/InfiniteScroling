@@ -72,7 +72,6 @@ public class FeedFragment extends Fragment {
         recyclerViewFeed.setLayoutManager(new LinearLayoutManager(getContext()));
 
         listFeed = new ArrayList<Posts>();
-        searchPosts();
         adapterList = new FeedAdapter(root.getContext(), listFeed, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Posts item) {
                 Intent intent = new Intent(root.getContext(), PostDetailsActivity.class);
@@ -81,6 +80,7 @@ public class FeedFragment extends Fragment {
             }
         });
         recyclerViewFeed.setAdapter(adapterList);
+        searchPosts();
         return root;
     }
 
