@@ -105,5 +105,4 @@
     <string name="alert_modifyLoginDes">Si aceptas a continuación, vas a tener que acceder nuevamente con la nueva información de acceso. ¿Estás seguro?</string>
     <string name="str_searchIncomplete">Por favor inserte algo para buscar.</string>
     <string name="str_noResults">No se han encontrado resultados</string>
-    <string name="str_unFriend">Eliminar amigo</string>
 </resources>

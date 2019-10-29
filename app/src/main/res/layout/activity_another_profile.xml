@@ -35,22 +35,20 @@
                 android:textSize="24sp" />
 
             <Button
-                android:id="@+id/button_addFriend"
+                android:id="@+id/button_editProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_name_profile"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
-                android:drawableLeft="@android:drawable/ic_input_add"
-                android:text="@string/str_addFriend"
-                android:textAllCaps="false" />
+                android:text="@string/str_addFriend" />
 
             <TextView
                 android:id="@+id/textView_Information"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/button_addFriend"
+                android:layout_below="@+id/button_editProfile"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
@@ -79,8 +77,7 @@
                 android:layout_marginEnd="-45dp"
                 android:layout_toStartOf="@+id/imageView_profile"
                 android:drawableLeft="@drawable/ic_people_black_24dp"
-                android:text="@string/str_seeFriends"
-                android:textAllCaps="false" />
+                android:text="@string/str_seeFriends" />
 
             <Button
                 android:id="@+id/button_anotherSeePhotos"
@@ -93,8 +90,7 @@
                 android:layout_marginEnd="30dp"
                 android:layout_toEndOf="@+id/imageView_profile"
                 android:drawableLeft="@drawable/ic_image_black_24dp"
-                android:text="@string/str_seePhotos"
-                android:textAllCaps="false" />
+                android:text="@string/str_seePhotos" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
