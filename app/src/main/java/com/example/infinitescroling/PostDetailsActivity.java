@@ -85,8 +85,7 @@ public class PostDetailsActivity extends AppCompatActivity implements CommentAda
                 post = documentSnapshot.toObject(Posts.class);
                 name.setText(post.getFirstNameUser()+" "+post.getLastNameUser());
                 description.setText(post.getDescription());
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                date.setText(formatter.format(post.getDatePublication()));
+                date.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
                 countDislikes.setText(String.valueOf(post.getDislikes().size()));
                 countLikes.setText(String.valueOf(post.getLikes().size()));
                 if(post.getImgProfile() != null){
