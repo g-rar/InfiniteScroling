@@ -162,7 +162,7 @@ public class SearchFragment extends Fragment
     @Override
     public void redirecToFriend(int position) {
         Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
-        intent.putExtra("idUser", userIds.get(position));
+        intent.putExtra("userId", userIds.get(position));
         startActivity(intent);
         Toast.makeText(getContext(), "Redirijiendo a usuario", Toast.LENGTH_SHORT).show();
     }

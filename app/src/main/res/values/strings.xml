@@ -65,7 +65,6 @@
     <string name="str_buttonRejectFriend">Rechazar</string>
     <string name="str_stateFriend">Estado de amistad</string>
     <string name="str_buttonMakePost">Crear publicación</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_editProfile">Actualizar perfil</string>
     <string name="str_warning">¡Cuidado!</string>
@@ -106,4 +105,5 @@
     <string name="alert_modifyLoginDes">Si aceptas a continuación, vas a tener que acceder nuevamente con la nueva información de acceso. ¿Estás seguro?</string>
     <string name="str_searchIncomplete">Por favor inserte algo para buscar.</string>
     <string name="str_noResults">No se han encontrado resultados</string>
+    <string name="str_unFriend">Eliminar amigo</string>
 </resources>
