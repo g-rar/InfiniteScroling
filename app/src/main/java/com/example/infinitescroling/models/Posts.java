@@ -14,6 +14,7 @@ public class Posts {
     private ArrayList<String> likes;
     private ArrayList<String> dislikes;
     private ArrayList<String> friends;
+    private ArrayList<Comment> comments;
     private Date datePublication;
     private String id;
 
@@ -30,6 +31,19 @@ public class Posts {
         this.postedBy = postedBy;
         this.imgProfile = imgProfile;
         this.friends.add(this.postedBy);
+        this.comments = new ArrayList<Comment>();
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment){
+        this.comments.add(comment);
     }
 
     public void addFriend(String userId){

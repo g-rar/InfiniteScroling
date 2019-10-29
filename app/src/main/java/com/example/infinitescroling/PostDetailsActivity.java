@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.adapters.CommentAdapter;
+import com.example.infinitescroling.adapters.UsersAdapter;
+import com.example.infinitescroling.models.Comment;
 import com.example.infinitescroling.models.Posts;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,12 +28,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class PostDetailsActivity extends AppCompatActivity {
+public class PostDetailsActivity extends AppCompatActivity implements CommentAdapter.CommentRedirectable {
 
     private String idUser;
+    private User user;
     private FirebaseFirestore db;
+    private CommentAdapter commentAdapter;
+    private ArrayList<Comment> commentsFetched;
     private FirebaseAuth firebaseAuth;
     private DocumentReference postDoc;
     private Posts post;
@@ -36,6 +45,9 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView countDislikes;
     private ImageButton btn_like;
     private ImageButton btn_dislike;
+    private ListView commentsListView;
+    private EditText ed_comment;
+    private DocumentReference userDoc;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +62,21 @@ public class PostDetailsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         btn_like = findViewById(R.id.btnLike);
         btn_dislike = findViewById(R.id.btnDislike);
+        ed_comment = findViewById(R.id.editText_commentInput);
+        userDoc = db.collection("users").document(firebaseAuth.getUid());
+        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user = documentSnapshot.toObject(User.class);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PostDetailsActivity.this, R.string.str_somethingWentWrong, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
 
         postDoc = db.collection("posts").document(getIntent().getStringExtra("idPost"));
         postDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -82,6 +109,11 @@ public class PostDetailsActivity extends AppCompatActivity {
                     btn_like.setImageResource(R.drawable.ic_like_select);
                 else if(post.getDislikes().contains(firebaseAuth.getUid()))
                     btn_dislike.setImageResource(R.drawable.ic_dislike_select);
+
+                for(Comment comment : post.getComments()){
+                    commentsFetched.add(comment);
+                }
+                commentAdapter.notifyDataSetChanged();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -90,6 +122,11 @@ public class PostDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+        commentsListView = findViewById(R.id.listView_commentList);
+
+        commentsFetched = new ArrayList<>();
+        commentAdapter = new CommentAdapter(this, this, commentsFetched);
+        commentsListView.setAdapter(commentAdapter);
 
     }
 
@@ -139,9 +176,37 @@ public class PostDetailsActivity extends AppCompatActivity {
         countLikes.setText(String.valueOf(post.getLikes().size()));
     }
 
+    public void addComent(View view){
+        String comment = ed_comment.getText().toString();
+        if(!comment.isEmpty()) {
+            Comment commentPost = new Comment(user.getFirstName(), user.getLastName(), new Date(), comment);
+            commentPost.setIdUser(firebaseAuth.getUid());
+            commentPost.setImage(user.getProfilePicture());
+            post.addComment(commentPost);
+            postDoc.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+            commentsFetched.add(commentPost);
+            ed_comment.setText("");
+            commentAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void viewProfile(View view){
         Intent intent = new Intent(this, AnotherProfileActivity.class);
         intent.putExtra("userId",idUser);
         startActivity(intent);
+    }
+
+    @Override
+    public void redirecToFriend(int position) {
+
     }
 }
