@@ -42,11 +42,10 @@ public class PostDetailsActivity extends AppCompatActivity {
         String videoPost = getIntent().getStringExtra("video");
         Date datePost = (Date) getIntent().getExtras().get("date");
         String profilePost = getIntent().getStringExtra("profile");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-        name.setText(firstName+" "+lastName);
+        name.setText((firstName+" "+lastName));
         description.setText(descriptionPost);
-        date.setText(formatter.format(datePost));
+        date.setText(InfScrollUtil.makeDateReadable(datePost));
 
         if(profilePost != null){
             ImageView image = findViewById(R.id.imageView_profile);
