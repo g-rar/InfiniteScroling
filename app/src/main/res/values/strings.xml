@@ -107,4 +107,5 @@
     <string name="str_noResults">No se han encontrado resultados</string>
     <string name="str_titleImages">Imagenes</string>
     <string name="str_unFriend">Eliminar amigo</string>
+    <string name="str_newPost">Nuevo post</string>
 </resources>
