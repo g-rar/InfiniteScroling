@@ -20,6 +20,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="48dp"
+                app:srcCompat="@drawable/ic_account_circle_black_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -110,7 +111,8 @@
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/button_editProfile"
-                app:layout_constraintTop_toTopOf="@+id/button_editProfile" />
+                app:layout_constraintTop_toTopOf="@+id/button_editProfile"
+                android:onClick="addPicture"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RecyclerView_posts"
