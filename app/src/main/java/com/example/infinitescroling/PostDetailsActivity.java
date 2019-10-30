@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.infinitescroling.adapters.CommentAdapter;
 import com.example.infinitescroling.adapters.UsersAdapter;
 import com.example.infinitescroling.models.Comment;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,7 +28,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,7 +40,7 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
     private ArrayList<Comment> commentsFetched;
     private FirebaseAuth firebaseAuth;
     private DocumentReference postDoc;
-    private Posts post;
+    private Post post;
     private TextView countLikes;
     private TextView countDislikes;
     private ImageButton btn_like;
@@ -83,42 +82,51 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
         postDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                post = documentSnapshot.toObject(Posts.class);
-                name.setText(post.getFirstNameUser()+" "+post.getLastNameUser());
-                description.setText(post.getDescription());
-                date.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
-                countDislikes.setText(String.valueOf(post.getDislikes().size()));
-                countLikes.setText(String.valueOf(post.getLikes().size()));
-                if(post.getImgProfile() != null){
-                    ImageView image = findViewById(R.id.imageView_profile);
-                    Uri path = Uri.parse(post.getImgProfile());
-                    Glide
-                            .with(PostDetailsActivity.this)
-                            .load(path)
-                            .into(image);
-                }
-                if(post.getImage() != null ){
-                    ImageView imageProfile = findViewById(R.id.imageView_imgPost);
-                    Uri path = Uri.parse(post.getImage());
-                    Glide
-                            .with(PostDetailsActivity.this)
-                            .load(path)
-                            .into(imageProfile);
-                }
-                if(post.getVideo() != null){
-                    WebView webView = findViewById(R.id.webView_postDVideo);
-                    InfScrollUtil.loadVideoIntoWebView(post.getVideo(), webView);
-                    webView.setVisibility(View.VISIBLE);
-                }
-                if(post.getLikes().contains(firebaseAuth.getUid()))
-                    btn_like.setImageResource(R.drawable.ic_like_select);
-                else if(post.getDislikes().contains(firebaseAuth.getUid()))
-                    btn_dislike.setImageResource(R.drawable.ic_dislike_select);
-                for(Comment comment : post.getComments()){
-                    commentsFetched.add(comment);
-                }
-                commentAdapter.notifyDataSetChanged();
-                InfScrollUtil.setListViewHeightBasedOnChildren(commentsListView);
+                post = documentSnapshot.toObject(Post.class);
+                ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+                final User[] user = new User[1];
+                firbaseManager.getUserWithId(post.getPostedBy(),new OnSuccessListener<DocumentSnapshot>(){
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        user[0] = documentSnapshot.toObject(User.class);
+                        name.setText(user[0].getFirstName()+" "+ user[0].getLastName());
+                        description.setText(post.getDescription());
+                        date.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
+                        countDislikes.setText(String.valueOf(post.getDislikes().size()));
+                        countLikes.setText(String.valueOf(post.getLikes().size()));
+                        if(user[0].getProfilePicture() != null){
+                            ImageView image = findViewById(R.id.imageView_profile);
+                            Uri path = Uri.parse(user[0].getProfilePicture());
+                            Glide
+                                    .with(PostDetailsActivity.this)
+                                    .load(path)
+                                    .into(image);
+                        }
+                        if(post.getImage() != null ){
+                            ImageView imageProfile = findViewById(R.id.imageView_imgPost);
+                            Uri path = Uri.parse(post.getImage());
+                            Glide
+                                    .with(PostDetailsActivity.this)
+                                    .load(path)
+                                    .into(imageProfile);
+                        }
+                        if(post.getVideo() != null){
+                            WebView webView = findViewById(R.id.webView_postDVideo);
+                            InfScrollUtil.loadVideoIntoWebView(post.getVideo(), webView);
+                            webView.setVisibility(View.VISIBLE);
+                        }
+                        if(post.getLikes().contains(firebaseAuth.getUid()))
+                            btn_like.setImageResource(R.drawable.ic_like_select);
+                        else if(post.getDislikes().contains(firebaseAuth.getUid()))
+                            btn_dislike.setImageResource(R.drawable.ic_dislike_select);
+                        for(Comment comment : post.getComments()){
+                            commentsFetched.add(comment);
+                        }
+                        commentAdapter.notifyDataSetChanged();
+                        InfScrollUtil.setListViewHeightBasedOnChildren(commentsListView);
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -184,9 +192,8 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
     public void addComent(View view){
         String comment = ed_comment.getText().toString();
         if(!comment.isEmpty()) {
-            final Comment commentPost = new Comment(user.getFirstName(), user.getLastName(), new Date(), comment);
+            final Comment commentPost = new Comment(new Date(), comment);
             commentPost.setIdUser(firebaseAuth.getUid());
-            commentPost.setImage(user.getProfilePicture());
             post.addComment(commentPost);
             postDoc.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

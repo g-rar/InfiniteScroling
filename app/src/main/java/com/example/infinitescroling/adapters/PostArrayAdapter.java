@@ -12,9 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.ISFirebaseManager;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
+import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -22,7 +26,7 @@ public class PostArrayAdapter extends ArrayAdapter {
 
     PostRedirectable postRedirectable;
 
-    public PostArrayAdapter(Context context, PostRedirectable postRedirectable, ArrayList<Posts> posts){
+    public PostArrayAdapter(Context context, PostRedirectable postRedirectable, ArrayList<Post> posts){
         super(context, 0, posts);
         this.postRedirectable = postRedirectable;
     }
@@ -30,31 +34,40 @@ public class PostArrayAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Posts post = (Posts) getItem(position);
+        final Post post = (Post) getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.post_row, parent, false);
         }
-
-        ((TextView) convertView.findViewById(R.id.textView_descriptionPost)).setText(post.getDescription());
-        ((TextView) convertView.findViewById(R.id.textView_datePost)).setText(
-                InfScrollUtil.makeDateReadable(post.getDatePublication()));
-        ((TextView) convertView.findViewById(R.id.textView_nameUserRow)).setText(
-                (post.getFirstNameUser() + " " + post.getLastNameUser()));
-        ImageView postProfilePic = convertView.findViewById(R.id.imageView_profileFeed);
-        if(post.getImgProfile() != null){
-            Glide.with(getContext()).load(post.getImgProfile())
-                    .centerCrop().into(postProfilePic);
-        } else {
-            postProfilePic.setImageResource(R.drawable.ic_account_circle_black_24dp);
-        }
-
-        convertView.setOnClickListener(new View.OnClickListener() {
+        ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+        final User[] user = new User[1];
+        final View finalConvertView = convertView;
+        firbaseManager.getUserWithId(post.getPostedBy(), new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                postRedirectable.redirectToPost(position);
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user[0] = documentSnapshot.toObject(User.class);
+                ((TextView) finalConvertView.findViewById(R.id.textView_descriptionPost)).setText(post.getDescription());
+                ((TextView) finalConvertView.findViewById(R.id.textView_datePost)).setText(
+                        InfScrollUtil.makeDateReadable(post.getDatePublication()));
+                ((TextView) finalConvertView.findViewById(R.id.textView_nameUserRow)).setText(
+                        (user[0].getFirstName() + " " + user[0].getLastName()));
+                ImageView postProfilePic = finalConvertView.findViewById(R.id.imageView_profileFeed);
+                if(user[0].getProfilePicture() != null){
+                    Glide.with(getContext()).load(user[0].getProfilePicture())
+                            .centerCrop().into(postProfilePic);
+                } else {
+                    postProfilePic.setImageResource(R.drawable.ic_account_circle_black_24dp);
+                }
+
+                finalConvertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        postRedirectable.redirectToPost(position);
+                    }
+                });
+
+
             }
         });
-
         return convertView;
     }
 

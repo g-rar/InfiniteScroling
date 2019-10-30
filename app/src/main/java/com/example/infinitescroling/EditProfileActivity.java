@@ -21,8 +21,7 @@ import android.widget.Toast;
 
 import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.models.AcademicInfo;
-import com.example.infinitescroling.models.Comment;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,7 +41,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -492,7 +490,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
-                                Posts post = snapshot.toObject(Posts.class);
+                                Post post = snapshot.toObject(Post.class);
                                 if(post.getImage() != null)
                                     //storageReference.child(post.getImage()).delete();
                                 snapshot.getReference().delete();
@@ -507,7 +505,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                             if (task.isSuccessful()) {
                                 List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
                                 for(DocumentSnapshot snapshot: myListOfDocuments){
-                                    Posts post = snapshot.toObject(Posts.class);
+                                    Post post = snapshot.toObject(Post.class);
                                     post.getLikes().remove(id);
                                     post.getDislikes().remove(id);
                                     post.getFriends().remove(id);
