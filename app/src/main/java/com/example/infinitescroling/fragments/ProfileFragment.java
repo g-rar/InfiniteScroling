@@ -35,6 +35,7 @@ import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.LoginActivity;
 import com.example.infinitescroling.MainActivity;
+import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.FeedAdapter;
 import com.example.infinitescroling.models.Posts;
@@ -112,7 +113,9 @@ public class ProfileFragment extends Fragment {
         listProfile = new ArrayList<Posts>();
         adapterList = new FeedAdapter(view.getContext(), listProfile, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Posts item) {
-
+                Intent intent = new Intent(layout.getContext(), PostDetailsActivity.class);
+                intent.putExtra("idPost",item.getId());
+                startActivity(intent);
             }
         });
         recyclerViewProfile .setAdapter(adapterList);

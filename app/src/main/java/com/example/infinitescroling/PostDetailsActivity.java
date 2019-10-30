@@ -206,8 +206,8 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
     }
 
     public void viewProfile(View view){
-        Intent intent = new Intent(this, AnotherProfileActivity.class);
-        intent.putExtra("userId",idUser);
+        Intent intent =  new Intent(this, AnotherProfileActivity.class);
+        intent.putExtra("userId", post.getPostedBy());
         startActivity(intent);
     }
 
