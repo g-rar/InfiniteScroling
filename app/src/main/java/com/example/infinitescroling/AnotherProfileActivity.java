@@ -103,7 +103,9 @@ public class AnotherProfileActivity extends AppCompatActivity {
         listProfile = new ArrayList<Posts>();
         adapterList = new FeedAdapter(this, listProfile, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Posts item) {
-
+                Intent intent = new Intent(AnotherProfileActivity.this, PostDetailsActivity.class);
+                intent.putExtra("idPost",item.getId());
+                startActivity(intent);
             }
         });
         profilePosts.setAdapter(adapterList);

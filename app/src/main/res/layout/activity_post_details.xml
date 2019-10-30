@@ -49,7 +49,8 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+                app:srcCompat="@drawable/ic_account_circle_black_24dp"
+                android:onClick="viewProfile"/>
 
             <TextView
                 android:id="@+id/textView_nameUser"
@@ -59,7 +60,8 @@
                 android:text="@string/str_userName"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/imageView_profile"
-                app:layout_constraintTop_toTopOf="@+id/imageView_profile" />
+                app:layout_constraintTop_toTopOf="@+id/imageView_profile"
+                android:onClick="viewProfile"/>
 
             <TextView
                 android:id="@+id/textView_datePost"
