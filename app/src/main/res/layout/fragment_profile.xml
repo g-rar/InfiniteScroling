@@ -55,8 +55,8 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/str_information"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/button_anotherSeePhotos"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalScroll" />
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScroll"
+                tools:layout_editor_absoluteX="16dp" />
 
             <ListView
                 android:id="@+id/listView_information_profile"
@@ -67,29 +67,6 @@
                 tools:layout_editor_absoluteX="16dp">
 
             </ListView>
-
-            <Button
-                android:id="@+id/button_anotherSeeFriends"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:drawableLeft="@drawable/ic_people_black_24dp"
-                android:text="@string/str_seeFriends"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="@+id/button_updateProfilePicture"
-                app:layout_constraintStart_toEndOf="@+id/button_anotherSeePhotos"
-                app:layout_constraintTop_toBottomOf="@+id/button_updateProfilePicture" />
-
-            <Button
-                android:id="@+id/button_anotherSeePhotos"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_image_black_24dp"
-                android:text="@string/str_seePhotos"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toStartOf="@+id/button_updateProfilePicture"
-                app:layout_constraintStart_toStartOf="@+id/button_editProfile"
-                app:layout_constraintTop_toBottomOf="@+id/button_editProfile" />
 
             <View
                 android:id="@+id/divider_profile"
@@ -131,7 +108,7 @@
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_anotherSeeFriends">
+                app:layout_constraintTop_toBottomOf="@+id/button_updateProfilePicture">
 
                 <LinearLayout
                     android:id="@+id/gallery"
