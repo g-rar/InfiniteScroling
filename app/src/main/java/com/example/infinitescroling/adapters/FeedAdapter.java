@@ -53,6 +53,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
         holder.textView_datePost.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
         holder.textView_description.setText(post.getDescription());
         holder.imageView_imgPost.setVisibility(View.GONE);
+        holder.webView_video.setVisibility(View.GONE);
         if(post.getImgProfile() != null ){
             Uri path = Uri.parse(post.getImgProfile());
             Glide
