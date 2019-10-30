@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        int tabSelect = getIntent().getIntExtra("tabSelect",0);
+        viewPager.setCurrentItem(tabSelect);
     }
 
     @Override
