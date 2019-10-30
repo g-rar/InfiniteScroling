@@ -64,7 +64,7 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
         idsPost = getIntent().getStringArrayListExtra("listIdsImages");
         posImage = getIntent().getIntExtra("posPost",0);
         postDoc = db.collection("posts").document(idsPost.get(posImage));
-        userDoc = db.collection("users").document(getIntent().getStringExtra("idUser"));
+        userDoc = db.collection("users").document(firebaseAuth.getUid());
         countDislikes = findViewById(R.id.txtDislikeCount);
         countLikes = findViewById(R.id.txtLikeCount);
 
