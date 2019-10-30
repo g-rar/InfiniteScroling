@@ -3,12 +3,9 @@ package com.example.infinitescroling.models;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Posts {
-    private String firstNameUser;
-    private String lastNameUser;
+public class Post {
     private String description;
     private String image;
-    private String imgProfile;
     private String video;
     private String postedBy;
     private ArrayList<String> likes;
@@ -18,18 +15,15 @@ public class Posts {
     private Date datePublication;
     private String id;
 
-    public Posts(){
+    public Post(){
 
     }
 
-    public Posts(String firstNameUser, String lastNameUser, String postedBy, String imgProfile, ArrayList<String> friendsIds){
-        this.firstNameUser = firstNameUser;
-        this.lastNameUser = lastNameUser;
+    public Post(String postedBy, ArrayList<String> friendsIds){
         this.likes = new ArrayList<String>();
         this.dislikes = new ArrayList<String>();
         this.friends = friendsIds;
         this.postedBy = postedBy;
-        this.imgProfile = imgProfile;
         this.comments = new ArrayList<Comment>();
     }
 
@@ -65,22 +59,6 @@ public class Posts {
         this.id = id;
     }
 
-    public String getFirstNameUser() {
-        return firstNameUser;
-    }
-
-    public void setFirstNameUser(String firstNameUser) {
-        this.firstNameUser = firstNameUser;
-    }
-
-    public String getLastNameUser() {
-        return lastNameUser;
-    }
-
-    public void setLastNameUser(String lastNameUser) {
-        this.lastNameUser = lastNameUser;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -111,14 +89,6 @@ public class Posts {
 
     public void setDatePublication(Date datePublication) {
         this.datePublication = datePublication;
-    }
-
-    public String getImgProfile() {
-        return imgProfile;
-    }
-
-    public void setImgProfile(String imgProfile) {
-        this.imgProfile = imgProfile;
     }
 
     public String getPostedBy() {

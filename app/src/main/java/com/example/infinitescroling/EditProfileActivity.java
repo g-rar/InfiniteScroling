@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.models.AcademicInfo;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -41,6 +42,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     private int RC_SIGN_IN = 7;
 
     private ConstraintLayout loadingLayout;
+    private String id;
     private ListView academicListView;
     private ArrayList<AcademicInfo> academics;
     private ArrayList<String> academicIds;
@@ -66,6 +70,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     private FirebaseAuth firebaseAuth;
     private Button submitAcademic;
     private Button editLoginInfoBtn;
+    private StorageReference storageReference;
     private FirebaseFirestore db;
     private DocumentReference userDoc;
     private User user;
@@ -94,6 +99,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         academicListView = findViewById(R.id.ListView_academics);
         submitAcademic = findViewById(R.id.button_submitAcademic);
@@ -369,11 +375,13 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     }
 
     public void deleteAccount(View view){
+        id = firebaseAuth.getUid();
         loadingLayout.setVisibility(View.VISIBLE);
         String passwordConfirm = passwordForDeleteInput.getText().toString();
         Log.d(TAG, "Inicio del for");
         if(isGoogleLoged){
             deleteGoogleAccount();
+
         } else {
             deletePasswordAccount(passwordConfirm);
         }
@@ -431,6 +439,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                 loadingLayout.setVisibility(View.GONE);
             }
         });
+
     }
 
     public void confirmDeleteAccount(){
@@ -458,10 +467,6 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                             firebaseAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Intent intent = getIntent();
-                                    setResult(ACCOUNT_DELETED, intent);
-                                    loadingLayout.setVisibility(View.GONE);
-                                    finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -480,6 +485,79 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                             loadingLayout.setVisibility(View.GONE);
                         }
                     });
+                    Query ref = db.collection("posts").whereEqualTo("postedBy", id);
+                    ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                                Post post = snapshot.toObject(Post.class);
+                                if(post.getImage() != null)
+                                    //storageReference.child(post.getImage()).delete();
+                                snapshot.getReference().delete();
+                            }
+                        }
+
+                    });
+                    CollectionReference refLikes = db.collection("posts");
+                    refLikes.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+                                for(DocumentSnapshot snapshot: myListOfDocuments){
+                                    Post post = snapshot.toObject(Post.class);
+                                    post.getLikes().remove(id);
+                                    post.getDislikes().remove(id);
+                                    post.getFriends().remove(id);
+
+                                    for (int i = 0; i < post.getComments().size(); i++) {
+                                        if(post.getComments().get(i).getIdUser().equals(id)){
+                                            post.getComments().remove(i);
+                                            i--;
+                                        }
+                                    }
+                                    snapshot.getReference().set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
+                    CollectionReference refFriends = db.collection("users");
+                    refFriends.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+                                for(DocumentSnapshot snapshot: myListOfDocuments){
+                                    User userItem = snapshot.toObject(User.class);
+                                    userItem.getFriendIds().remove(id);
+                                    snapshot.getReference().set(userItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                    Intent intent = getIntent();
+                    setResult(ACCOUNT_DELETED, intent);
+                    loadingLayout.setVisibility(View.GONE);
+                    finish();
                 }
 
             }).setNegativeButton(R.string.alert_backCancel, new DialogInterface.OnClickListener() {

@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.infinitescroling.adapters.FeedAdapter;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +39,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
     private String profileUserId;
     private String loggedUserId;
     private User profileUser;
-    private ArrayList<Posts> fetchedPosts;
+    private ArrayList<Post> fetchedPosts;
     private ArrayList<CharSequence> infos;
     private ArrayAdapter<CharSequence> infoAdapter;
     private FeedAdapter postsAdapter;
@@ -54,7 +54,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
     private Button seeFriendsBtn;
     private RecyclerView profilePosts;
     private LinearLayout gallery;
-    private ArrayList<Posts> listProfile;
+    private ArrayList<Post> listProfile;
     private ArrayList<String> listIdPost;
     private FeedAdapter adapterList;
 
@@ -81,7 +81,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
         fetchedPosts = new ArrayList<>();
         postsAdapter = new FeedAdapter(this, fetchedPosts, new FeedAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Posts item) {
+            public void onItemClick(Post item) {
 
             }
         });
@@ -100,9 +100,9 @@ public class AnotherProfileActivity extends AppCompatActivity {
         profilePosts.setHasFixedSize(true);
         profilePosts.setLayoutManager(new LinearLayoutManager(this));
 
-        listProfile = new ArrayList<Posts>();
+        listProfile = new ArrayList<Post>();
         adapterList = new FeedAdapter(this, listProfile, new FeedAdapter.OnItemClickListener() {
-            @Override public void onItemClick(Posts item) {
+            @Override public void onItemClick(Post item) {
                 Intent intent = new Intent(AnotherProfileActivity.this, PostDetailsActivity.class);
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
@@ -140,7 +140,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
         gallery = findViewById(R.id.gallery);
         final LayoutInflater inflater = LayoutInflater.from(this);
         int posTag = 0;
-        for(Posts post : listProfile){
+        for(Post post : listProfile){
             if(post.getImage() != null) {
                 View view = inflater.inflate(R.layout.image_item, gallery, false);
 
@@ -176,11 +176,11 @@ public class AnotherProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
-                    Posts post = taskPost.toObject(Posts.class);
+                    Post post = taskPost.toObject(Post.class);
                     listProfile.add(post);
                 }
-                Collections.sort(listProfile, new Comparator<Posts>() {
-                    public int compare(Posts o1, Posts o2) {
+                Collections.sort(listProfile, new Comparator<Post>() {
+                    public int compare(Post o1, Post o2) {
                         return o2.getDatePublication().compareTo(o1.getDatePublication());
                     }
                 });

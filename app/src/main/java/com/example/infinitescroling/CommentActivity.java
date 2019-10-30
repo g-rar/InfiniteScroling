@@ -3,7 +3,6 @@ package com.example.infinitescroling;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.infinitescroling.adapters.CommentAdapter;
 import com.example.infinitescroling.adapters.UsersAdapter;
 import com.example.infinitescroling.models.Comment;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +40,7 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
     private ArrayList<Comment> commentsFetched;
     private FirebaseAuth firebaseAuth;
     private DocumentReference postDoc;
-    private Posts post;
+    private Post post;
     private TextView countLikes;
     private TextView countDislikes;
     private ImageButton btn_like;
@@ -124,7 +123,7 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
         postDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                post = documentSnapshot.toObject(Posts.class);
+                post = documentSnapshot.toObject(Post.class);
                 countDislikes.setText(String.valueOf(post.getDislikes().size()));
                 countLikes.setText(String.valueOf(post.getLikes().size()));
                 if(post.getImage() != null ){
@@ -208,9 +207,8 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
     public void addComent(View view){
         String comment = ed_comment.getText().toString();
         if(!comment.isEmpty()) {
-            Comment commentPost = new Comment(user.getFirstName(), user.getLastName(), new Date(), comment);
+            Comment commentPost = new Comment(new Date(), comment);
             commentPost.setIdUser(firebaseAuth.getUid());
-            commentPost.setImage(user.getProfilePicture());
             post.addComment(commentPost);
             postDoc.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

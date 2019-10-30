@@ -54,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(firebaseAuth.getCurrentUser() != null){
+        int deleted = getIntent().getIntExtra("deleted",0);
+
+        if(firebaseAuth.getCurrentUser() != null && deleted == 0){
             gotoMainActivity();
         }
 
@@ -170,5 +172,12 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent =  new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        super.onBackPressed();
+
     }
 }

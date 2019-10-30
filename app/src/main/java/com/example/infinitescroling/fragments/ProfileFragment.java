@@ -30,15 +30,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.infinitescroling.CommentActivity;
-import com.example.infinitescroling.CreatePostActivity;
 import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.LoginActivity;
-import com.example.infinitescroling.MainActivity;
 import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.FeedAdapter;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -85,7 +83,7 @@ public class ProfileFragment extends Fragment {
 
     private FeedAdapter adapterList;
     private RecyclerView recyclerViewProfile;
-    private ArrayList<Posts> listProfile;
+    private ArrayList<Post> listProfile;
     private Uri path;
     private LinearLayout gallery;
 
@@ -110,9 +108,9 @@ public class ProfileFragment extends Fragment {
         recyclerViewProfile.setHasFixedSize(true);
         recyclerViewProfile.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listProfile = new ArrayList<Posts>();
+        listProfile = new ArrayList<Post>();
         adapterList = new FeedAdapter(view.getContext(), listProfile, new FeedAdapter.OnItemClickListener() {
-            @Override public void onItemClick(Posts item) {
+            @Override public void onItemClick(Post item) {
                 Intent intent = new Intent(layout.getContext(), PostDetailsActivity.class);
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
@@ -138,7 +136,7 @@ public class ProfileFragment extends Fragment {
         gallery = layout.findViewById(R.id.gallery);
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         int posTag = 0;
-        for(Posts post : listProfile){
+        for(Post post : listProfile){
             if(post.getImage() != null) {
                 View view = inflater.inflate(R.layout.image_item, gallery, false);
 
@@ -200,11 +198,11 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
-                    Posts post = taskPost.toObject(Posts.class);
+                    Post post = taskPost.toObject(Post.class);
                     listProfile.add(post);
                 }
-                Collections.sort(listProfile, new Comparator<Posts>() {
-                    public int compare(Posts o1, Posts o2) {
+                Collections.sort(listProfile, new Comparator<Post>() {
+                    public int compare(Post o1, Post o2) {
                         return o2.getDatePublication().compareTo(o1.getDatePublication());
                     }
                 });
@@ -326,45 +324,51 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("prueba", "siiii");
         if(requestCode == MODIFY_ACCOUNT){
+            Log.i("prueba", "entro");
             if(resultCode == ACCOUNT_DELETED){
+                Log.i("prueba", "nooo");
                 Intent loginIntent = new Intent(this.getContext(), LoginActivity.class);
+                loginIntent.putExtra("deleted",1);
                 startActivity(loginIntent);
                 getActivity().finish();
             }
         }
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-                case PHOTO_CODE:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        else {
+            if (resultCode == RESULT_OK) {
+                switch (requestCode) {
+                    case PHOTO_CODE:
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
-                    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                    path = getImageUri(getContext().getApplicationContext(), bitmap);
-                    break;
-                case SELECT_PICTURE:
-                    path = data.getData();
-                    break;
-            }
-            if(path != null){
-                Glide
-                        .with(getContext())
-                        .load(path)
-                        .into(profile);
-                StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
-                file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
-                        while(!uri.isComplete());
-                        path = uri.getResult();
-                        loggedUser.setProfilePicture(path.toString());
-                        uploadUser();
-                    }
-                });
+                        // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                        path = getImageUri(getContext().getApplicationContext(), bitmap);
+                        break;
+                    case SELECT_PICTURE:
+                        path = data.getData();
+                        break;
+                }
+                if (path != null) {
+                    Glide
+                            .with(getContext())
+                            .load(path)
+                            .into(profile);
+                    StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
+                    file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uri.isComplete()) ;
+                            path = uri.getResult();
+                            loggedUser.setProfilePicture(path.toString());
+                            uploadUser();
+                        }
+                    });
 
+                }
             }
+            searchPosts();
         }
-        searchPosts();
     }
 
 

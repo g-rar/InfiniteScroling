@@ -13,24 +13,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.ISFirebaseManager;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
+import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
 
     private Context context;
-    private ArrayList<Posts> posts;
+    private ArrayList<Post> posts;
     private final OnItemClickListener listener;
 
 
     public interface OnItemClickListener {
-        void onItemClick(Posts item);
+        void onItemClick(Post item);
     }
 
-    public FeedAdapter(Context context, ArrayList<Posts> posts, OnItemClickListener listener) {
+    public FeedAdapter(Context context, ArrayList<Post> posts, OnItemClickListener listener) {
         this.context = context;
         this.posts = posts;
         this.listener = listener;
@@ -47,38 +51,46 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedAdapter.PostsHolder holder, int position) {
-        Posts post = posts.get(position);
-        holder.textView_nameUser.setText(post.getFirstNameUser()+" "+ post.getLastNameUser());
-        holder.textView_datePost.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
-        holder.textView_description.setText(post.getDescription());
-        holder.imageView_imgPost.setVisibility(View.GONE);
-        holder.webView_video.setVisibility(View.GONE);
-        if(post.getImgProfile() != null ){
-            Uri path = Uri.parse(post.getImgProfile());
-            Glide
-                    .with(context)
-                    .load(path)
-                    .into(holder.imageView_Profile);
+    public void onBindViewHolder(@NonNull final FeedAdapter.PostsHolder holder, final int position) {
+        final Post post = posts.get(position);
+        ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+        final User[] user = new User[1];
+        firbaseManager.getUserWithId(post.getPostedBy(), new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user[0] = documentSnapshot.toObject(User.class);
+                holder.textView_nameUser.setText(user[0].getFirstName()+" "+ user[0].getLastName());
+                holder.textView_datePost.setText(InfScrollUtil.makeDateReadable(post.getDatePublication()));
+                holder.textView_description.setText(post.getDescription());
+                holder.imageView_imgPost.setVisibility(View.GONE);
+                holder.webView_video.setVisibility(View.GONE);
+                if(user[0].getProfilePicture() != null ){
+                    Uri path = Uri.parse(user[0].getProfilePicture());
+                    Glide
+                            .with(context)
+                            .load(path)
+                            .into(holder.imageView_Profile);
 
-        }
-        else   {
-            holder.imageView_Profile.setImageResource(R.drawable.ic_account_circle_black_24dp);
-        }
-        if(post.getImage() != null ){
-            Uri path = Uri.parse(post.getImage());
-            Glide
-                    .with(context)
-                    .load(path)
-                    .into(holder.imageView_imgPost);
-            holder.imageView_imgPost.setVisibility(View.VISIBLE);
-        }
-        if(post.getVideo() != null){
-            InfScrollUtil.loadVideoIntoWebView(post.getVideo(), holder.webView_video);
-            holder.webView_video.setVisibility(View.VISIBLE);
-        }
+                }
+                else   {
+                    holder.imageView_Profile.setImageResource(R.drawable.ic_account_circle_black_24dp);
+                }
+                if(post.getImage() != null ){
+                    Uri path = Uri.parse(post.getImage());
+                    Glide
+                            .with(context)
+                            .load(path)
+                            .into(holder.imageView_imgPost);
+                    holder.imageView_imgPost.setVisibility(View.VISIBLE);
+                }
+                if(post.getVideo() != null){
+                    InfScrollUtil.loadVideoIntoWebView(post.getVideo(), holder.webView_video);
+                    holder.webView_video.setVisibility(View.VISIBLE);
+                }
 
-        holder.bind(posts.get(position), listener);
+                holder.bind(posts.get(position), listener);
+            }
+        });
     }
 
     @Override
@@ -108,7 +120,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
             imageView_imgPost = view.findViewById(R.id.imageView_imgPost);
         }
 
-        public void bind(final Posts item, final OnItemClickListener listener) {
+        public void bind(final Post item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);

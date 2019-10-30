@@ -18,10 +18,9 @@ import androidx.fragment.app.Fragment;
 import com.example.infinitescroling.AnotherProfileActivity;
 import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
-import com.example.infinitescroling.adapters.FeedAdapter;
 import com.example.infinitescroling.adapters.PostArrayAdapter;
 import com.example.infinitescroling.adapters.UsersAdapter;
-import com.example.infinitescroling.models.Posts;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +41,7 @@ public class SearchFragment extends Fragment
     private PostArrayAdapter postsAdapter;
     private ArrayList<User> usersFetched;
     private ArrayList<String> userIds;
-    private ArrayList<Posts> postsFetched;
+    private ArrayList<Post> postFetched;
     private ArrayList<String> postIds;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -60,9 +59,9 @@ public class SearchFragment extends Fragment
         usersFetched = new ArrayList<>();
         userIds = new ArrayList<>();
         usersAdapter = new UsersAdapter(getContext(), this, usersFetched);
-        postsFetched = new ArrayList<>();
+        postFetched = new ArrayList<>();
         postIds = new ArrayList<>();
-        postsAdapter = new PostArrayAdapter(getContext(), this, postsFetched);
+        postsAdapter = new PostArrayAdapter(getContext(), this, postFetched);
         searchResultListView.setAdapter(postsAdapter);
         //TODO add postsAdapter
 
@@ -124,7 +123,7 @@ public class SearchFragment extends Fragment
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getContext(), "Algo falló", Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "onFailure: Posts search", e);
+                Log.w(TAG, "onFailure: Post search", e);
             }
         });
     }
@@ -142,10 +141,10 @@ public class SearchFragment extends Fragment
                     Toast.makeText(getContext(), R.string.str_noResults, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                postsFetched.clear();
+                postFetched.clear();
                 postIds.clear();
                 for(DocumentSnapshot doc : results){
-                    postsFetched.add(doc.toObject(Posts.class));
+                    postFetched.add(doc.toObject(Post.class));
                     postIds.add(doc.getId());
                 }
                 postsAdapter.notifyDataSetChanged();

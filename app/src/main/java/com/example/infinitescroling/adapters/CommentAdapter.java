@@ -12,9 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.ISFirebaseManager;
 import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.Comment;
+import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,25 +40,34 @@ public class CommentAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comments_row, parent, false);
         }
 
-        if(comment.getImage()!= null){
-            ImageView imageView = convertView.findViewById(R.id.imageView_profileComment);
-            Glide.with(getContext()).load(comment.getImage())
-                    .centerCrop().fitCenter().into(imageView);
-        }
-
-        TextView userName = convertView.findViewById(R.id.textView_nameUserRow);
-        userName.setText((comment.getFirstName() + " " + comment.getLastName()));
-
-        TextView description = convertView.findViewById(R.id.textView_descriptionComment);
-        description.setText(comment.getDescription());
-
-        TextView date = convertView.findViewById(R.id.textView_dateComment);
-        date.setText(InfScrollUtil.makeDateReadable(comment.getDateComment()));
-
-        convertView.setOnClickListener(new View.OnClickListener() {
+        ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+        final User[] user = new User[1];
+        final View finalConvertView = convertView;
+        firbaseManager.getUserWithId(comment.getIdUser(), new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                userRedirectable.redirecToFriend(position);
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user[0] = documentSnapshot.toObject(User.class);
+                if(user[0].getProfilePicture() != null){
+                    ImageView imageView = finalConvertView.findViewById(R.id.imageView_profileComment);
+                    Glide.with(getContext()).load(user[0].getProfilePicture())
+                            .centerCrop().fitCenter().into(imageView);
+                }
+
+                TextView userName = finalConvertView.findViewById(R.id.textView_nameUserRow);
+                userName.setText((user[0].getFirstName() + " " + user[0].getLastName()));
+
+                TextView description = finalConvertView.findViewById(R.id.textView_descriptionComment);
+                description.setText(comment.getDescription());
+
+                TextView date = finalConvertView.findViewById(R.id.textView_dateComment);
+                date.setText(InfScrollUtil.makeDateReadable(comment.getDateComment()));
+
+                finalConvertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        userRedirectable.redirecToFriend(position);
+                    }
+                });
             }
         });
 
