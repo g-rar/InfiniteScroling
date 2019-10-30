@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputType;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,15 +63,16 @@ public class CreatePostActivity extends AppCompatActivity {
     private DocumentReference userDoc;
     private FirebaseAuth firebaseAuth;
     private ImageView img_post;
-    private VideoView video_post;
     private ImageButton btn_deleteImg;
+    private ImageButton btn_deleteVideo;
+    private WebView videoView;
     private final int MY_PERMISSIONS = 100;
     private final int PHOTO_CODE = 200;
     private final int SELECT_PICTURE = 300;
     private Uri path;
     private User user;
+    private String videoURL;
     private Posts newPost;
-    private Uri pathVideo;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,15 +83,15 @@ public class CreatePostActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         img_post = findViewById(R.id.imgPhoto);
-        video_post = findViewById(R.id.videoView_videoPost);
         btn_deleteImg = findViewById(R.id.btnDeletePhoto);
-        video_post.setMediaController(new MediaController(this));
+        btn_deleteVideo = findViewById(R.id.btn_deleteVideo);
+        videoView = findViewById(R.id.webView_videoCreate);
 
         userDoc = db.collection("users").document(firebaseAuth.getUid());
 
         myRequestStoragePermission();
         path = null;
-        pathVideo = null;
+        videoURL = null;
 
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -111,8 +115,15 @@ public class CreatePostActivity extends AppCompatActivity {
     public void createPost(View view){
         EditText txt = findViewById(R.id.txtPost);
         String text = txt.getText().toString();
+        if(text.equals("") & videoURL == null & path == null){
+            Toast.makeText(this, "No se puede crear un post vacío.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         newPost.setDescription(text);
         newPost.setDatePublication(new Date());
+        if(videoURL != null){
+            newPost.setVideo(videoURL);
+        }
         if(path != null){
             StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
             file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -143,7 +154,7 @@ public class CreatePostActivity extends AppCompatActivity {
         ref.set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                Toast.makeText(CreatePostActivity.this, "Se ha publicado el post", Toast.LENGTH_SHORT).show();
             }
         });
         finish();
@@ -245,11 +256,52 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
-
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    public void addVideo(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Igrese la URL del video:");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String inputURL = input.getText().toString();
+                if(inputURL.equals("")){
+                    Toast.makeText(CreatePostActivity.this, "No se ha ingresado nada", Toast.LENGTH_SHORT).show();
+                } else {
+                    videoURL = InfScrollUtil.getYTVideoId(inputURL);
+                    if(videoURL.equals("")){
+                        Toast.makeText(CreatePostActivity.this, "No se ha ingresado un enlace valido", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    btn_deleteVideo.setVisibility(View.VISIBLE);
+                    videoView.setVisibility(View.VISIBLE);
+                    InfScrollUtil.loadVideoIntoWebView(videoURL, videoView);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void deleteVideo(View view) {
+        videoView.setVisibility(View.GONE);
+        btn_deleteVideo.setVisibility(View.GONE);
+        videoURL = null;
     }
 }

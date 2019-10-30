@@ -7,81 +7,125 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/lblTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:text="New post"
-            android:textSize="24sp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/txtPost"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/lblTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="42sp"
-            android:gravity="start|top"
-            android:hint="@string/what_are_you_thinking"
-            android:inputType="textMultiLine" />
+            <TextView
+                android:id="@+id/lblTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="@string/str_newPost"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btnAddPhoto"
-            android:layout_width="66dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imgPhoto"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:onClick="addPicture"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            <EditText
+                android:id="@+id/txtPost"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:gravity="start|top"
+                android:hint="@string/what_are_you_thinking"
+                android:inputType="textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.49"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+            <ImageButton
+                android:id="@+id/btnAddPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="addPicture"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPublish"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.49"
+                app:layout_constraintStart_toEndOf="@+id/btnPublish"
+                app:layout_constraintTop_toTopOf="@+id/btnPublish"
+                app:layout_constraintVertical_bias="0.666"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <ImageButton
+                android:id="@+id/btnDeletePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="removeImg"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddPhoto"
+                app:layout_constraintEnd_toEndOf="@+id/btnAddPhoto"
+                app:layout_constraintStart_toStartOf="@+id/btnAddPhoto"
+                app:layout_constraintTop_toTopOf="@+id/btnAddPhoto"
+                app:srcCompat="@android:drawable/ic_delete" />
+
+            <ImageButton
+                android:id="@+id/imageButton_addVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#E4F10909"
+                android:onClick="addVideo"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPublish"
+                app:layout_constraintEnd_toStartOf="@+id/btnPublish"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnPublish"
+                app:srcCompat="@drawable/ic_video_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/btn_deleteVideo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:backgroundTint="#E4F10909"
+                android:onClick="deleteVideo"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/imageButton_addVideo"
+                app:layout_constraintEnd_toEndOf="@+id/imageButton_addVideo"
+                app:layout_constraintStart_toStartOf="@+id/imageButton_addVideo"
+                app:layout_constraintTop_toTopOf="@+id/imageButton_addVideo"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+            <ImageView
+                android:id="@+id/imgPhoto"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPost" />
+
+            <WebView
+                android:id="@+id/webView_videoCreate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgPhoto" />
+
+            <Button
+                android:id="@+id/btnPublish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:onClick="createPost"
+                android:text="Post"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/webView_videoCreate" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
-        <ImageButton
-            android:id="@+id/btnDeletePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imgPhoto"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@+id/btnAddPhoto"
-            android:onClick="removeImg"
-            app:srcCompat="@android:drawable/ic_delete"
-            android:visibility="gone"/>
-
-
-        <ImageView
-            android:id="@+id/imgPhoto"
-            android:layout_width="270dp"
-            android:layout_height="340dp"
-            android:layout_below="@+id/videoView_videoPost"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"/>
-
-        <VideoView
-            android:id="@+id/videoView_videoPost"
-            android:layout_width="270dp"
-            android:layout_height="340dp"
-            android:layout_below="@+id/txtPost"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/btnPublish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="35dp"
-            android:text="Post"
-            android:onClick="createPost"/>
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

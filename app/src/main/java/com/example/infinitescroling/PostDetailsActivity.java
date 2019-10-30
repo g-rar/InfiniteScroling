@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -104,15 +105,20 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
                             .load(path)
                             .into(imageProfile);
                 }
+                if(post.getVideo() != null){
+                    WebView webView = findViewById(R.id.webView_postDVideo);
+                    InfScrollUtil.loadVideoIntoWebView(post.getVideo(), webView);
+                    webView.setVisibility(View.VISIBLE);
+                }
                 if(post.getLikes().contains(firebaseAuth.getUid()))
                     btn_like.setImageResource(R.drawable.ic_like_select);
                 else if(post.getDislikes().contains(firebaseAuth.getUid()))
                     btn_dislike.setImageResource(R.drawable.ic_dislike_select);
-
                 for(Comment comment : post.getComments()){
                     commentsFetched.add(comment);
                 }
                 commentAdapter.notifyDataSetChanged();
+                InfScrollUtil.setListViewHeightBasedOnChildren(commentsListView);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -178,13 +184,17 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
     public void addComent(View view){
         String comment = ed_comment.getText().toString();
         if(!comment.isEmpty()) {
-            Comment commentPost = new Comment(user.getFirstName(), user.getLastName(), new Date(), comment);
+            final Comment commentPost = new Comment(user.getFirstName(), user.getLastName(), new Date(), comment);
             commentPost.setIdUser(firebaseAuth.getUid());
             commentPost.setImage(user.getProfilePicture());
             post.addComment(commentPost);
             postDoc.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    commentsFetched.add(commentPost);
+                    ed_comment.setText("");
+                    commentAdapter.notifyDataSetChanged();
+                    InfScrollUtil.setListViewHeightBasedOnChildren(commentsListView);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -192,9 +202,6 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
 
                 }
             });
-            commentsFetched.add(commentPost);
-            ed_comment.setText("");
-            commentAdapter.notifyDataSetChanged();
         }
     }
 
