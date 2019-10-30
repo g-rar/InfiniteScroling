@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,7 +69,7 @@ public class FeedFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         query = db.collection("posts").whereArrayContains("friends",firebaseAuth.getUid())
-            .orderBy("datePublication", Direction.DESCENDING);
+            .orderBy("datePublication", Query.Direction.DESCENDING);
         recyclerViewFeed = root.findViewById(R.id.recyclerView_posts);
         recyclerViewFeed.setHasFixedSize(true);
         recyclerViewFeed.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -114,7 +116,7 @@ public class FeedFragment extends Fragment {
                         return;
                     }
                     for (DocumentSnapshot doc : docs) {
-                        listFeed.add(doc.toObject(Posts.class));
+                        listFeed.add(doc.toObject(Post.class));
                     }
                     lastDocLoaded = docs.get(docs.size()-1);
                     adapterList.notifyDataSetChanged();
@@ -138,15 +140,6 @@ public class FeedFragment extends Fragment {
         query.limit(10).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
-                    Post post = taskPost.toObject(Post.class);
-                    listFeed.add(post);
-                }
-                Collections.sort(listFeed, new Comparator<Post>() {
-                    public int compare(Post o1, Post o2) {
-                        return o2.getDatePublication().compareTo(o1.getDatePublication());
-                    }
-                });
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 if(docs.isEmpty()){
                     Toast.makeText(getContext(), "No hay posts que mostrar", Toast.LENGTH_SHORT).show();
@@ -154,7 +147,7 @@ public class FeedFragment extends Fragment {
                     return;
                 }
                 for(DocumentSnapshot taskPost : docs) {
-                    Posts post = taskPost.toObject(Posts.class);
+                    Post post = taskPost.toObject(Post.class);
                     listFeed.add(post);
                 }
                 lastDocLoaded = docs.get(docs.size()-1);
