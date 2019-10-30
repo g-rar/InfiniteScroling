@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +17,6 @@ import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.Posts;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
@@ -72,6 +72,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
                     .into(holder.imageView_imgPost);
             holder.imageView_imgPost.setVisibility(View.VISIBLE);
         }
+        if(post.getVideo() != null){
+            InfScrollUtil.loadVideoIntoWebView(post.getVideo(), holder.webView_video);
+            holder.webView_video.setVisibility(View.VISIBLE);
+        }
 
         holder.bind(posts.get(position), listener);
     }
@@ -88,6 +92,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
         private TextView textView_nameUser;
         private TextView textView_datePost;
         private TextView textView_description;
+        private WebView webView_video;
         private ImageView imageView_Profile;
         private ImageView imageView_imgPost;
 
@@ -97,6 +102,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.PostsHolder> {
             textView_nameUser = view.findViewById(R.id.textView_nameUserRow);
             textView_datePost = view.findViewById(R.id.textView_datePost);
             textView_description = view.findViewById(R.id.textView_descriptionPost);
+            webView_video = view.findViewById(R.id.webView_videoRow);
             imageView_Profile = view.findViewById(R.id.imageView_profileFeed);
             imageView_imgPost = view.findViewById(R.id.imageView_imgPost);
         }
