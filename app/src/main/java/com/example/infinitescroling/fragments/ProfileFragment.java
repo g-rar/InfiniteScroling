@@ -326,45 +326,51 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("prueba", "siiii");
         if(requestCode == MODIFY_ACCOUNT){
+            Log.i("prueba", "entro");
             if(resultCode == ACCOUNT_DELETED){
+                Log.i("prueba", "nooo");
                 Intent loginIntent = new Intent(this.getContext(), LoginActivity.class);
+                loginIntent.putExtra("deleted",1);
                 startActivity(loginIntent);
                 getActivity().finish();
             }
         }
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-                case PHOTO_CODE:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        else {
+            if (resultCode == RESULT_OK) {
+                switch (requestCode) {
+                    case PHOTO_CODE:
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
-                    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                    path = getImageUri(getContext().getApplicationContext(), bitmap);
-                    break;
-                case SELECT_PICTURE:
-                    path = data.getData();
-                    break;
-            }
-            if(path != null){
-                Glide
-                        .with(getContext())
-                        .load(path)
-                        .into(profile);
-                StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
-                file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
-                        while(!uri.isComplete());
-                        path = uri.getResult();
-                        loggedUser.setProfilePicture(path.toString());
-                        uploadUser();
-                    }
-                });
+                        // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                        path = getImageUri(getContext().getApplicationContext(), bitmap);
+                        break;
+                    case SELECT_PICTURE:
+                        path = data.getData();
+                        break;
+                }
+                if (path != null) {
+                    Glide
+                            .with(getContext())
+                            .load(path)
+                            .into(profile);
+                    StorageReference file = storageReference.child(firebaseAuth.getUid()).child(path.getLastPathSegment());
+                    file.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uri.isComplete()) ;
+                            path = uri.getResult();
+                            loggedUser.setProfilePicture(path.toString());
+                            uploadUser();
+                        }
+                    });
 
+                }
             }
+            searchPosts();
         }
-        searchPosts();
     }
 
 

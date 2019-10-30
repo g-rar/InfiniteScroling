@@ -98,9 +98,6 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user = documentSnapshot.toObject(User.class);
                 newPost = new Posts(user.getFirstName(),user.getLastName(),firebaseAuth.getUid(),user.getProfilePicture(),user.getFriendIds());
-                for(String friend : user.getFriendIds()){
-                    newPost.addFriend(friend);
-                }
                 newPost.addFriend(newPost.getPostedBy());
             }
         }).addOnFailureListener(new OnFailureListener() {
