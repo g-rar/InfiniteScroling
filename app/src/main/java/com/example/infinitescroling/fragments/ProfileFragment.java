@@ -12,12 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.CommentActivity;
 import com.example.infinitescroling.CreatePostActivity;
 import com.example.infinitescroling.EditProfileActivity;
 import com.example.infinitescroling.InfScrollUtil;
@@ -77,12 +80,13 @@ public class ProfileFragment extends Fragment {
     private ArrayAdapter<CharSequence> infoAdapter;
     private ListView infoListView;
     private ImageView profile;
+    private ArrayList<String> listIdPost;
 
     private FeedAdapter adapterList;
     private RecyclerView recyclerViewProfile;
     private ArrayList<Posts> listProfile;
     private Uri path;
-
+    private LinearLayout gallery;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,6 +117,7 @@ public class ProfileFragment extends Fragment {
         });
         recyclerViewProfile .setAdapter(adapterList);
         profile = view.findViewById(R.id.imageView_profile);
+        listIdPost = new ArrayList<String>();
         Button btn = view.findViewById(R.id.button_updateProfilePicture);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +129,39 @@ public class ProfileFragment extends Fragment {
         loadUser();
         myRequestStoragePermission();
         return view;
+    }
+
+    private void createGallery(){
+        gallery = layout.findViewById(R.id.gallery);
+        final LayoutInflater inflater = LayoutInflater.from(getContext());
+        int posTag = 0;
+        for(Posts post : listProfile){
+            if(post.getImage() != null) {
+                View view = inflater.inflate(R.layout.image_item, gallery, false);
+
+                ImageView imageView = view.findViewById(R.id.imageView_carousel);
+                Uri pathImage = Uri.parse(post.getImage());
+                Glide
+                        .with(view)
+                        .load(pathImage)
+                        .into(imageView);
+                imageView.setTag(posTag);
+                listIdPost.add(listProfile.get(posTag).getId());
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = (int) v.getTag();
+                        Intent intent = new Intent(layout.getContext(), CommentActivity.class);
+                        intent.putExtra("posPost",pos);
+                        intent.putExtra("idUser",firebaseAuth.getUid());
+                        intent.putExtra("listIdsImages",listIdPost);
+                        startActivity(intent);
+                    }
+                });
+                gallery.addView(view);
+            }
+            posTag++;
+        }
     }
 
     private void loadUser(){
@@ -168,6 +206,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
                 adapterList.notifyDataSetChanged();
+                createGallery();
             }
         });
     }
