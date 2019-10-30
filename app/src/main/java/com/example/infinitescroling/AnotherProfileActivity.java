@@ -1,14 +1,20 @@
 package com.example.infinitescroling;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +25,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class AnotherProfileActivity extends AppCompatActivity {
 
@@ -42,6 +53,10 @@ public class AnotherProfileActivity extends AppCompatActivity {
     private Button seePicturesBtn;
     private Button seeFriendsBtn;
     private RecyclerView profilePosts;
+    private LinearLayout gallery;
+    private ArrayList<Posts> listProfile;
+    private ArrayList<String> listIdPost;
+    private FeedAdapter adapterList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +69,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
         seePicturesBtn = findViewById(R.id.button_anotherSeePhotos);
         seeFriendsBtn = findViewById(R.id.button_anotherSeeFriends);
         profilePosts = findViewById(R.id.recyclerView_posts);
+
 
         db = FirebaseFirestore.getInstance();
         infos = new ArrayList<>();
@@ -77,6 +93,23 @@ public class AnotherProfileActivity extends AppCompatActivity {
             }
         });
 
+        infoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, infos );
+        infoListView = findViewById(R.id.listView_information_profile);
+        infoListView.setAdapter(infoAdapter);
+
+        profilePosts.setHasFixedSize(true);
+        profilePosts.setLayoutManager(new LinearLayoutManager(this));
+
+        listProfile = new ArrayList<Posts>();
+        adapterList = new FeedAdapter(this, listProfile, new FeedAdapter.OnItemClickListener() {
+            @Override public void onItemClick(Posts item) {
+
+            }
+        });
+        profilePosts.setAdapter(adapterList);
+        listIdPost = new ArrayList<String>();
+        searchPosts();
+
     }
 
     private void fillProfile() {
@@ -99,5 +132,59 @@ public class AnotherProfileActivity extends AppCompatActivity {
             infos.add("Número de teléfono: " + profileUser.getPhoneNumber());
         infoAdapter.notifyDataSetChanged();
         InfScrollUtil.setListViewHeightBasedOnChildren(infoListView);
+    }
+
+    private void createGallery(){
+        gallery = findViewById(R.id.gallery);
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        int posTag = 0;
+        for(Posts post : listProfile){
+            if(post.getImage() != null) {
+                View view = inflater.inflate(R.layout.image_item, gallery, false);
+
+                ImageView imageView = view.findViewById(R.id.imageView_carousel);
+                Uri pathImage = Uri.parse(post.getImage());
+                Glide
+                        .with(view)
+                        .load(pathImage)
+                        .into(imageView);
+                imageView.setTag(posTag);
+                listIdPost.add(listProfile.get(posTag).getId());
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = (int) v.getTag();
+                        Intent intent = new Intent(AnotherProfileActivity.this, CommentActivity.class);
+                        intent.putExtra("posPost",pos);
+                        intent.putExtra("idUser",profileUserId);
+                        intent.putExtra("listIdsImages",listIdPost);
+                        startActivity(intent);
+                    }
+                });
+                gallery.addView(view);
+            }
+            posTag++;
+        }
+    }
+
+    private void searchPosts(){
+        listProfile.clear();
+        Query documentPosts = db.collection("posts").whereEqualTo("postedBy",profileUserId);
+        documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
+                    Posts post = taskPost.toObject(Posts.class);
+                    listProfile.add(post);
+                }
+                Collections.sort(listProfile, new Comparator<Posts>() {
+                    public int compare(Posts o1, Posts o2) {
+                        return o2.getDatePublication().compareTo(o1.getDatePublication());
+                    }
+                });
+                adapterList.notifyDataSetChanged();
+                createGallery();
+            }
+        });
     }
 }
