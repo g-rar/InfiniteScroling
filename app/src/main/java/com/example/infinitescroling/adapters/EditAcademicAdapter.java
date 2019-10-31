@@ -21,10 +21,12 @@ public class EditAcademicAdapter extends ArrayAdapter {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private AcademicEditable academicEditable;
+    private boolean edit;
 
-    public EditAcademicAdapter(Context context, AcademicEditable academicEditable, ArrayList<AcademicInfo> academics){
+    public EditAcademicAdapter(Context context, AcademicEditable academicEditable, ArrayList<AcademicInfo> academics, boolean edit){
         super(context, 0, academics);
         this.academicEditable = academicEditable;
+        this.edit = edit;
     }
 
     @NonNull
@@ -46,18 +48,24 @@ public class EditAcademicAdapter extends ArrayAdapter {
         tvInst.setText(academicInfo.getInstitution());
         tvBeginDate.setText(simpleDateFormat.format(academicInfo.getBeginDate()));
         tvEndDate.setText(simpleDateFormat.format(academicInfo.getEndDate()));
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                academicEditable.editAcademicOnClick(position);
-            }
-        });
-        btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                academicEditable.deleteAcademicOnClick(position);
-            }
-        });
+        if(edit) {
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    academicEditable.editAcademicOnClick(position);
+                }
+            });
+            btnDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    academicEditable.deleteAcademicOnClick(position);
+                }
+            });
+        }
+        else{
+            btnEdit.setVisibility(View.GONE);
+            btnDel.setVisibility(View.GONE);
+        }
 
 
         return convertView;

@@ -14,18 +14,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.adapters.FeedAdapter;
+import com.example.infinitescroling.models.AcademicInfo;
 import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,7 +46,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AnotherProfileActivity extends AppCompatActivity implements InfScrollUtil.ContentPaginable {
+public class AnotherProfileActivity extends AppCompatActivity implements InfScrollUtil.ContentPaginable, EditAcademicAdapter.AcademicEditable {
 
     private static final int NOT_FRIEND = 11;
     private static final int FRIEND = 328;
@@ -55,6 +63,8 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     private FirebaseFirestore db;
     private ISFirebaseManager firebaseManager;
     private SimpleDateFormat simpleDateFormat;
+    public static final String TAG = "Profile Fragment: ";
+    public static final String ACADEMICS_KEY = "academicInfo";
 
     private DocumentSnapshot lastDocLoaded;
     private boolean loading = false;
@@ -73,6 +83,12 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     private LinearLayout gallery;
     private ArrayList<String> listIdPost;
 
+    private ListView academicListView;
+    private ArrayList<AcademicInfo> academics;
+    private ArrayList<String> academicIds;
+    private CollectionReference academicsReference;
+    private EditAcademicAdapter adapter;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_another_profile);
@@ -84,6 +100,12 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         seePicturesBtn = findViewById(R.id.button_anotherSeePhotos);
         seeFriendsBtn = findViewById(R.id.button_anotherSeeFriends);
         recyclerViewPosts = findViewById(R.id.recyclerView_posts);
+
+        academicListView = findViewById(R.id.ListView_academics);
+        academics = new ArrayList<>();
+        academicIds = new ArrayList<>();
+        adapter = new EditAcademicAdapter(this, this, academics, false);
+        academicListView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
         firebaseManager = ISFirebaseManager.getInstance();
@@ -98,6 +120,8 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 profileUser = documentSnapshot.toObject(User.class);
+                academicsReference = documentSnapshot.getReference().collection(ACADEMICS_KEY);
+                refreshAcademics();
                 fillProfile();
             }
         });
@@ -155,6 +179,35 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
             infos.add("Número de teléfono: " + profileUser.getPhoneNumber());
         infoAdapter.notifyDataSetChanged();
         InfScrollUtil.setListViewHeightBasedOnChildren(infoListView);
+    }
+
+    private void refreshAcademics(){
+        academicsReference.orderBy("endDate", Query.Direction.DESCENDING)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                academics.clear();
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot doc : docs){
+                    AcademicInfo academicInfo = doc.toObject(AcademicInfo.class);
+                    academics.add(academicInfo);
+                    academicIds.add(doc.getId());
+                }
+                adapter.notifyDataSetChanged();
+                InfScrollUtil.setListViewHeightBasedOnChildren(academicListView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), R.string.str_fetchAcademicFail, Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "refreshAcademics/onFailure: ", e);
+            }
+        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+            }
+        });
     }
 
     private void createGallery(){
@@ -328,4 +381,13 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         this.finished = finished;
     }
 
+    @Override
+    public void editAcademicOnClick(int position) {
+
+    }
+
+    @Override
+    public void deleteAcademicOnClick(int position) {
+
+    }
 }
