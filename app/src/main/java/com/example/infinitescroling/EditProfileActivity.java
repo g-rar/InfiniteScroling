@@ -105,7 +105,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
         submitAcademic = findViewById(R.id.button_submitAcademic);
         academics = new ArrayList<>();
         academicIds = new ArrayList<>();
-        adapter = new EditAcademicAdapter(this, this, academics);
+        adapter = new EditAcademicAdapter(this, this, academics, true);
         academicListView.setAdapter(adapter);
         loadingLayout = findViewById(R.id.ConstraintLayout_loading);
 

@@ -37,13 +37,17 @@ import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.LoginActivity;
 import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
+import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.adapters.FeedAdapter;
+import com.example.infinitescroling.models.AcademicInfo;
 import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -66,13 +70,15 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPaginable {
+public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPaginable, EditAcademicAdapter.AcademicEditable {
 
     private int MODIFY_ACCOUNT = 1;
     private int ACCOUNT_DELETED = 6;
     private final int MY_PERMISSIONS = 100;
     private final int PHOTO_CODE = 200;
     private final int SELECT_PICTURE = 300;
+    public static final String TAG = "Profile Fragment: ";
+    public static final String ACADEMICS_KEY = "academicInfo";
 
     private SimpleDateFormat simpleDateFormat;
     private User loggedUser;
@@ -97,6 +103,12 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
     private Uri path;
     private LinearLayout gallery;
     private Uri imageUri;
+
+    private ListView academicListView;
+    private ArrayList<AcademicInfo> academics;
+    private ArrayList<String> academicIds;
+    private CollectionReference academicsReference;
+    private EditAcademicAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,6 +152,13 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
                 addPicture();
             }
         });
+
+        academicListView = view.findViewById(R.id.ListView_academics);
+        academics = new ArrayList<>();
+        academicIds = new ArrayList<>();
+        adapter = new EditAcademicAdapter(getContext(), this, academics, false);
+        academicListView.setAdapter(adapter);
+
         InfScrollUtil.loadNextPage(this);
         createGallery();
         loadUser();
@@ -200,6 +219,8 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
                 loggedUser = documentSnapshot.toObject(User.class);
                 loadUserInfo();
                 loadImages();
+                academicsReference = documentSnapshot.getReference().collection(ACADEMICS_KEY);
+                refreshAcademics();
             }
         });
     }
@@ -337,11 +358,8 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("prueba", "siiii");
         if(requestCode == MODIFY_ACCOUNT){
-            Log.i("prueba", "entro");
             if(resultCode == ACCOUNT_DELETED){
-                Log.i("prueba", "nooo");
                 Intent loginIntent = new Intent(this.getContext(), LoginActivity.class);
                 loginIntent.putExtra("deleted",1);
                 startActivity(loginIntent);
@@ -388,6 +406,35 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
         }
     }
 
+    private void refreshAcademics(){
+        academicsReference.orderBy("endDate", Query.Direction.DESCENDING)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                academics.clear();
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot doc : docs){
+                    AcademicInfo academicInfo = doc.toObject(AcademicInfo.class);
+                    academics.add(academicInfo);
+                    academicIds.add(doc.getId());
+                }
+                adapter.notifyDataSetChanged();
+                InfScrollUtil.setListViewHeightBasedOnChildren(academicListView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), R.string.str_fetchAcademicFail, Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "refreshAcademics/onFailure: ", e);
+            }
+        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+            }
+        });
+    }
+
 
     @Override
     public DocumentSnapshot getLastDocLoaded() {
@@ -432,5 +479,15 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
     @Override
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    @Override
+    public void editAcademicOnClick(int position) {
+
+    }
+
+    @Override
+    public void deleteAcademicOnClick(int position) {
+
     }
 }
