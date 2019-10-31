@@ -135,7 +135,7 @@ public class InfScrollUtil {
 
     }
 
-    public interface ContentPaginable{
+    public interface ContentPaginable {
         DocumentSnapshot getLastDocLoaded();
         void setLastDocLoaded(DocumentSnapshot doc);
         ArrayList<Post> getFetchedPosts();

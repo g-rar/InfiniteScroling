@@ -1,7 +1,7 @@
 package com.example.infinitescroling;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,18 +33,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
-public class AnotherProfileActivity extends AppCompatActivity {
+public class AnotherProfileActivity extends AppCompatActivity implements InfScrollUtil.ContentPaginable {
 
     private String profileUserId;
     private String loggedUserId;
     private User profileUser;
-    private ArrayList<Post> fetchedPosts;
     private ArrayList<CharSequence> infos;
     private ArrayAdapter<CharSequence> infoAdapter;
-    private FeedAdapter postsAdapter;
     private FirebaseFirestore db;
     private SimpleDateFormat simpleDateFormat;
+
+    private DocumentSnapshot lastDocLoaded;
+    private boolean loading = false;
+    private boolean finished = false;
+    private ArrayList<Post> fetchedPosts;
+    private FeedAdapter feedAdapter;
+    private Query query;
 
     private ImageView profilePicture;
     private TextView profileName;
@@ -52,11 +58,9 @@ public class AnotherProfileActivity extends AppCompatActivity {
     private Button addFriendBtn;
     private Button seePicturesBtn;
     private Button seeFriendsBtn;
-    private RecyclerView profilePosts;
+    private RecyclerView recyclerViewPosts;
     private LinearLayout gallery;
-    private ArrayList<Post> listProfile;
     private ArrayList<String> listIdPost;
-    private FeedAdapter adapterList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +72,7 @@ public class AnotherProfileActivity extends AppCompatActivity {
         addFriendBtn = findViewById(R.id.button_addFriend);
         seePicturesBtn = findViewById(R.id.button_anotherSeePhotos);
         seeFriendsBtn = findViewById(R.id.button_anotherSeeFriends);
-        profilePosts = findViewById(R.id.recyclerView_posts);
-
+        recyclerViewPosts = findViewById(R.id.recyclerView_posts);
 
         db = FirebaseFirestore.getInstance();
         infos = new ArrayList<>();
@@ -78,13 +81,6 @@ public class AnotherProfileActivity extends AppCompatActivity {
         simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         profileUserId = getIntent().getStringExtra("userId");
         loggedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        fetchedPosts = new ArrayList<>();
-        postsAdapter = new FeedAdapter(this, fetchedPosts, new FeedAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Post item) {
-
-            }
-        });
         db.collection("users").document(profileUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -97,21 +93,24 @@ public class AnotherProfileActivity extends AppCompatActivity {
         infoListView = findViewById(R.id.listView_information_profile);
         infoListView.setAdapter(infoAdapter);
 
-        profilePosts.setHasFixedSize(true);
-        profilePosts.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewPosts.setHasFixedSize(true);
+        recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        listProfile = new ArrayList<Post>();
-        adapterList = new FeedAdapter(this, listProfile, new FeedAdapter.OnItemClickListener() {
+        fetchedPosts = new ArrayList<Post>();
+        feedAdapter = new FeedAdapter(this, fetchedPosts, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Post item) {
                 Intent intent = new Intent(AnotherProfileActivity.this, PostDetailsActivity.class);
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
         });
-        profilePosts.setAdapter(adapterList);
+        recyclerViewPosts.setAdapter(feedAdapter);
         listIdPost = new ArrayList<String>();
-        searchPosts();
-
+        query = db.collection("posts").whereEqualTo("postedBy", profileUserId);
+//        searchPosts();
+        InfScrollUtil.setInfiniteScrolling(recyclerViewPosts, this);
+        InfScrollUtil.loadNextPage(this);
+        createGallery();
     }
 
     private void fillProfile() {
@@ -121,7 +120,6 @@ public class AnotherProfileActivity extends AppCompatActivity {
             .into(profilePicture);
         if(profileUser.getFriendIds().contains(loggedUserId)) {
             addFriendBtn.setText(R.string.str_unFriend);
-            Drawable drawable = getDrawable(android.R.drawable.ic_delete);
             addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
         }
         if(!profileUser.getCity().equals(""))
@@ -139,54 +137,108 @@ public class AnotherProfileActivity extends AppCompatActivity {
     private void createGallery(){
         gallery = findViewById(R.id.gallery);
         final LayoutInflater inflater = LayoutInflater.from(this);
-        int posTag = 0;
-        for(Post post : listProfile){
-            if(post.getImage() != null) {
-                View view = inflater.inflate(R.layout.image_item, gallery, false);
-
-                ImageView imageView = view.findViewById(R.id.imageView_carousel);
-                Uri pathImage = Uri.parse(post.getImage());
-                Glide
-                        .with(view)
-                        .load(pathImage)
-                        .into(imageView);
-                imageView.setTag(posTag);
-                listIdPost.add(listProfile.get(posTag).getId());
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = (int) v.getTag();
-                        Intent intent = new Intent(AnotherProfileActivity.this, CommentActivity.class);
-                        intent.putExtra("posPost",pos);
-                        intent.putExtra("idUser",profileUserId);
-                        intent.putExtra("listIdsImages",listIdPost);
-                        startActivity(intent);
-                    }
-                });
-                gallery.addView(view);
+        db.collection("posts").whereEqualTo("postedBy", profileUserId)
+                .whereGreaterThan("image", "").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                int posTag = 0;
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot doc : docs) {
+                    Post post = doc.toObject(Post.class);
+                    View view = inflater.inflate(R.layout.image_item, gallery, false);
+                    ImageView imageView = view.findViewById(R.id.imageView_carousel);
+                    Uri pathImage = Uri.parse(post.getImage());
+                    Glide
+                            .with(view)
+                            .load(pathImage)
+                            .into(imageView);
+                    imageView.setTag(posTag);
+                    listIdPost.add(doc.getId());
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = (int) v.getTag();
+                            Intent intent = new Intent(AnotherProfileActivity.this, CommentActivity.class);
+                            intent.putExtra("posPost", pos);
+                            intent.putExtra("idUser", profileUserId);
+                            intent.putExtra("listIdsImages", listIdPost);
+                            startActivity(intent);
+                        }
+                    });
+                    gallery.addView(view);
+                    posTag++;
+                }
             }
-            posTag++;
-        }
+        });
     }
 
     private void searchPosts(){
-        listProfile.clear();
+        fetchedPosts.clear();
         Query documentPosts = db.collection("posts").whereEqualTo("postedBy",profileUserId);
         documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
                     Post post = taskPost.toObject(Post.class);
-                    listProfile.add(post);
+                    fetchedPosts.add(post);
                 }
-                Collections.sort(listProfile, new Comparator<Post>() {
+                Collections.sort(fetchedPosts, new Comparator<Post>() {
                     public int compare(Post o1, Post o2) {
                         return o2.getDatePublication().compareTo(o1.getDatePublication());
                     }
                 });
-                adapterList.notifyDataSetChanged();
-                createGallery();
+                feedAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public DocumentSnapshot getLastDocLoaded() {
+        return lastDocLoaded;
+    }
+
+    @Override
+    public void setLastDocLoaded(DocumentSnapshot doc) {
+        lastDocLoaded = doc;
+    }
+
+    @Override
+    public ArrayList<Post> getFetchedPosts() {
+        return fetchedPosts;
+    }
+
+    @Override
+    public FeedAdapter getFeedAdapter() {
+        return feedAdapter;
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public Query getQuery() {
+        return query;
+    }
+
+    @Override
+    public boolean isLoading() {
+        return loading;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }
