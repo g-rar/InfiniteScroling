@@ -45,7 +45,8 @@
                 android:drawableLeft="@android:drawable/ic_input_add"
                 android:onClick="friendBtnClick"
                 android:text="@string/str_addFriend"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:onClick="actionFriend"/>
 
             <TextView
                 android:id="@+id/textView_Information"
