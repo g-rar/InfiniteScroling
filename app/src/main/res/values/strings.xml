@@ -118,4 +118,6 @@
     <string name="alert_answerReqMessage">¡Este usuario quiere ser tu amigo! Si aceptas su solicitud podrás ver sus mensajes aparecer en tu feed :D ¿Quieres aceptar la solicitud de amistad?</string>
     <string name="alert_rejectFriendRequest">Rechazar</string>
     <string name="alert_waitCancel">Espera, volver</string>
+    <string name="alert_requestCancel">Cancelar solicitud</string>
+    <string name="alert_requestCancelMessage">¿Estas seguro que quieres cancelar la solicitud de amistad?</string>
 </resources>

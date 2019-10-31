@@ -106,12 +106,13 @@ public class SearchFragment extends Fragment
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> results = queryDocumentSnapshots.getDocuments();
                 Log.d(TAG, "onSuccess: Documents retrieved: " + results.size());
-                if(results.isEmpty()){
-                    Toast.makeText(getContext(), R.string.str_noResults, Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 usersFetched.clear();
                 userIds.clear();
+                if(results.isEmpty()){
+                    Toast.makeText(getContext(), R.string.str_noResults, Toast.LENGTH_SHORT).show();
+                    usersAdapter.notifyDataSetChanged();
+                    return;
+                }
                 for(DocumentSnapshot doc : results){
                     usersFetched.add(doc.toObject(User.class));
                     userIds.add(doc.getId());
@@ -136,12 +137,13 @@ public class SearchFragment extends Fragment
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> results = queryDocumentSnapshots.getDocuments();
                 Log.d(TAG, "onSuccess: Documents retrieved: " + results.size());
-                if(results.isEmpty()){
-                    Toast.makeText(getContext(), R.string.str_noResults, Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 postFetched.clear();
                 postIds.clear();
+                if(results.isEmpty()){
+                    Toast.makeText(getContext(), R.string.str_noResults, Toast.LENGTH_SHORT).show();
+                    postsAdapter.notifyDataSetChanged();
+                    return;
+                }
                 for(DocumentSnapshot doc : results){
                     postFetched.add(doc.toObject(Post.class));
                     postIds.add(doc.getId());

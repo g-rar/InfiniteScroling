@@ -89,7 +89,6 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     private ArrayList<String> academicIds;
     private CollectionReference academicsReference;
     private EditAcademicAdapter adapter;
-    private boolean friend;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,24 +156,7 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         if(profileUser.getProfilePicture() != null && !profileUser.getProfilePicture().equals(""))
             Glide.with(this).load(profileUser.getProfilePicture()).fitCenter()
             .into(profilePicture);
-        profileIs = NOT_FRIEND;
-        if(profileUser.getFriendIds().contains(loggedUserId)) {
-            addFriendBtn.setText(R.string.str_unFriend);
-            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
-            profileIs = FRIEND;
-        } else if (profileUser.getFriendRequests().contains(loggedUserId)){
-            addFriendBtn.setText(R.string.str_cancelFriendRequest);
-            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
-            profileIs = REQUESTED;
-        } else if (profileUser.getRequestsSent().contains(loggedUserId)){
-            addFriendBtn.setText(R.string.str_respondFriendRequest);
-            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_send,0,0,0);
-            profileIs = REQ_SENDER;
-            friend = true;
-        }
-        else{
-            friend = false;
-        }
+        statusFriend();
         if(!profileUser.getCity().equals(""))
             infos.add("Ciudad: " + profileUser.getCity());
         if(profileUser.getBirthDate() != null)
@@ -269,10 +251,27 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                 answerRequest();
                 break;
             }
-//            case REQUESTED: {
-//                cancelRequest();
-//                break;
-//            }
+            case REQUESTED: {
+                cancelRequest();
+                break;
+            }
+        }
+    }
+
+    private void statusFriend(){
+        profileIs = NOT_FRIEND;
+        if(profileUser.getFriendIds().contains(loggedUserId)) {
+            addFriendBtn.setText(R.string.str_unFriend);
+            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
+            profileIs = FRIEND;
+        } else if (profileUser.getFriendRequests().contains(loggedUserId)){
+            addFriendBtn.setText(R.string.str_cancelFriendRequest);
+            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
+            profileIs = REQUESTED;
+        } else if (profileUser.getRequestsSent().contains(loggedUserId)){
+            addFriendBtn.setText(R.string.str_respondFriendRequest);
+            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_send,0,0,0);
+            profileIs = REQ_SENDER;
         }
     }
 
@@ -287,7 +286,29 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                         profileUser.getFriendIds().remove(loggedUserId);
                         db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
                         db.collection("users").document(profileUserId).set(profileUser);
-                        finish();
+                        Query refPosts = db.collection("posts").whereEqualTo("postedBy",loggedUserId);
+                        refPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                                    Post post = snapshot.toObject(Post.class);
+                                    post.getFriends().remove(profileUserId);
+                                    snapshot.getReference().set(post);
+                                }
+                            }
+                        });
+                        Query refPost = db.collection("posts").whereEqualTo("postedBy",profileUserId);
+                        refPost.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                                    Post post = snapshot.toObject(Post.class);
+                                    post.getFriends().remove(loggedUserId);
+                                    snapshot.getReference().set(post);
+                                }
+                            }
+                        });
+                        statusFriend();
                     }
                 }).setNegativeButton(R.string.alert_backCancel, null).show();
     }
@@ -304,7 +325,7 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                         profileUser.getFriendRequests().add(loggedUserId);
                         db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
                         db.collection("users").document(profileUserId).set(profileUser);
-                        finish();
+                        statusFriend();
                     }
                 }).setNegativeButton(R.string.alert_backCancel, null).show();
     }
@@ -318,12 +339,34 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         loggedUser.getFriendRequests().remove(profileUserId);
-                        loggedUser.getFriendIds().add(loggedUserId);
+                        loggedUser.getFriendIds().add(profileUserId);
                         profileUser.getRequestsSent().remove(loggedUserId);
                         profileUser.getFriendIds().add(loggedUserId);
                         db.collection("users").document(profileUserId).set(profileUser);
                         db.collection("users").document(loggedUserId).set(loggedUser);
-                        finish();
+                        Query refPosts = db.collection("posts").whereEqualTo("postedBy",loggedUserId);
+                        refPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                                    Post post = snapshot.toObject(Post.class);
+                                    post.getFriends().add(profileUserId);
+                                    snapshot.getReference().set(post);
+                                }
+                            }
+                        });
+                        Query refPost = db.collection("posts").whereEqualTo("postedBy",profileUserId);
+                        refPost.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                                    Post post = snapshot.toObject(Post.class);
+                                    post.getFriends().add(loggedUserId);
+                                    snapshot.getReference().set(post);
+                                }
+                            }
+                        });
+                        statusFriend();
                     }
                 }).setNegativeButton(R.string.alert_rejectFriendRequest, new DialogInterface.OnClickListener() {
                     @Override
@@ -332,9 +375,26 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                         profileUser.getRequestsSent().remove(loggedUserId);
                         db.collection("users").document(profileUserId).set(profileUser);
                         db.collection("users").document(loggedUserId).set(loggedUser);
-                        finish();
+                        statusFriend();
                     }
         }).setNeutralButton(R.string.alert_waitCancel, null).show();
+    }
+
+    private void cancelRequest() {
+        new AlertDialog.Builder(AnotherProfileActivity.this)
+                .setIcon(android.R.drawable.ic_input_add)
+                .setTitle(R.string.alert_requestCancel)
+                .setMessage(R.string.alert_requestCancelMessage)
+                .setPositiveButton(R.string.alert_requestCancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        loggedUser.getRequestsSent().remove(profileUserId);
+                        profileUser.getFriendRequests().remove(loggedUserId);
+                        db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
+                        db.collection("users").document(profileUserId).set(profileUser);
+                        statusFriend();
+                    }
+                }).setNegativeButton(R.string.alert_backCancel, null).show();
     }
 
     @Override

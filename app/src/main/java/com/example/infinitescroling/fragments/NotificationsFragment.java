@@ -33,12 +33,9 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
     private View view;
 
     private boolean fetchedIncoming = false;
-    private boolean fetchedSent = false;
     private ListView friendsListView;
     private ArrayList<User> incomingRequests;
     private ArrayList<String> incomingIds;
-    private ArrayList<User> sentRequests;
-    private ArrayList<String> sentIds;
     private ArrayList<User> userArrayList;
     private ArrayList<String> userIds;
     private UsersAdapter usersAdapter;
@@ -56,8 +53,6 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
         friendsListView = view.findViewById(R.id.arrayList_notifications);
         incomingRequests = new ArrayList<>();
         incomingIds = new ArrayList<>();
-        sentRequests = new ArrayList<>();
-        sentIds = new ArrayList<>();
         userArrayList = new ArrayList<>();
         userIds = new ArrayList<>();
         usersAdapter = new UsersAdapter(getContext(), this, userArrayList);
@@ -82,27 +77,12 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
                 updateList();
             }
         });
-        db.collection("users").whereArrayContains("friendRequests", firebaseAuth.getUid())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot doc : docs){
-                    sentRequests.add(doc.toObject(User.class));
-                    sentIds.add(doc.getId());
-                }
-                fetchedSent = true;
-                updateList();
-            }
-        });
     }
 
     private void updateList(){
-        if(fetchedIncoming & fetchedSent){
+        if(fetchedIncoming){
             userArrayList.addAll(incomingRequests);
             userIds.addAll(incomingIds);
-            userArrayList.addAll(sentRequests);
-            userIds.addAll(sentIds);
         }
         usersAdapter.notifyDataSetChanged();
     }
