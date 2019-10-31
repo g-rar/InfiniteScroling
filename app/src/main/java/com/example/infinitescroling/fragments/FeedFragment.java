@@ -3,52 +3,40 @@ package com.example.infinitescroling.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infinitescroling.CreatePostActivity;
+import com.example.infinitescroling.InfScrollUtil;
 import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.FeedAdapter;
 import com.example.infinitescroling.models.Post;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements InfScrollUtil.ContentPaginable {
 
-    private boolean loading = true;
+    private boolean loading = false;
+    private boolean finished = false;
 
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
-    private FeedAdapter adapterList;
+    private FeedAdapter feedAdapter;
     private RecyclerView recyclerViewFeed;
-    private ArrayList<Post> listFeed;
+    private ArrayList<Post> fetchedPosts;
     private DocumentSnapshot lastDocLoaded;
     private Query query;
     private final int CODPOST = 2;
@@ -73,99 +61,69 @@ public class FeedFragment extends Fragment {
         recyclerViewFeed = root.findViewById(R.id.recyclerView_posts);
         recyclerViewFeed.setHasFixedSize(true);
         recyclerViewFeed.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewFeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if(dy > 0){
-                    if(!loading){
-                        int visibleItems = recyclerView.getChildCount();
-                        int pastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                        int total = recyclerView.getLayoutManager().getItemCount();
-                        if(visibleItems+pastVisibleItem>=total){
-                            loadNextPage();
-                        }
-                    }
-                }
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
+        InfScrollUtil.setInfiniteScrolling(recyclerViewFeed, this);
 
-        listFeed = new ArrayList<Post>();
-        adapterList = new FeedAdapter(root.getContext(), listFeed, new FeedAdapter.OnItemClickListener() {
+        fetchedPosts = new ArrayList<Post>();
+        feedAdapter = new FeedAdapter(root.getContext(), fetchedPosts, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Post item) {
                 Intent intent = new Intent(root.getContext(), PostDetailsActivity.class);
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
         });
-        recyclerViewFeed.setAdapter(adapterList);
-        loadNextPage();
+        recyclerViewFeed.setAdapter(feedAdapter);
+        InfScrollUtil.loadNextPage(this);
         return root;
     }
 
-    private void loadNextPage(){
-        loading = true;
-        if(lastDocLoaded != null){
-            query.startAfter(lastDocLoaded).limit(10).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                    if(docs.isEmpty()){
-                        Toast.makeText(getContext(), "Se ha acabado el feed", Toast.LENGTH_SHORT).show();
-                        loading = false;
-                        return;
-                    }
-                    for (DocumentSnapshot doc : docs) {
-                        listFeed.add(doc.toObject(Post.class));
-                    }
-                    lastDocLoaded = docs.get(docs.size()-1);
-                    adapterList.notifyDataSetChanged();
-                    loading = false;
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    loading = false;
-                    Toast.makeText(getContext(), "Algo salio mal", Toast.LENGTH_SHORT).show();
-                    Log.w("LoadNextPage in Feed Fragment: ", "onFailure: Cargando pagina", e);
-                }
-            });
-        }else{
-            searchPosts();
-        }
+    @Override
+    public boolean isLoading() {
+        return loading;
     }
 
-    private void searchPosts(){
-        listFeed.clear();
-        query.limit(10).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                if(docs.isEmpty()){
-                    Toast.makeText(getContext(), "No hay posts que mostrar", Toast.LENGTH_SHORT).show();
-                    loading = false;
-                    return;
-                }
-                for(DocumentSnapshot taskPost : docs) {
-                    Post post = taskPost.toObject(Post.class);
-                    listFeed.add(post);
-                }
-                lastDocLoaded = docs.get(docs.size()-1);
-                adapterList.notifyDataSetChanged();
-                loading = false;
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Algo salio mal", Toast.LENGTH_SHORT).show();
-                Log.w("searchPosts() in FeedFragment", "onFailure: ", e);
-            }
-        });
+    @Override
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    @Override
+    public FeedAdapter getFeedAdapter() {
+        return feedAdapter;
+    }
+
+    @Override
+    public ArrayList<Post> getFetchedPosts() {
+        return fetchedPosts;
+    }
+
+    @Override
+    public DocumentSnapshot getLastDocLoaded() {
+        return lastDocLoaded;
+    }
+
+    @Override
+    public void setLastDocLoaded(DocumentSnapshot lastDocLoaded) {
+        this.lastDocLoaded = lastDocLoaded;
+    }
+
+    @Override
+    public Query getQuery() {
+        return query;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        searchPosts();
+        InfScrollUtil.loadNextPage(this);
     }
 }

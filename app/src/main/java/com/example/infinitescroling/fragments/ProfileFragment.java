@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,7 @@ import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.FeedAdapter;
 import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,13 +59,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPaginable {
 
     private int MODIFY_ACCOUNT = 1;
     private int ACCOUNT_DELETED = 6;
@@ -83,9 +86,14 @@ public class ProfileFragment extends Fragment {
     private ImageView profile;
     private ArrayList<String> listIdPost;
 
+    private DocumentSnapshot lastDocLoaded;
+    private ArrayList<Post> listProfilePosts;
     private FeedAdapter adapterList;
+    private Query query;
+    private boolean loading = false;
+    private boolean finished = false;
+
     private RecyclerView recyclerViewProfile;
-    private ArrayList<Post> listProfile;
     private Uri path;
     private LinearLayout gallery;
     private Uri imageUri;
@@ -111,17 +119,19 @@ public class ProfileFragment extends Fragment {
         recyclerViewProfile.setHasFixedSize(true);
         recyclerViewProfile.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listProfile = new ArrayList<Post>();
-        adapterList = new FeedAdapter(view.getContext(), listProfile, new FeedAdapter.OnItemClickListener() {
+        listProfilePosts = new ArrayList<Post>();
+        adapterList = new FeedAdapter(view.getContext(), listProfilePosts, new FeedAdapter.OnItemClickListener() {
             @Override public void onItemClick(Post item) {
                 Intent intent = new Intent(layout.getContext(), PostDetailsActivity.class);
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
         });
-        recyclerViewProfile .setAdapter(adapterList);
+        recyclerViewProfile.setAdapter(adapterList);
+        query = db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid());
+        InfScrollUtil.setInfiniteScrolling(recyclerViewProfile, this);
         profile = view.findViewById(R.id.imageView_profile);
-        listIdPost = new ArrayList<String>();
+        listIdPost = new ArrayList<>();
         Button btn = view.findViewById(R.id.button_updateProfilePicture);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +139,8 @@ public class ProfileFragment extends Fragment {
                 addPicture();
             }
         });
-        searchPosts();
+        InfScrollUtil.loadNextPage(this);
+        createGallery();
         loadUser();
         myRequestStoragePermission();
         return view;
@@ -137,35 +148,48 @@ public class ProfileFragment extends Fragment {
 
     private void createGallery(){
         gallery = layout.findViewById(R.id.gallery);
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        int posTag = 0;
-        for(Post post : listProfile){
-            if(post.getImage() != null) {
-                View view = inflater.inflate(R.layout.image_item, gallery, false);
+        db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid())
+                .whereGreaterThan("image", "").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                int posTag = 0;
+                for(DocumentSnapshot doc : docs){
+                    Post post = doc.toObject(Post.class);
+                    View view = inflater.inflate(R.layout.image_item, gallery, false);
 
-                ImageView imageView = view.findViewById(R.id.imageView_carousel);
-                Uri pathImage = Uri.parse(post.getImage());
-                Glide
-                        .with(view)
-                        .load(pathImage)
-                        .into(imageView);
-                imageView.setTag(posTag);
-                listIdPost.add(listProfile.get(posTag).getId());
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = (int) v.getTag();
-                        Intent intent = new Intent(layout.getContext(), CommentActivity.class);
-                        intent.putExtra("posPost",pos);
-                        intent.putExtra("idUser",firebaseAuth.getUid());
-                        intent.putExtra("listIdsImages",listIdPost);
-                        startActivity(intent);
-                    }
-                });
-                gallery.addView(view);
+                    ImageView imageView = view.findViewById(R.id.imageView_carousel);
+                    Log.d("debG", "onSuccess: " + view.toString() + "  _  " + posTag);
+                    Uri pathImage = Uri.parse(post.getImage());
+                    Glide
+                            .with(view)
+                            .load(pathImage)
+                            .into(imageView);
+                    imageView.setTag(posTag);
+                    listIdPost.add(doc.getId());
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = (int) v.getTag();
+                            Intent intent = new Intent(layout.getContext(), CommentActivity.class);
+                            intent.putExtra("posPost",pos);
+                            intent.putExtra("idUser",firebaseAuth.getUid());
+                            intent.putExtra("listIdsImages",listIdPost);
+                            startActivity(intent);
+                        }
+                    });
+                    gallery.addView(view);
+                    posTag++;
+                }
             }
-            posTag++;
-        }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Algo fallo", Toast.LENGTH_SHORT).show();
+                Log.w("DebG Profile fragment: ", "onFailure: Crear carrusel", e);
+            }
+        });
     }
 
     private void loadUser(){
@@ -194,27 +218,6 @@ public class ProfileFragment extends Fragment {
         InfScrollUtil.setListViewHeightBasedOnChildren(infoListView);
     }
 
-    private void searchPosts(){
-        listProfile.clear();
-        Query documentPosts = db.collection("posts").whereEqualTo("postedBy",firebaseAuth.getUid());
-        documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
-                    Post post = taskPost.toObject(Post.class);
-                    listProfile.add(post);
-                }
-                Collections.sort(listProfile, new Comparator<Post>() {
-                    public int compare(Post o1, Post o2) {
-                        return o2.getDatePublication().compareTo(o1.getDatePublication());
-                    }
-                });
-                adapterList.notifyDataSetChanged();
-                createGallery();
-            }
-        });
-    }
-
     private void loadImages() {
         if(loggedUser.getProfilePicture() != null && !loggedUser.getProfilePicture().equals("")){
             try {
@@ -222,7 +225,7 @@ public class ProfileFragment extends Fragment {
                 Glide.with(getContext())
                         .load(loggedUser.getProfilePicture())
                         .centerCrop().fitCenter().into(iv);
-                //TODO fill the rest of images
+                //TODO load everything in one method
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -380,9 +383,53 @@ public class ProfileFragment extends Fragment {
 
                 }
             }
-            searchPosts();
+            InfScrollUtil.loadNextPage(this);
         }
     }
 
 
+    @Override
+    public DocumentSnapshot getLastDocLoaded() {
+        return lastDocLoaded;
+    }
+
+    @Override
+    public void setLastDocLoaded(DocumentSnapshot doc) {
+        lastDocLoaded = doc;
+    }
+
+    @Override
+    public ArrayList<Post> getFetchedPosts() {
+        return listProfilePosts;
+    }
+
+    @Override
+    public FeedAdapter getFeedAdapter() {
+        return adapterList;
+    }
+
+    @Override
+    public Query getQuery() {
+        return query;
+    }
+
+    @Override
+    public boolean isLoading() {
+        return loading;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 }
