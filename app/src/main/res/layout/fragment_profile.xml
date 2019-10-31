@@ -68,6 +68,15 @@
 
             </ListView>
 
+            <ListView
+                android:id="@+id/ListView_academics"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"
+                android:scrollbars="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/listView_information_profile"/>
+
             <View
                 android:id="@+id/divider_profile"
                 android:layout_width="match_parent"
@@ -75,7 +84,7 @@
                 android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/listView_information_profile" />
+                app:layout_constraintTop_toBottomOf="@+id/ListView_academics" />
 
             <Button
                 android:id="@+id/button_updateProfilePicture"

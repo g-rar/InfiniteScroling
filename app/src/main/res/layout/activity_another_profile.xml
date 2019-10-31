@@ -68,11 +68,20 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"/>
 
+            <ListView
+                android:id="@+id/ListView_academics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listView_information_profile"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"
+                android:scrollbars="vertical" />
+
             <Button
                 android:id="@+id/button_anotherSeeFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listView_information_profile"
+                android:layout_below="@+id/ListView_academics"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
@@ -86,7 +95,7 @@
                 android:id="@+id/button_anotherSeePhotos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listView_information_profile"
+                android:layout_below="@+id/ListView_academics"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="-45dp"
                 android:layout_marginTop="30dp"
