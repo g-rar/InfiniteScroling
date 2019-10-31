@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -78,6 +79,7 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     private ArrayList<String> academicIds;
     private CollectionReference academicsReference;
     private EditAcademicAdapter adapter;
+    private boolean friend;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +148,10 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         if(profileUser.getFriendIds().contains(loggedUserId)) {
             addFriendBtn.setText(R.string.str_unFriend);
             addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
+            friend = true;
+        }
+        else{
+            friend = false;
         }
         if(!profileUser.getCity().equals(""))
             infos.add("Ciudad: " + profileUser.getCity());
@@ -224,6 +230,90 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                 }
             }
         });
+    }
+
+    public void actionFriend(View view){
+        if(friend) {
+            DocumentReference refFriends = db.collection("users").document(profileUserId);
+            refFriends.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User userItem = documentSnapshot.toObject(User.class);
+                    userItem.getFriendIds().remove(loggedUserId);
+                    documentSnapshot.getReference().set(userItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            addFriendBtn.setText(R.string.str_addFriend);
+                            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_input_add, 0, 0, 0);
+                            friend = false;
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }
+            });
+            DocumentReference refFriend = db.collection("users").document(loggedUserId);
+            refFriend.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User userItem = documentSnapshot.toObject(User.class);
+                    userItem.getFriendIds().remove(profileUserId);
+                    documentSnapshot.getReference().set(userItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }
+            });
+            Query refPosts = db.collection("posts").whereEqualTo("postedBy",loggedUserId);
+            refPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                        Post post = snapshot.toObject(Post.class);
+                        post.getFriends().remove(profileUserId);
+                        snapshot.getReference().set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                }
+            });
+            Query refPost = db.collection("posts").whereEqualTo("postedBy",profileUserId);
+            refPost.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                        Post post = snapshot.toObject(Post.class);
+                        post.getFriends().remove(loggedUserId);
+                        snapshot.getReference().set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 
     @Override
