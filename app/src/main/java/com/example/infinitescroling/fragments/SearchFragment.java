@@ -63,7 +63,6 @@ public class SearchFragment extends Fragment
         postIds = new ArrayList<>();
         postsAdapter = new PostArrayAdapter(getContext(), this, postFetched);
         searchResultListView.setAdapter(postsAdapter);
-        //TODO add postsAdapter
 
         ((Switch) view.findViewById(R.id.btnSwitchInformation)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -222,7 +222,7 @@ public class ProfileFragment extends Fragment {
                 Glide.with(getContext())
                         .load(loggedUser.getProfilePicture())
                         .centerCrop().fitCenter().into(iv);
-                //TODO fill the rest of images
+                //TODO load everything in one method
             } catch (Exception e) {
                 e.printStackTrace();
             }

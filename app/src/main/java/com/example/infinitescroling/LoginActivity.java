@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void registerAccount(View view) {
-        //TODO crear metodo para recibir el resultado del activity
         Intent registerIntent = new Intent(this, RegisterActivity.class);
         startActivityForResult(registerIntent, CREAR_CUENTA);
     }
