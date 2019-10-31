@@ -86,7 +86,6 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
                 ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
                 final User[] user = new User[1];
                 firbaseManager.getUserWithId(post.getPostedBy(),new OnSuccessListener<DocumentSnapshot>(){
-
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         user[0] = documentSnapshot.toObject(User.class);

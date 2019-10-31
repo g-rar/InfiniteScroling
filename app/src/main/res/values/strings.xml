@@ -108,4 +108,14 @@
     <string name="str_titleImages">Imagenes</string>
     <string name="str_unFriend">Eliminar amigo</string>
     <string name="str_newPost">Nuevo post</string>
+    <string name="str_cancelFriendRequest">Cancelar solicitud</string>
+    <string name="str_respondFriendRequest">Responder solicitud</string>
+    <string name="alert_sure">¿Estás seguro?</string>
+    <string name="alert_sendReqTitle">Enviar solicitud</string>
+    <string name="alert_sendReqMessage">Si te aceptan la solicitud podrás ver los mensajes de este usuario en tu feed :D</string>
+    <string name="alert_letsGoConfirm">¡Adelante!</string>
+    <string name="alert_answerReqTitle">Responder la solicitud</string>
+    <string name="alert_answerReqMessage">¡Este usuario quiere ser tu amigo! Si aceptas su solicitud podrás ver sus mensajes aparecer en tu feed :D ¿Quieres aceptar la solicitud de amistad?</string>
+    <string name="alert_rejectFriendRequest">Rechazar</string>
+    <string name="alert_waitCancel">Espera, volver</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.example.infinitescroling;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +40,20 @@ import java.util.List;
 
 public class AnotherProfileActivity extends AppCompatActivity implements InfScrollUtil.ContentPaginable {
 
+    private static final int NOT_FRIEND = 11;
+    private static final int FRIEND = 328;
+    private static final int REQ_SENDER = 214;
+    private static final int REQUESTED = 110;
+
+    private User profileUser;
+    private User loggedUser;
+    private int profileIs;
     private String profileUserId;
     private String loggedUserId;
-    private User profileUser;
     private ArrayList<CharSequence> infos;
     private ArrayAdapter<CharSequence> infoAdapter;
     private FirebaseFirestore db;
+    private ISFirebaseManager firebaseManager;
     private SimpleDateFormat simpleDateFormat;
 
     private DocumentSnapshot lastDocLoaded;
@@ -75,12 +86,14 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         recyclerViewPosts = findViewById(R.id.recyclerView_posts);
 
         db = FirebaseFirestore.getInstance();
+        firebaseManager = ISFirebaseManager.getInstance();
         infos = new ArrayList<>();
         infoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, infos );
         infoListView.setAdapter(infoAdapter);
         simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         profileUserId = getIntent().getStringExtra("userId");
         loggedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        loggedUser = firebaseManager.getLoggedUser();
         db.collection("users").document(profileUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -118,9 +131,19 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         if(profileUser.getProfilePicture() != null && !profileUser.getProfilePicture().equals(""))
             Glide.with(this).load(profileUser.getProfilePicture()).fitCenter()
             .into(profilePicture);
+        profileIs = NOT_FRIEND;
         if(profileUser.getFriendIds().contains(loggedUserId)) {
             addFriendBtn.setText(R.string.str_unFriend);
             addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
+            profileIs = FRIEND;
+        } else if (profileUser.getFriendRequests().contains(loggedUserId)){
+            addFriendBtn.setText(R.string.str_cancelFriendRequest);
+            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_delete, 0,0,0);
+            profileIs = REQUESTED;
+        } else if (profileUser.getRequestsSent().contains(loggedUserId)){
+            addFriendBtn.setText(R.string.str_respondFriendRequest);
+            addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_send,0,0,0);
+            profileIs = REQ_SENDER;
         }
         if(!profileUser.getCity().equals(""))
             infos.add("Ciudad: " + profileUser.getCity());
@@ -172,6 +195,89 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         });
     }
 
+    public void friendBtnClick(View view) {
+        Log.d("Another profile activity: ", "friendBtnClick: ");
+        switch (profileIs){
+            case FRIEND: {
+                deleteFriend();
+                break;
+            }
+            case NOT_FRIEND: {
+                sendRequest();
+                break;
+            }
+            case REQ_SENDER: {
+                answerRequest();
+                break;
+            }
+//            case REQUESTED: {
+//                cancelRequest();
+//                break;
+//            }
+        }
+    }
+
+    public void deleteFriend(){
+        new AlertDialog.Builder(AnotherProfileActivity.this)
+                .setIcon(android.R.drawable.ic_delete)
+                .setTitle(R.string.alert_sure)
+                .setPositiveButton(R.string.alert_imSureConfirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        loggedUser.getFriendIds().remove(profileUserId);
+                        profileUser.getFriendIds().remove(loggedUserId);
+                        db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
+                        db.collection("users").document(profileUserId).set(profileUser);
+                        finish();
+                    }
+                }).setNegativeButton(R.string.alert_backCancel, null).show();
+    }
+
+    private void sendRequest() {
+        new AlertDialog.Builder(AnotherProfileActivity.this)
+                .setIcon(android.R.drawable.ic_input_add)
+                .setTitle(R.string.alert_sendReqTitle)
+                .setMessage(R.string.alert_sendReqMessage)
+                .setPositiveButton(R.string.alert_letsGoConfirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        loggedUser.getRequestsSent().add(profileUserId);
+                        profileUser.getFriendRequests().add(loggedUserId);
+                        db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
+                        db.collection("users").document(profileUserId).set(profileUser);
+                        finish();
+                    }
+                }).setNegativeButton(R.string.alert_backCancel, null).show();
+    }
+
+    private void answerRequest() {
+        new AlertDialog.Builder(AnotherProfileActivity.this)
+                .setIcon(android.R.drawable.ic_menu_send)
+                .setTitle(R.string.alert_answerReqTitle)
+                .setMessage(R.string.alert_answerReqMessage)
+                .setPositiveButton(R.string.alert_letsGoConfirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        loggedUser.getFriendRequests().remove(profileUserId);
+                        loggedUser.getFriendIds().add(loggedUserId);
+                        profileUser.getRequestsSent().remove(loggedUserId);
+                        profileUser.getFriendIds().add(loggedUserId);
+                        db.collection("users").document(profileUserId).set(profileUser);
+                        db.collection("users").document(loggedUserId).set(loggedUser);
+                        finish();
+                    }
+                }).setNegativeButton(R.string.alert_rejectFriendRequest, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        loggedUser.getFriendRequests().remove(profileUserId);
+                        profileUser.getRequestsSent().remove(loggedUserId);
+                        db.collection("users").document(profileUserId).set(profileUser);
+                        db.collection("users").document(loggedUserId).set(loggedUser);
+                        finish();
+                    }
+        }).setNeutralButton(R.string.alert_waitCancel, null).show();
+    }
+
     @Override
     public DocumentSnapshot getLastDocLoaded() {
         return lastDocLoaded;
@@ -221,4 +327,5 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
+
 }

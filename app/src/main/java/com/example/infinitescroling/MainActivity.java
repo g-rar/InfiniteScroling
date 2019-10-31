@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
+    private ISFirebaseManager firebaseManager = ISFirebaseManager.getInstance();
     private TabLayout tabLayout;
     private TabItem tabProfile;
     private TabItem tabFeed;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
             finish();
+        } else {
+            firebaseManager.setLoggedUser();
         }
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         int tabSelect = getIntent().getIntExtra("tabSelect",0);
+//        firebaseManager.updateModel();
         viewPager.setCurrentItem(tabSelect);
     }
 

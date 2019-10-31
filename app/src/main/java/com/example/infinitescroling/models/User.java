@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
+
     private String firstName;
     private String lastName;
     private String city;
@@ -15,6 +16,8 @@ public class User {
     private String phoneNumber;
     private String profilePicture;
     private ArrayList<String> friendIds;
+    private ArrayList<String> friendRequests;
+    private ArrayList<String> requestsSent;
 
     public User(){
 
@@ -114,4 +117,21 @@ public class User {
     public void setFriendIds(ArrayList<String> friendIds) {
         this.friendIds = friendIds;
     }
+
+    public ArrayList<String> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public void setFriendRequests(ArrayList<String> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
+
+    public ArrayList<String> getRequestsSent() {
+        return requestsSent;
+    }
+
+    public void setRequestsSent(ArrayList<String> requestsSent) {
+        this.requestsSent = requestsSent;
+    }
+
 }
