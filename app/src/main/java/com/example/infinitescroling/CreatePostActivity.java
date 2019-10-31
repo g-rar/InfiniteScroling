@@ -1,5 +1,6 @@
 package com.example.infinitescroling;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 import static android.Manifest.permission.CAMERA;
@@ -59,6 +61,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private User user;
     private String videoURL;
     private Post newPost;
+    private Uri imageUri;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,7 +192,13 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void openCamera(){
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        imageUri = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, PHOTO_CODE);
     }
 
@@ -222,12 +231,19 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
+
             switch (requestCode){
                 case PHOTO_CODE:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    Bitmap thumbnail = null;
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                        path = getImageUri(getApplicationContext(), thumbnail);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                    path = getImageUri(getApplicationContext(), bitmap);
                     break;
                 case SELECT_PICTURE:
                     path = data.getData();

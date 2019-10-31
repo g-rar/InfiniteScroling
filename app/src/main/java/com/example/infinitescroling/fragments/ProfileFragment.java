@@ -2,6 +2,7 @@
 package com.example.infinitescroling.fragments;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +52,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,6 +88,7 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Post> listProfile;
     private Uri path;
     private LinearLayout gallery;
+    private Uri imageUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -271,7 +274,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void openCamera(){
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        imageUri = getContext().getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, PHOTO_CODE);
     }
 
@@ -339,10 +348,14 @@ public class ProfileFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 switch (requestCode) {
                     case PHOTO_CODE:
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-
-                        // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                        path = getImageUri(getContext().getApplicationContext(), bitmap);
+                        Bitmap thumbnail = null;
+                        try {
+                            thumbnail = MediaStore.Images.Media.getBitmap(
+                                    getContext().getContentResolver(), imageUri);
+                            path = getImageUri(getContext().getApplicationContext(), thumbnail);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case SELECT_PICTURE:
                         path = data.getData();
