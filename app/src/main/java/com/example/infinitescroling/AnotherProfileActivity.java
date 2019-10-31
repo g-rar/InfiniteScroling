@@ -106,8 +106,8 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         });
         recyclerViewPosts.setAdapter(feedAdapter);
         listIdPost = new ArrayList<String>();
-        query = db.collection("posts").whereEqualTo("postedBy", profileUserId);
-//        searchPosts();
+        query = db.collection("posts").whereEqualTo("postedBy", profileUserId)
+            .orderBy("datePublication", Query.Direction.DESCENDING);
         InfScrollUtil.setInfiniteScrolling(recyclerViewPosts, this);
         InfScrollUtil.loadNextPage(this);
         createGallery();
@@ -168,26 +168,6 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                     gallery.addView(view);
                     posTag++;
                 }
-            }
-        });
-    }
-
-    private void searchPosts(){
-        fetchedPosts.clear();
-        Query documentPosts = db.collection("posts").whereEqualTo("postedBy",profileUserId);
-        documentPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot taskPost : queryDocumentSnapshots) {
-                    Post post = taskPost.toObject(Post.class);
-                    fetchedPosts.add(post);
-                }
-                Collections.sort(fetchedPosts, new Comparator<Post>() {
-                    public int compare(Post o1, Post o2) {
-                        return o2.getDatePublication().compareTo(o1.getDatePublication());
-                    }
-                });
-                feedAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -128,7 +128,8 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
             }
         });
         recyclerViewProfile.setAdapter(adapterList);
-        query = db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid());
+        query = db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid())
+            .orderBy("datePublication", Query.Direction.DESCENDING);
         InfScrollUtil.setInfiniteScrolling(recyclerViewProfile, this);
         profile = view.findViewById(R.id.imageView_profile);
         listIdPost = new ArrayList<>();
