@@ -259,6 +259,8 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     }
 
     private void statusFriend(){
+        addFriendBtn.setText(R.string.str_addFriend);
+        addFriendBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_input_add, 0,0,0);
         profileIs = NOT_FRIEND;
         if(profileUser.getFriendIds().contains(loggedUserId)) {
             addFriendBtn.setText(R.string.str_unFriend);
