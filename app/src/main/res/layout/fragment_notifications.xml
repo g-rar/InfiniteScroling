@@ -6,8 +6,7 @@
     tools:context=".fragments.NotificationsFragment">
 
 
-    <ListView
-        android:id="@+id/arrayList_notifications"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

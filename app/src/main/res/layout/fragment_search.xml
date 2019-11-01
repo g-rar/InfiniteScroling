@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SearchFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,8 +26,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:singleLine="true"
-            android:inputType="text"
-            android:hint="@string/str_buscar"
+            android:text="Buscar"
             android:textSize="20sp"
             android:layout_alignTop="@+id/lblSearch"
             android:layout_marginTop="50dp"
@@ -70,11 +70,10 @@
             android:layout_marginLeft="50dp"/>
 
         <ListView
-            android:id="@+id/listView_searchResults"
+            android:id="@+id/lvData"
             android:layout_width="match_parent"
             android:layout_height="550dp"
-            android:layout_below="@+id/btnSwitchInformation"
-            android:layout_marginTop="24dp" />
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
