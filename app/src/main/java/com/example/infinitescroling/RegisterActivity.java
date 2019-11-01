@@ -103,48 +103,61 @@ public class RegisterActivity extends AppCompatActivity {
         Date birthDate = null;
         try {
             birthDate = simpleDateFormat.parse(birthDateStr);
+            if(!password.equals(repeatPassword)){
+                Toast.makeText(this, R.string.str_passwordConfirmFailed, Toast.LENGTH_LONG).show();
+                loadingLayout.setVisibility(View.GONE);
+                return;
+            }
+
+            final Date finalBirthDate = birthDate;
+            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(AuthResult authResult) {
+                    try{
+                        firestore.collection("users").document(authResult.getUser().getUid()).set(new User(
+                                name, lastName, city, gender, email, finalBirthDate, phoneNumberStr
+                        )).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                loadingLayout.setVisibility(View.GONE);
+                                finish();
+                                Toast.makeText(RegisterActivity.this, R.string.str_registrationSuccess, Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                loadingLayout.setVisibility(View.GONE);
+                                firebaseAuth.getCurrentUser().delete();
+                                Log.d(TAG, "onFailure: " + e.getStackTrace().toString());
+                                Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }catch (IllegalArgumentException e){
+                        String errorText = "Ocurrio un error";
+                        if(e.getMessage().startsWith("Timestamp")){
+                            errorText += ": Fecha invalida";
+                        }
+                        Toast.makeText(RegisterActivity.this, errorText, Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "submitUser: ", e);
+                        loadingLayout.setVisibility(View.GONE);
+                        firebaseAuth.getCurrentUser().delete();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    loadingLayout.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
+                }
+            });
         } catch (ParseException e) {
             Log.d(TAG , "Ha ocurrido un error con el parseo de la fecha: \n" + e.getStackTrace().toString());
             Toast.makeText(this, R.string.str_unvalidDate, Toast.LENGTH_LONG).show();
             loadingLayout.setVisibility(View.GONE);
             return;
+        } catch (Exception e){
+            Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "registerBtnOnClick: ", e);
         }
-
-        if(!password.equals(repeatPassword)){
-            Toast.makeText(this, R.string.str_passwordConfirmFailed, Toast.LENGTH_LONG).show();
-            loadingLayout.setVisibility(View.GONE);
-            return;
-        }
-
-        final Date finalBirthDate = birthDate;
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                firestore.collection("users").document(authResult.getUser().getUid()).set(new User(
-                        name, lastName, city, gender, email, finalBirthDate, phoneNumberStr
-                )).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        loadingLayout.setVisibility(View.GONE);
-                        finish();
-                        Toast.makeText(RegisterActivity.this, R.string.str_registrationSuccess, Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        loadingLayout.setVisibility(View.GONE);
-                        firebaseAuth.getCurrentUser().delete();
-                        Log.d(TAG, "onFailure: " + e.getStackTrace().toString());
-                        Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                loadingLayout.setVisibility(View.GONE);
-                Toast.makeText(RegisterActivity.this, R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

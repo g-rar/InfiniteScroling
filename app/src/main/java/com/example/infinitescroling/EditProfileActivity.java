@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.models.AcademicInfo;
 import com.example.infinitescroling.models.Post;
@@ -336,41 +337,49 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
             loadingLayout.setVisibility(View.VISIBLE);
             AcademicInfo newAcademic = new AcademicInfo(title, institution, bDate, eDate);
             //if this is new academic
-            if(academicEdited == -1){
-                academicsReference.add(newAcademic).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(EditProfileActivity.this, R.string.str_addAcademicSucces, Toast.LENGTH_SHORT).show();
-                        resetEditAcademic(null);
-                        refreshAcademics();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Add academic: ",e);
-                        Toast.makeText(EditProfileActivity.this, R.string.str_addAcademicFail, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                academicsReference.document(academicIds.get(academicEdited)).set(newAcademic)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(EditProfileActivity.this, R.string.str_editAcademicSuccess, Toast.LENGTH_SHORT).show();
-                                resetEditAcademic(null);
-                                refreshAcademics();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: editAcademic: ", e);
-                        Toast.makeText(EditProfileActivity.this, R.string.str_editAcademicFail, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                if(academicEdited == -1){
+                    academicsReference.add(newAcademic).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(EditProfileActivity.this, R.string.str_addAcademicSucces, Toast.LENGTH_SHORT).show();
+                            resetEditAcademic(null);
+                            refreshAcademics();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "onFailure: Add academic: ",e);
+                            Toast.makeText(EditProfileActivity.this, R.string.str_addAcademicFail, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    academicsReference.document(academicIds.get(academicEdited)).set(newAcademic)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(EditProfileActivity.this, R.string.str_editAcademicSuccess, Toast.LENGTH_SHORT).show();
+                                    resetEditAcademic(null);
+                                    refreshAcademics();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "onFailure: editAcademic: ", e);
+                            Toast.makeText(EditProfileActivity.this, R.string.str_editAcademicFail, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
         } catch (ParseException e) {
             Toast.makeText(this, R.string.str_unvalidDate, Toast.LENGTH_SHORT).show();
             Log.w(TAG, e);
+        } catch (IllegalArgumentException e){
+            String errorText = "Ocurrio un error";
+            if(e.getMessage().startsWith("Timestamp")){
+                errorText += ": Fecha invalida";
+            }
+            Toast.makeText(this, errorText, Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "submitAcademic: ", e);
+            loadingLayout.setVisibility(View.GONE);
         }
     }
 
