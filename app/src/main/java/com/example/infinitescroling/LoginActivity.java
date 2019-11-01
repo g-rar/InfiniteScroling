@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(LoginActivity.this, R.string.str_loginFailed, Toast.LENGTH_LONG).show();
+                        Log.w(TAG, "onFailure: ", e);
                     }
                 });
             } catch (Exception e) {
