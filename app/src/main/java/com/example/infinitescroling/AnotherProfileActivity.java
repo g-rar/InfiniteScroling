@@ -381,7 +381,7 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                     public void onClick(DialogInterface dialog, int which) {
                         loggedUser.getRequestsSent().add(profileUserId);
                         profileUser.getFriendRequests().add(loggedUserId);
-                        db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
+                        db.collection("users").document(loggedUserId).set(loggedUser);
                         db.collection("users").document(profileUserId).set(profileUser);
                         statusFriend();
                     }
