@@ -106,7 +106,7 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
                     Post post = snapshot.toObject(Post.class);
-                    post.getFriends().add(userIds.get(position));
+                    post.getFriends().add(firebaseAuth.getUid());
                     snapshot.getReference().set(post);
                 }
                 userArrayList.remove(position);

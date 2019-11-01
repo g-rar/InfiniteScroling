@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
@@ -47,6 +48,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class CreatePostActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
+    private ConstraintLayout loadingLayout;
     private StorageReference storageReference;
     private DocumentReference userDoc;
     private FirebaseAuth firebaseAuth;
@@ -75,6 +77,7 @@ public class CreatePostActivity extends AppCompatActivity {
         btn_deleteImg = findViewById(R.id.btnDeletePhoto);
         btn_deleteVideo = findViewById(R.id.btn_deleteVideo);
         videoView = findViewById(R.id.webView_videoCreate);
+        loadingLayout = findViewById(R.id.ConstraintLayout_loading);
 
         userDoc = db.collection("users").document(firebaseAuth.getUid());
 
@@ -96,9 +99,11 @@ public class CreatePostActivity extends AppCompatActivity {
                 finish();
             }
         });
+        loadingLayout.setVisibility(View.GONE);
     }
 
     public void createPost(View view){
+        loadingLayout.setVisibility(View.VISIBLE);
         EditText txt = findViewById(R.id.txtPost);
         String text = txt.getText().toString();
         if(text.equals("") & videoURL == null & path == null){
@@ -140,6 +145,7 @@ public class CreatePostActivity extends AppCompatActivity {
         ref.set(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                loadingLayout.setVisibility(View.GONE);
                 Toast.makeText(CreatePostActivity.this, "Se ha publicado el post", Toast.LENGTH_SHORT).show();
             }
         });
