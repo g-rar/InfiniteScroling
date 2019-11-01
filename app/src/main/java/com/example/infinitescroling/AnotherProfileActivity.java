@@ -98,7 +98,6 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
         profileName = findViewById(R.id.textView_name_profile);
         infoListView = findViewById(R.id.listView_information_profile);
         addFriendBtn = findViewById(R.id.button_addFriend);
-        seePicturesBtn = findViewById(R.id.button_anotherSeePhotos);
         seeFriendsBtn = findViewById(R.id.button_anotherSeeFriends);
         recyclerViewPosts = findViewById(R.id.recyclerView_posts);
 
@@ -399,6 +398,12 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                 }).setNegativeButton(R.string.alert_backCancel, null).show();
     }
 
+    public void seeProfileFriends(View view) {
+        Intent intent = new Intent(this, FriendsActivity.class);
+        intent.putExtra("userId", profileUserId);
+        startActivity(intent);
+    }
+
     @Override
     public DocumentSnapshot getLastDocLoaded() {
         return lastDocLoaded;
@@ -458,4 +463,5 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
     public void deleteAcademicOnClick(int position) {
 
     }
+
 }
