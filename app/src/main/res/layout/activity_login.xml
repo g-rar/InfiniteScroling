@@ -30,86 +30,126 @@
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/editText_emailInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:autofillHints="@string/str_emailhint"
-                android:ems="10"
-                android:hint="@string/str_emailhint"
-                android:inputType="textEmailAddress"
-                app:layout_constraintEnd_toEndOf="@+id/textView_loginText"
-                app:layout_constraintHorizontal_bias="0.486"
-                app:layout_constraintStart_toStartOf="@+id/textView_loginText"
 
-                app:layout_constraintTop_toBottomOf="@+id/textView_loginText" />
 
-            <EditText
-                android:id="@+id/editText_editPasswordInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:autofillHints="@string/str_passwordHint"
-                android:ems="10"
-                android:hint="@string/str_passwordHint"
-                android:inputType="textPassword"
-                app:layout_constraintEnd_toEndOf="@+id/editText_emailInput"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/editText_emailInput"
-                app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
+                <TextView
+                    android:id="@+id/textView_loginText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:maxWidth="250sp"
+                    android:text="@string/str_loginLabel"
+                    android:textAlignment="center"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/button_forgotPassword"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:text="@string/str_forgotPassword"
-                android:textAllCaps="false"
-                android:textColor="@color/colorHiperLink"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="@+id/editText_editPasswordInput"
-                app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
+                <EditText
+                    android:id="@+id/editText_emailInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:autofillHints="@string/str_emailhint"
+                    android:ems="10"
+                    android:hint="@string/str_emailhint"
+                    android:inputType="textEmailAddress"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_loginText"
+                    app:layout_constraintHorizontal_bias="0.486"
+                    app:layout_constraintStart_toStartOf="@+id/textView_loginText"
 
-            <Button
-                android:id="@+id/button_login"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:text="@string/str_login"
-                app:layout_constraintEnd_toEndOf="@+id/editText_editPasswordInput"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/editText_editPasswordInput"
-                app:layout_constraintTop_toBottomOf="@+id/editText_editPasswordInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_loginText" />
 
-            <Button
-                android:id="@+id/button_register"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:onClick="registerAccount"
-                android:text="@string/str_register"
-                app:layout_constraintEnd_toEndOf="@+id/button_login"
-                app:layout_constraintStart_toStartOf="@+id/button_login"
-                app:layout_constraintTop_toBottomOf="@+id/button_login" />
+                <EditText
+                    android:id="@+id/editText_passwordInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:autofillHints="@string/str_passwordHint"
+                    android:ems="10"
+                    android:hint="@string/str_passwordHint"
+                    android:inputType="textPassword"
+                    app:layout_constraintEnd_toEndOf="@+id/editText_emailInput"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/editText_emailInput"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_emailInput" />
 
-            <Button
-                android:id="@+id/button_googleLogin"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawableLeft="@drawable/common_google_signin_btn_icon_dark"
-                android:text="@string/str_googleLogin"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="@+id/button_register"
-                app:layout_constraintStart_toStartOf="@+id/button_register"
-                app:layout_constraintTop_toBottomOf="@+id/button_register" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+                <Button
+                    android:id="@+id/button_forgotPassword"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text="@string/str_forgotPassword"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorHiperLink"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="@+id/editText_passwordInput"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" 
+                    android:onClick="onClickForgotPass"/>
 
-</ScrollView>
+                <Button
+                    android:id="@+id/button_login"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:onClick="loginOnClick"
+                    android:text="@string/str_login"
+                    app:layout_constraintEnd_toEndOf="@+id/editText_passwordInput"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/editText_passwordInput"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_passwordInput" />
+
+                <Button
+                    android:id="@+id/button_register"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="registerAccount"
+                    android:text="@string/str_register"
+                    app:layout_constraintEnd_toEndOf="@+id/button_login"
+                    app:layout_constraintStart_toStartOf="@+id/button_login"
+                    app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+                <Button
+                    android:id="@+id/button_googleLogin"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:drawableLeft="@drawable/common_google_signin_btn_icon_dark"
+                    android:onClick="signInWithGoogle"
+                    android:text="@string/str_googleLogin"
+                    android:textAllCaps="false"
+                    app:layout_constraintEnd_toEndOf="@+id/button_register"
+                    app:layout_constraintStart_toStartOf="@+id/button_register"
+                    app:layout_constraintTop_toBottomOf="@+id/button_register" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLoading"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

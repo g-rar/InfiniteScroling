@@ -6,82 +6,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/scrollView_comment"
+    <EditText
+        android:id="@+id/editText_commentInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
+        android:ems="10"
+        android:hint="@string/str_edtitTextCommentHint"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/button_addComment"
+        tools:layout_editor_absoluteX="20dp" />
 
-        <RelativeLayout
+    <Button
+        android:id="@+id/button_addComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/str_buttonComment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="addComent"/>
+
+    <ScrollView
+        android:id="@+id/scroll_images"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_commentInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView_perfilComment"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp" />
-
-            <TextView
-                android:id="@+id/textView_nameUser"
-                android:layout_width="wrap_content"
+                android:id="@+id/imageView_imgPost"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageView_perfilComment"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/imageView_perfilComment"
-                android:text="@string/str_userName"
-                android:textSize="20sp" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
-            <TextView
-                android:id="@+id/textView_commentText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView_perfilComment"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="30dp"
+
+            <ImageButton
+                android:id="@+id/btnLike"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="104dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:text="@string/str_commentText"
-                android:textSize="25sp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_imgPost"
+                app:srcCompat="@drawable/ic_like"
+                android:onClick="clickLike"/>
+
+            <TextView
+                android:id="@+id/txtLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="0"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/btnLike"
+                app:layout_constraintTop_toTopOf="@+id/btnLike" />
+
+            <ImageButton
+                android:id="@+id/btnDislike"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toEndOf="@+id/txtLikeCount"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_imgPost"
+                app:srcCompat="@drawable/ic_dislike"
+                android:onClick="clickDislike"/>
+
+            <TextView
+                android:id="@+id/txtDislikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="0"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/btnDislike"
+                app:layout_constraintTop_toTopOf="@+id/btnDislike" />
 
             <ListView
                 android:id="@+id/listView_commentList"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_below="@+id/textView_commentText"
-                android:layout_marginTop="30dp" />
-
-            <EditText
-                android:id="@+id/editText_commentInput"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listView_commentList"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="41dp"
-                android:layout_marginEnd="30dp"
-                android:hint="@string/str_edtitTextCommentHint"
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine" />
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnDislike"
+                tools:layout_editor_absoluteX="20dp" />
 
-            <Button
-                android:id="@+id/button_addComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editText_commentInput"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="33dp"
-                android:text="@string/str_buttonComment" />
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,41 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <ImageView
-        android:id="@+id/imageView_perfilFriend"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/textView_nameFriend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/str_userName"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView_perfilFriend"
-        app:layout_constraintTop_toTopOf="@+id/imageView_perfilFriend" />
-
-    <TextView
-        android:id="@+id/textView_stateFriend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/str_stateFriend"
-        android:textSize="24sp"
+        android:id="@+id/imageView_profilePicRow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nameFriend"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
+    <TextView
+        android:id="@+id/textView_nameUserRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/str_userName"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView_profilePicRow"
+        app:layout_constraintTop_toTopOf="@+id/imageView_profilePicRow" />
+
+    <TextView
+        android:id="@+id/textView_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_commonFriends"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_profilePicRow"
+        app:layout_constraintStart_toStartOf="@+id/textView_nameUserRow" />
+
+    <Button
+        android:id="@+id/button_acceptable"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/str_buttonAcceptFriend"
+        android:textSize="10sp"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/button_reject"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/str_buttonRejectFriend"
+        android:textSize="10sp"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_acceptable"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profilePicRow"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

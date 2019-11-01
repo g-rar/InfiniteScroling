@@ -2,6 +2,9 @@ package com.example.infinitescroling;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -9,13 +12,16 @@ import com.example.infinitescroling.fragments.PageAdapter;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO checklist [ ] https://developers.google.com/identity/sign-in/android/sign-in
-    //TODO checklist [ ] https://firebase.google.com/docs/auth/android/google-signin?utm_source=studio
-
     private FirebaseAuth firebaseAuth;
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient mGoogleSignInClient;
+    private ISFirebaseManager firebaseManager = ISFirebaseManager.getInstance();
+    private FirebaseFirestore db;
     private TabLayout tabLayout;
     private TabItem tabProfile;
     private TabItem tabFeed;
@@ -28,14 +34,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() == null){
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else {
+            firebaseManager.setLoggedUser();
+        }
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         tabLayout = findViewById(R.id.tabLayout);
         tabProfile = findViewById(R.id.TabItem_Feed);
         tabFeed =  findViewById(R.id.TabItem_Profile);
         tabSearch =  findViewById(R.id.TabItem_Friends);
         viewPager = findViewById(R.id.ViewPager);
-        pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        Query friendsQuery = db.collection("users").whereArrayContains("friendIds", firebaseAuth.getUid());
+        pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(), friendsQuery);
         viewPager.setAdapter(pageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
@@ -54,5 +74,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        int tabSelect = getIntent().getIntExtra("tabSelect",0);
+//        firebaseManager.updateModel();
+        viewPager.setCurrentItem(tabSelect);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                firebaseAuth.signOut();
+                mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(MainActivity.this, R.string.str_logoutSuc, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                startActivity(new Intent(this, LoginActivity.class));
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
