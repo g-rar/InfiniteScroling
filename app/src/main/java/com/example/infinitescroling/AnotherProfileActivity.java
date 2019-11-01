@@ -140,6 +140,25 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
+
+            @Override
+            public void deletePost(int position) {
+                String postId = fetchedPosts.get(position).getId();
+                db.collection("posts").document(postId).delete();
+                fetchedPosts.remove(position);
+                feedAdapter.notifyDataSetChanged();
+                InfScrollUtil.loadNextPage(AnotherProfileActivity.this);
+            }
+
+            @Override
+            public void likeClick(int position) {
+                clickLike(position);
+            }
+
+            @Override
+            public void dislikeClick(int position) {
+                clickDislike(position);
+            }
         });
         recyclerViewPosts.setAdapter(feedAdapter);
         listIdPost = new ArrayList<String>();
@@ -195,6 +214,44 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
 
             }
         });
+    }
+
+    public void clickLike(int position){
+        DocumentReference postDoc = db.collection("posts").document(fetchedPosts.get(position).getId());
+        fetchedPosts.get(position).getDislikes().remove(firebaseManager.getLoggedUserId());
+        if(!fetchedPosts.get(position).getLikes().remove(firebaseManager.getLoggedUserId())) {
+            fetchedPosts.get(position).addLike(firebaseManager.getLoggedUserId());
+        }
+        postDoc.set(fetchedPosts.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        feedAdapter.notifyDataSetChanged();
+    }
+
+    public void clickDislike(int position){
+        fetchedPosts.get(position).getLikes().remove(firebaseManager.getLoggedUserId());
+        if(!fetchedPosts.get(position).getDislikes().remove(firebaseManager.getLoggedUserId())) {
+            fetchedPosts.get(position).addDislike(firebaseManager.getLoggedUserId());
+        }
+        DocumentReference postDoc = db.collection("posts").document(fetchedPosts.get(position).getId());
+        postDoc.set(fetchedPosts.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        feedAdapter.notifyDataSetChanged();
     }
 
     private void createGallery(){

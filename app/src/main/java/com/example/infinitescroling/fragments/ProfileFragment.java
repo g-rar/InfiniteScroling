@@ -48,6 +48,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -138,6 +139,25 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
                 intent.putExtra("idPost",item.getId());
                 startActivity(intent);
             }
+
+            @Override
+            public void deletePost(int position) {
+                String postId = listProfilePosts.get(position).getId();
+                db.collection("posts").document(postId).delete();
+                listProfilePosts.remove(position);
+                listIdPost.remove(position);
+                InfScrollUtil.loadNextPage(ProfileFragment.this);
+            }
+
+            @Override
+            public void likeClick(int position) {
+                clickLike(position);
+            }
+
+            @Override
+            public void dislikeClick(int position) {
+                clickDislike(position);
+            }
         });
         recyclerViewProfile.setAdapter(adapterList);
         query = db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid())
@@ -211,6 +231,44 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
             }
         });
     }
+    public void clickLike(int position){
+        DocumentReference postDoc = db.collection("posts").document(listProfilePosts.get(position).getId());
+        listProfilePosts.get(position).getDislikes().remove(firebaseAuth.getUid());
+        if(!listProfilePosts.get(position).getLikes().remove(firebaseAuth.getUid())) {
+            listProfilePosts.get(position).addLike(firebaseAuth.getUid());
+        }
+        postDoc.set(listProfilePosts.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        adapterList.notifyDataSetChanged();
+    }
+
+    public void clickDislike(int position){
+        listProfilePosts.get(position).getLikes().remove(firebaseAuth.getUid());
+        if(!listProfilePosts.get(position).getDislikes().remove(firebaseAuth.getUid())) {
+            listProfilePosts.get(position).addDislike(firebaseAuth.getUid());
+        }
+        DocumentReference postDoc = db.collection("posts").document(listProfilePosts.get(position).getId());
+        postDoc.set(listProfilePosts.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        adapterList.notifyDataSetChanged();
+    }
+
 
     private void loadUser(){
         db.collection("users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class PostArrayAdapter extends ArrayAdapter {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.post_row, parent, false);
         }
-        ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+        final ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
         final User[] user = new User[1];
         final View finalConvertView = convertView;
         firbaseManager.getUserWithId(post.getPostedBy(), new OnSuccessListener<DocumentSnapshot>() {

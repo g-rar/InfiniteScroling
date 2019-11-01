@@ -25,6 +25,16 @@
         app:layout_constraintStart_toEndOf="@+id/imageView_profileFeed"
         app:layout_constraintTop_toTopOf="@+id/imageView_profileFeed" />
 
+    <ImageButton
+        android:id="@+id/imageButton_deletePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete_black_24dp" />
+
     <TextView
         android:id="@+id/textView_datePost"
         android:layout_width="wrap_content"
@@ -74,6 +84,55 @@
 
     </WebView>
 
+    <ImageButton
+        android:id="@+id/imageButton_likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/webView_videoRow"
+        app:srcCompat="@drawable/ic_like" />
+
+
+    <TextView
+        android:id="@+id/text_countLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="13dp"
+        android:text="0"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton_likes"
+        app:layout_constraintTop_toBottomOf="@+id/webView_videoRow" />
+
+    <ImageButton
+        android:id="@+id/imageButton_Dislikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_countLikes"
+        app:layout_constraintTop_toBottomOf="@+id/webView_videoRow"
+        app:srcCompat="@drawable/ic_dislike" />
+
+    <TextView
+        android:id="@+id/text_countDislikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="13dp"
+        android:text="0"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton_Dislikes"
+        app:layout_constraintTop_toBottomOf="@+id/webView_videoRow" />
+
     <View
         android:id="@+id/divider4"
         android:layout_width="match_parent"
@@ -82,7 +141,8 @@
         android:layout_marginBottom="4dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webView_videoRow"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton_Dislikes"
         tools:layout_editor_absoluteX="176dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
