@@ -47,7 +47,7 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
         //getFriends
         friends = new ArrayList<>();
         friendIds = new ArrayList<>();
-        adapter = new UsersAdapter(getContext(), this, friends);
+        adapter = new UsersAdapter(getContext(), this, friends,false);
         friendsListView = view.findViewById(R.id.listview_friends);
         friendsListView.setAdapter(adapter);
         loggedUserId = firebaseAuth.getCurrentUser().getUid();
@@ -83,5 +83,15 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
         Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
         intent.putExtra("userId",friendIds.get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void acceptFriend(int position) {
+
+    }
+
+    @Override
+    public void rejectFriend(int position) {
+
     }
 }

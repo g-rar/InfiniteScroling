@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment
         searchResultListView = view.findViewById(R.id.listView_searchResults);
         usersFetched = new ArrayList<>();
         userIds = new ArrayList<>();
-        usersAdapter = new UsersAdapter(getContext(), this, usersFetched);
+        usersAdapter = new UsersAdapter(getContext(), this, usersFetched, false);
         postFetched = new ArrayList<>();
         postIds = new ArrayList<>();
         postsAdapter = new PostArrayAdapter(getContext(), this, postFetched);
@@ -165,6 +165,16 @@ public class SearchFragment extends Fragment
         intent.putExtra("userId", userIds.get(position));
         startActivity(intent);
         Toast.makeText(getContext(), "Redirijiendo a usuario", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void acceptFriend(int position) {
+
+    }
+
+    @Override
+    public void rejectFriend(int position) {
+
     }
 
     @Override
