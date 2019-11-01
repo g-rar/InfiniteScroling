@@ -39,9 +39,13 @@ public class UsersAdapter extends ArrayAdapter {
         }
         ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
         User loggedUser = firbaseManager.getLoggedUser();
-        if(user.getProfilePicture() != null && !user.getProfilePicture().equals("")){
-            ImageView imageView = convertView.findViewById(R.id.imageView_profilePicRow);
+        ImageView imageView = convertView.findViewById(R.id.imageView_profilePicRow);
+        if(user.getProfilePicture() != null){
             Glide.with(getContext()).load(user.getProfilePicture())
+                    .centerCrop().fitCenter().into(imageView);
+        }
+        else{
+            Glide.with(getContext()).load(R.drawable.ic_account_circle_black_24dp)
                     .centerCrop().fitCenter().into(imageView);
         }
         int commonNum = 0;
