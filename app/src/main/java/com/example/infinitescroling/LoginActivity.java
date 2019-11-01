@@ -125,13 +125,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(LoginActivity.this, R.string.str_loginFailed, Toast.LENGTH_LONG).show();
                         Log.w(TAG, "onFailure: ", e);
+                        loadingLayout.setVisibility(View.GONE);
                     }
                 });
             } catch (Exception e) {
                 Log.w(TAG, "Sign in with credential: Fail", e);
                 Toast.makeText(this, R.string.str_loginFailed, Toast.LENGTH_LONG).show();
+                loadingLayout.setVisibility(View.GONE);
             }
-            loadingLayout.setVisibility(View.GONE);
         }
     }
 
@@ -146,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
                         gotoMainActivity();
+                        loadingLayout.setVisibility(View.GONE);
                     } else {
                         dbUsers.document(uid).set(new User(
                                 account.getGivenName(), account.getFamilyName(), "", "", account.getEmail(), null, "", account.getPhotoUrl().toString()
@@ -154,15 +156,20 @@ public class LoginActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(LoginActivity.this, R.string.str_registrationSuccess, Toast.LENGTH_SHORT).show();
                                 gotoMainActivity();
+                                loadingLayout.setVisibility(View.GONE);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 firebaseAuth.getCurrentUser().delete();
                                 Toast.makeText(LoginActivity.this,R.string.str_registrationFailed, Toast.LENGTH_SHORT).show();
+                                loadingLayout.setVisibility(View.GONE);
                             }
                         });
                     }
+                }
+                else{
+                    loadingLayout.setVisibility(View.GONE);
                 }
             }
         });
