@@ -82,39 +82,26 @@
                 android:id="@+id/button_anotherSeeFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ListView_academics"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="-45dp"
-                android:layout_toStartOf="@+id/imageView_profile"
-                android:drawableLeft="@drawable/ic_people_black_24dp"
-                android:text="@string/str_seeFriends"
-                android:textAllCaps="false" />
-
-            <Button
-                android:id="@+id/button_anotherSeePhotos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ListView_academics"
+                android:layout_below="@+id/textView_name_profile"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="-45dp"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
-                android:layout_toEndOf="@+id/imageView_profile"
-                android:drawableLeft="@drawable/ic_image_black_24dp"
-                android:text="@string/str_seePhotos"
+                android:layout_toEndOf="@+id/button_addFriend"
+                android:drawableLeft="@drawable/ic_people_black_24dp"
+                android:onClick="seeProfileFriends"
+                android:text="@string/str_seeFriends"
                 android:textAllCaps="false" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_posts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/button_anotherSeePhotos"
+                android:layout_below="@+id/ListView_academics"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="108dp"
                 android:layout_marginEnd="20dp" />
 
             <HorizontalScrollView

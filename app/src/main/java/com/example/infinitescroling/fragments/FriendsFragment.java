@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -33,10 +34,25 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
     private ArrayList<String> friendIds;
     private UsersAdapter adapter;
     private ListView friendsListView;
+    private Query query;
 
+    private boolean friendsByQuery;
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
     private View view;
+
+    public FriendsFragment(Query query){
+        super();
+        this.query = query;
+        friendsByQuery = true;
+    }
+
+    public FriendsFragment(ArrayList<User> friends, ArrayList<String> friendIds){
+        super();
+        this.friends = friends;
+        this.friendIds = friendIds;
+        friendsByQuery = false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,13 +61,21 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         //getFriends
-        friends = new ArrayList<>();
-        friendIds = new ArrayList<>();
+        if(friendsByQuery){
+            friends = new ArrayList<>();
+            friendIds = new ArrayList<>();
+            executeQuery();
+        }
         adapter = new UsersAdapter(getContext(), this, friends);
         friendsListView = view.findViewById(R.id.listview_friends);
         friendsListView.setAdapter(adapter);
         loggedUserId = firebaseAuth.getCurrentUser().getUid();
-        db.collection("users").whereArrayContains("friendIds", loggedUserId).get()
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void executeQuery() {
+        query.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -73,9 +97,6 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
                 Log.w("FireStore query", "onFailure: No se consiguieron amigos", e);
             }
         });
-
-        // Inflate the layout for this fragment
-        return view;
     }
 
     @Override

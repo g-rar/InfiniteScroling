@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
     private ISFirebaseManager firebaseManager = ISFirebaseManager.getInstance();
+    private FirebaseFirestore db;
     private TabLayout tabLayout;
     private TabItem tabProfile;
     private TabItem tabFeed;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
-
+        db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -62,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         tabFeed =  findViewById(R.id.TabItem_Profile);
         tabSearch =  findViewById(R.id.TabItem_Friends);
         viewPager = findViewById(R.id.ViewPager);
-        pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        Query friendsQuery = db.collection("users").whereArrayContains("friendIds", firebaseAuth.getUid());
+        pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(), friendsQuery);
         viewPager.setAdapter(pageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
