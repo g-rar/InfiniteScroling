@@ -13,12 +13,14 @@ import com.example.infinitescroling.AnotherProfileActivity;
 import com.example.infinitescroling.ISFirebaseManager;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.UsersAdapter;
+import com.example.infinitescroling.models.Post;
 import com.example.infinitescroling.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
         incomingIds = new ArrayList<>();
         userArrayList = new ArrayList<>();
         userIds = new ArrayList<>();
-        usersAdapter = new UsersAdapter(getContext(), this, userArrayList);
+        usersAdapter = new UsersAdapter(getContext(), this, userArrayList, true);
         friendsListView.setAdapter(usersAdapter);
 
         //getUser id
@@ -79,6 +81,41 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
         });
     }
 
+    private void acceptRequest(final int position){
+        loggedUser.getFriendRequests().remove(userIds.get(position));
+        loggedUser.getFriendIds().add(userIds.get(position));
+        User profileUser = incomingRequests.get(position);
+        profileUser.getRequestsSent().remove(firebaseAuth.getUid());
+        profileUser.getFriendIds().add(firebaseAuth.getUid());
+        db.collection("users").document(userIds.get(position)).set(profileUser);
+        db.collection("users").document(firebaseAuth.getUid()).set(loggedUser);
+        Query refPosts = db.collection("posts").whereEqualTo("postedBy",firebaseAuth.getUid());
+        refPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                    Post post = snapshot.toObject(Post.class);
+                    post.getFriends().add(firebaseAuth.getUid());
+                    snapshot.getReference().set(post);
+                }
+                userArrayList.remove(position);
+                userIds.remove(position);
+                usersAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void rejectRequest(final int position){
+        loggedUser.getFriendRequests().remove(userIds.get(position));
+        User profileUser = incomingRequests.get(position);
+        profileUser.getRequestsSent().remove(firebaseAuth.getUid());
+        db.collection("users").document(userIds.get(position)).set(profileUser);
+        db.collection("users").document(firebaseAuth.getUid()).set(loggedUser);
+        incomingRequests.remove(position);
+        userIds.remove(position);
+        usersAdapter.notifyDataSetChanged();
+    }
+
     private void updateList(){
         if(fetchedIncoming){
             userArrayList.addAll(incomingRequests);
@@ -92,5 +129,15 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
         Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
         intent.putExtra("userId", userIds.get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void acceptFriend(int position) {
+        acceptRequest(position);
+    }
+
+    @Override
+    public void rejectFriend(int position) {
+        rejectRequest(position);
     }
 }

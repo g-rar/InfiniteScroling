@@ -233,6 +233,16 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
         startActivity(intent);
     }
 
+    @Override
+    public void acceptFriend(int position) {
+
+    }
+
+    @Override
+    public void rejectFriend(int position) {
+
+    }
+
     private void swipeToLeft() {
         if (posImage > 0) {
             posImage--;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +22,12 @@ import java.util.ArrayList;
 public class UsersAdapter extends ArrayAdapter {
 
     private UserRedirectable userRedirectable;
+    private boolean notifications;
 
-    public UsersAdapter(Context context, UserRedirectable userRedirectable, ArrayList<User> users){
+    public UsersAdapter(Context context, UserRedirectable userRedirectable, ArrayList<User> users, boolean notifications){
         super(context, 0, users);
         this.userRedirectable = userRedirectable;
+        this.notifications = notifications;
     }
 
     @NonNull
@@ -54,6 +57,26 @@ public class UsersAdapter extends ArrayAdapter {
             }
         }
         common.setText(commonNum + " amigos en común");
+        Button accept = convertView.findViewById(R.id.button_acceptable);
+        Button reject = convertView.findViewById(R.id.button_reject);
+        accept.setVisibility(View.GONE);
+        reject.setVisibility(View.GONE);
+        if(notifications){
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userRedirectable.acceptFriend(position);
+                }
+            });
+            reject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userRedirectable.rejectFriend(position);
+                }
+            });
+            accept.setVisibility(View.VISIBLE);
+            reject.setVisibility(View.VISIBLE);
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,5 +90,7 @@ public class UsersAdapter extends ArrayAdapter {
 
     public interface UserRedirectable {
         void redirecToFriend(int position);
+        void acceptFriend(int position);
+        void rejectFriend(int position);
     }
 }

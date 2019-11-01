@@ -239,4 +239,14 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
             startActivity(intent);
         }
     }
+
+    @Override
+    public void acceptFriend(int position) {
+
+    }
+
+    @Override
+    public void rejectFriend(int position) {
+
+    }
 }

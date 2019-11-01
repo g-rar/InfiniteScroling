@@ -34,6 +34,31 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView_profilePicRow"
         app:layout_constraintStart_toStartOf="@+id/textView_nameUserRow" />
 
+    <Button
+        android:id="@+id/button_acceptable"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/str_buttonAcceptFriend"
+        android:textSize="10sp"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/button_reject"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/str_buttonRejectFriend"
+        android:textSize="10sp"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_acceptable"
+        android:visibility="gone"/>
+
     <View
         android:id="@+id/divider5"
         android:layout_width="match_parent"
