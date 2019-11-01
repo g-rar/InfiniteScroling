@@ -52,11 +52,12 @@ public class PostArrayAdapter extends ArrayAdapter {
                 ((TextView) finalConvertView.findViewById(R.id.textView_nameUserRow)).setText(
                         (user[0].getFirstName() + " " + user[0].getLastName()));
                 ImageView postProfilePic = finalConvertView.findViewById(R.id.imageView_profileFeed);
-                if(user[0].getProfilePicture() != null){
+                if(user[0].getProfilePicture() != null ){
                     Glide.with(getContext()).load(user[0].getProfilePicture())
                             .centerCrop().into(postProfilePic);
                 } else {
-                    postProfilePic.setImageResource(R.drawable.ic_account_circle_black_24dp);
+                    Glide.with(getContext()).load(R.drawable.ic_account_circle_black_24dp)
+                            .centerCrop().into(postProfilePic);
                 }
 
                 finalConvertView.setOnClickListener(new View.OnClickListener() {
