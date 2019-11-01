@@ -540,16 +540,9 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                 for(DocumentSnapshot snapshot: myListOfDocuments){
                                     User userItem = snapshot.toObject(User.class);
                                     userItem.getFriendIds().remove(id);
-                                    snapshot.getReference().set(userItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-
-                                        }
-                                    });
+                                    userItem.getFriendRequests().remove(id);
+                                    userItem.getRequestsSent().remove(id);
+                                    snapshot.getReference().set(userItem);
                                 }
                             }
                         }

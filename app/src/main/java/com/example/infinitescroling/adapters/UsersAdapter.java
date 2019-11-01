@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.infinitescroling.ISFirebaseManager;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.models.User;
 
@@ -33,15 +34,26 @@ public class UsersAdapter extends ArrayAdapter {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.friends_row, parent, false);
         }
-
+        ISFirebaseManager firbaseManager = ISFirebaseManager.getInstance();
+        User loggedUser = firbaseManager.getLoggedUser();
         if(user.getProfilePicture() != null && !user.getProfilePicture().equals("")){
             ImageView imageView = convertView.findViewById(R.id.imageView_profilePicRow);
             Glide.with(getContext()).load(user.getProfilePicture())
                     .centerCrop().fitCenter().into(imageView);
         }
-
+        int commonNum = 0;
         TextView userName = convertView.findViewById(R.id.textView_nameUserRow);
+        TextView common = convertView.findViewById(R.id.textView_friends);
         userName.setText(user.getFirstName() + " " + user.getLastName());
+        for(String friendId1 : user.getFriendIds()){
+            for(String friendId2 : loggedUser.getFriendIds()){
+                if(friendId1.equalsIgnoreCase(friendId2)){
+                    commonNum++;
+                    break;
+                }
+            }
+        }
+        common.setText(commonNum + " amigos en común");
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

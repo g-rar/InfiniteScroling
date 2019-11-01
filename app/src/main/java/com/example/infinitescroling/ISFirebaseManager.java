@@ -37,21 +37,11 @@ public class ISFirebaseManager {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public /*User*/ void getUserWithId(String postedBy, OnSuccessListener<DocumentSnapshot> listener){
+    public void getUserWithId(String postedBy, OnSuccessListener<DocumentSnapshot> listener){
         DocumentReference ref = db.collection("users").document(postedBy);
         ref.get().addOnSuccessListener(listener
-//                new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if(task.isSuccessful()){
-//                    user[0] = task.getResult().toObject(User.class);
-//                }
-//            }
-//        }
         );
-//        return user[0];
     }
-
 
     public void setLoggedUser() {
         db.collection("users").document(firebaseAuth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -22,19 +22,15 @@
         android:layout_marginStart="16dp"
         android:text="@string/str_userName"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/imageView_profilePicRow"
         app:layout_constraintTop_toTopOf="@+id/imageView_profilePicRow" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="150dp"
+        android:id="@+id/textView_friends"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bckg_request_accepted"
-        android:gravity="center"
-        android:text="status"
-        android:textColor="@color/colorWhite"
-        android:visibility="gone"
+        android:text="@string/str_commonFriends"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView_profilePicRow"
         app:layout_constraintStart_toStartOf="@+id/textView_nameUserRow" />
 
