@@ -32,6 +32,8 @@ public class User {
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         friendIds = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+        requestsSent = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String city, String gender, String email, Date birthDate, String phoneNumber, String profilePicture) {
