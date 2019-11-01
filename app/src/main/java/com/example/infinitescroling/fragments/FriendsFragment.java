@@ -66,7 +66,7 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
             friendIds = new ArrayList<>();
             executeQuery();
         }
-        adapter = new UsersAdapter(getContext(), this, friends);
+        adapter = new UsersAdapter(getContext(), this, friends, false);
         friendsListView = view.findViewById(R.id.listview_friends);
         friendsListView.setAdapter(adapter);
         loggedUserId = firebaseAuth.getCurrentUser().getUid();
