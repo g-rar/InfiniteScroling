@@ -35,6 +35,7 @@ public class ISFirebaseManager {
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
+
     }
 
     public void getUserWithId(String postedBy, OnSuccessListener<DocumentSnapshot> listener){
@@ -52,8 +53,16 @@ public class ISFirebaseManager {
         });
     }
 
+    public boolean isLoggedUser(String userId){
+        return userId.equals(firebaseAuth.getUid());
+    }
+
     public User getLoggedUser() {
         return loggedUser;
+    }
+
+    public String getLoggedUserId() {
+        return firebaseAuth.getUid();
     }
 
 }
