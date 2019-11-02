@@ -34,10 +34,9 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
     private User loggedUser;
     private View view;
 
-    private boolean fetchedIncoming = false;
+    private boolean editedForReciever = false;
+    private boolean editedForSender = false;
     private ListView friendsListView;
-    private ArrayList<User> incomingRequests;
-    private ArrayList<String> incomingIds;
     private ArrayList<User> userArrayList;
     private ArrayList<String> userIds;
     private UsersAdapter usersAdapter;
@@ -53,8 +52,6 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
         loggedUser = firebaseManager.getLoggedUser();
         //setup list
         friendsListView = view.findViewById(R.id.arrayList_notifications);
-        incomingRequests = new ArrayList<>();
-        incomingIds = new ArrayList<>();
         userArrayList = new ArrayList<>();
         userIds = new ArrayList<>();
         usersAdapter = new UsersAdapter(getContext(), this, userArrayList, true);
@@ -72,19 +69,19 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 for(DocumentSnapshot doc : docs){
-                    incomingRequests.add(doc.toObject(User.class));
-                    incomingIds.add(doc.getId());
+                    userArrayList.add(doc.toObject(User.class));
+                    userIds.add(doc.getId());
                 }
-                fetchedIncoming = true;
-                updateList();
+                usersAdapter.notifyDataSetChanged();
             }
         });
     }
 
     private void acceptRequest(final int position){
+        editedForReciever = editedForSender = false;
         loggedUser.getFriendRequests().remove(userIds.get(position));
         loggedUser.getFriendIds().add(userIds.get(position));
-        User profileUser = incomingRequests.get(position);
+        User profileUser = userArrayList.get(position);
         profileUser.getRequestsSent().remove(firebaseAuth.getUid());
         profileUser.getFriendIds().add(firebaseAuth.getUid());
         db.collection("users").document(userIds.get(position)).set(profileUser);
@@ -98,6 +95,8 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
                     post.getFriends().add(userIds.get(position));
                     snapshot.getReference().set(post);
                 }
+                editedForSender = true;
+                removeNotification(position);
             }
         });
         Query refPost = db.collection("posts").whereEqualTo("postedBy",userIds.get(position));
@@ -109,29 +108,28 @@ public class NotificationsFragment extends Fragment implements UsersAdapter.User
                     post.getFriends().add(firebaseAuth.getUid());
                     snapshot.getReference().set(post);
                 }
-                userArrayList.remove(position);
-                userIds.remove(position);
-                usersAdapter.notifyDataSetChanged();
+                editedForReciever = true;
+                removeNotification(position);
             }
         });
     }
 
+    private void removeNotification(int position){
+        if(editedForReciever & editedForSender){
+                userArrayList.remove(position);
+                userIds.remove(position);
+                usersAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void rejectRequest(final int position){
         loggedUser.getFriendRequests().remove(userIds.get(position));
-        User profileUser = incomingRequests.get(position);
+        User profileUser = userArrayList.get(position);
         profileUser.getRequestsSent().remove(firebaseAuth.getUid());
         db.collection("users").document(userIds.get(position)).set(profileUser);
         db.collection("users").document(firebaseAuth.getUid()).set(loggedUser);
-        incomingRequests.remove(position);
+        userArrayList.remove(position);
         userIds.remove(position);
-        usersAdapter.notifyDataSetChanged();
-    }
-
-    private void updateList(){
-        if(fetchedIncoming){
-            userArrayList.addAll(incomingRequests);
-            userIds.addAll(incomingIds);
-        }
         usersAdapter.notifyDataSetChanged();
     }
 

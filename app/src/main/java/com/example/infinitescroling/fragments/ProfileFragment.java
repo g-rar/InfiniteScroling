@@ -187,9 +187,12 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
     }
 
     private void createGallery(){
+        //TODO order posts by date as well
         gallery = layout.findViewById(R.id.gallery);
-        db.collection("posts").whereEqualTo("postedBy", firebaseAuth.getUid())
-                .whereGreaterThan("image", "").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("posts")
+                .whereEqualTo("postedBy", firebaseAuth.getUid())
+                .whereGreaterThan("image", "")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
