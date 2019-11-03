@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.infinitescroling.AnotherProfileActivity;
+import com.example.infinitescroling.MainActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.UsersAdapter;
 import com.example.infinitescroling.models.User;
@@ -101,9 +102,17 @@ public class FriendsFragment extends Fragment implements UsersAdapter.UserRedire
 
     @Override
     public void redirecToFriend(int position) {
-        Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
-        intent.putExtra("userId",friendIds.get(position));
-        startActivity(intent);
+        String userId = friendIds.get(position);
+        if(userId.equals(firebaseAuth.getUid())){
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("tabSelect", 4);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        }
     }
 
     @Override

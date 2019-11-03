@@ -227,15 +227,15 @@ public class PostDetailsActivity extends AppCompatActivity implements UsersAdapt
 
     @Override
     public void redirecToFriend(int position) {
-        String idComment = commentsFetched.get(position).getIdUser();
-        if(idComment.equals(firebaseAuth.getUid())){
+        String idUser = commentsFetched.get(position).getIdUser();
+        if(idUser.equals(firebaseAuth.getUid())){
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("tabSelect", 4);
             startActivity(intent);
         }
         else {
             Intent intent = new Intent(this, AnotherProfileActivity.class);
-            intent.putExtra("userId", idComment);
+            intent.putExtra("userId", idUser);
             startActivity(intent);
         }
     }

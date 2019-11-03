@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.infinitescroling.AnotherProfileActivity;
+import com.example.infinitescroling.ISFirebaseManager;
+import com.example.infinitescroling.MainActivity;
 import com.example.infinitescroling.PostDetailsActivity;
 import com.example.infinitescroling.R;
 import com.example.infinitescroling.adapters.PostArrayAdapter;
@@ -45,6 +47,7 @@ public class SearchFragment extends Fragment
     private ArrayList<String> postIds;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ISFirebaseManager firebaseManager = ISFirebaseManager.getInstance();
     private EditText searchEditText;
     private ListView searchResultListView;
     private View view;
@@ -161,10 +164,17 @@ public class SearchFragment extends Fragment
 
     @Override
     public void redirecToFriend(int position) {
-        Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
-        intent.putExtra("userId", userIds.get(position));
-        startActivity(intent);
-        Toast.makeText(getContext(), "Redirijiendo a usuario", Toast.LENGTH_SHORT).show();
+        String userId = userIds.get(position);
+        if(userId.equals(firebaseManager.getLoggedUserId())){
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("tabSelect", 4);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(getContext(), AnotherProfileActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        }
     }
 
     @Override
