@@ -342,7 +342,7 @@ public class AnotherProfileActivity extends AppCompatActivity implements InfScro
                     public void onClick(DialogInterface dialog, int which) {
                         loggedUser.getFriendIds().remove(profileUserId);
                         profileUser.getFriendIds().remove(loggedUserId);
-                        db.collection("users").document(loggedUserId).set(firebaseManager.getLoggedUser());
+                        db.collection("users").document(loggedUserId).set(loggedUser);
                         db.collection("users").document(profileUserId).set(profileUser);
                         Query refPosts = db.collection("posts").whereEqualTo("postedBy",loggedUserId);
                         refPosts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
