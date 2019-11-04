@@ -57,20 +57,6 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
-        db = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        idsPost = getIntent().getStringArrayListExtra("listIdsImages");
-        posImage = getIntent().getIntExtra("posPost",0);
-        postDoc = db.collection("posts").document(idsPost.get(posImage));
-        userDoc = db.collection("users").document(firebaseAuth.getUid());
-        countDislikes = findViewById(R.id.txtDislikeCount);
-        countLikes = findViewById(R.id.txtLikeCount);
-
-        btn_like = findViewById(R.id.btnLike);
-        btn_dislike = findViewById(R.id.btnDislike);
-        ed_comment = findViewById(R.id.editText_commentInput);
-
         ScrollView scrollView = (ScrollView)findViewById(R.id.scroll_images);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -103,6 +89,19 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
     }
 
     private void loadPost(){
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        idsPost = getIntent().getStringArrayListExtra("listIdsImages");
+        posImage = getIntent().getIntExtra("posPost",0);
+        postDoc = db.collection("posts").document(idsPost.get(posImage));
+        userDoc = db.collection("users").document(firebaseAuth.getUid());
+        countDislikes = findViewById(R.id.txtDislikeCount);
+        countLikes = findViewById(R.id.txtLikeCount);
+
+        btn_like = findViewById(R.id.btnLike);
+        btn_dislike = findViewById(R.id.btnDislike);
+        ed_comment = findViewById(R.id.editText_commentInput);
         btn_like.setImageResource(R.drawable.ic_like);
         btn_dislike.setImageResource(R.drawable.ic_dislike);
 
@@ -246,16 +245,24 @@ public class CommentActivity extends AppCompatActivity implements UsersAdapter.U
     private void swipeToLeft() {
         if (posImage > 0) {
             posImage--;
-            postDoc = db.collection("posts").document(idsPost.get(posImage));
-            loadPost();
+            Intent intent = new Intent(this, CommentActivity.class);
+            intent.putExtra("posPost", posImage);
+            intent.putExtra("idUser", post.getPostedBy());
+            intent.putExtra("listIdsImages", idsPost);
+            startActivity(intent);
+            finish();
         }
     }
 
     private void swipeToRight() {
         if (posImage < idsPost.size()-1) {
             posImage++;
-            postDoc = db.collection("posts").document(idsPost.get(posImage));
-            loadPost();
+            Intent intent = new Intent(this, CommentActivity.class);
+            intent.putExtra("posPost", posImage);
+            intent.putExtra("idUser", post.getPostedBy());
+            intent.putExtra("listIdsImages", idsPost);
+            startActivity(intent);
+            finish();
         }
     }
 }

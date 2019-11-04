@@ -198,8 +198,18 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 int posTag = 0;
+                ArrayList<Post> postsList = new ArrayList<Post>();
                 for(DocumentSnapshot doc : docs){
                     Post post = doc.toObject(Post.class);
+                    postsList.add(post);
+                }
+                Collections.sort(postsList,new Comparator<Post>() {
+                    @Override
+                    public int compare(Post o1, Post o2) {
+                        return o2.getDatePublication().compareTo(o1.getDatePublication());
+                    }
+                });
+                for(Post post : postsList){
                     View view = inflater.inflate(R.layout.image_item, gallery, false);
 
                     ImageView imageView = view.findViewById(R.id.imageView_carousel);
@@ -210,7 +220,7 @@ public class ProfileFragment extends Fragment implements InfScrollUtil.ContentPa
                             .load(pathImage)
                             .into(imageView);
                     imageView.setTag(posTag);
-                    listIdPost.add(doc.getId());
+                    listIdPost.add(post.getId());
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
