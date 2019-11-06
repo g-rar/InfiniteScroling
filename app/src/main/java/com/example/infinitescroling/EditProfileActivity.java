@@ -499,8 +499,8 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
-                                Post post = snapshot.toObject(Post.class);
-                                if(post.getImage() != null)
+//                                Post post = snapshot.toObject(Post.class);
+//                                if(post.getImage() != null)
                                     //storageReference.child(post.getImage()).delete();
                                 snapshot.getReference().delete();
                             }
