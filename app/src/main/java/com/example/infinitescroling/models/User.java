@@ -46,6 +46,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
         friendIds = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+        requestsSent = new ArrayList<>();
     }
 
     public String getFirstName() {
