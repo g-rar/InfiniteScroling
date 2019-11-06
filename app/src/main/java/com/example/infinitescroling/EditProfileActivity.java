@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.example.infinitescroling.adapters.EditAcademicAdapter;
 import com.example.infinitescroling.models.AcademicInfo;
 import com.example.infinitescroling.models.Post;
@@ -95,6 +94,10 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
 
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
+    private boolean academicsdeleted = false;
+    private boolean userDeletedInDb = false;
+    private boolean postsDeleted = false;
+    private boolean friendsDeleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -468,6 +471,8 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                     document.getReference().delete();
                                 }
                             }
+                            academicsdeleted = true;
+                            finishDelete();
                         }
                     });
                     userDoc.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -476,6 +481,8 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                             firebaseAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    userDeletedInDb = true;
+                                    finishDelete();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -494,19 +501,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                             loadingLayout.setVisibility(View.GONE);
                         }
                     });
-                    Query ref = db.collection("posts").whereEqualTo("postedBy", id);
-                    ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
-//                                Post post = snapshot.toObject(Post.class);
-//                                if(post.getImage() != null)
-                                    //storageReference.child(post.getImage()).delete();
-                                snapshot.getReference().delete();
-                            }
-                        }
 
-                    });
                     CollectionReference refLikes = db.collection("posts");
                     refLikes.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -515,27 +510,25 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                 List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
                                 for(DocumentSnapshot snapshot: myListOfDocuments){
                                     Post post = snapshot.toObject(Post.class);
-                                    post.getLikes().remove(id);
-                                    post.getDislikes().remove(id);
-                                    post.getFriends().remove(id);
-
-                                    for (int i = 0; i < post.getComments().size(); i++) {
-                                        if(post.getComments().get(i).getIdUser().equals(id)){
-                                            post.getComments().remove(i);
-                                            i--;
-                                        }
+                                    if(post.getPostedBy().equals(id)){
+                                        snapshot.getReference().delete();
                                     }
-                                    snapshot.getReference().set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
+                                    else {
+                                        post.getLikes().remove(id);
+                                        post.getDislikes().remove(id);
+                                        post.getFriends().remove(id);
 
+                                        for (int i = 0; i < post.getComments().size(); i++) {
+                                            if (post.getComments().get(i).getIdUser().equals(id)) {
+                                                post.getComments().remove(i);
+                                                i--;
+                                            }
                                         }
-                                    });
+                                        snapshot.getReference().set(post);
+                                    }
                                 }
+                                postsDeleted = true;
+                                finishDelete();
                             }
                         }
                     });
@@ -553,13 +546,11 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                     userItem.getRequestsSent().remove(id);
                                     snapshot.getReference().set(userItem);
                                 }
+                                friendsDeleted = true;
+                                finishDelete();
                             }
                         }
                     });
-                    Intent intent = getIntent();
-                    setResult(ACCOUNT_DELETED, intent);
-                    loadingLayout.setVisibility(View.GONE);
-                    finish();
                 }
 
             }).setNegativeButton(R.string.alert_backCancel, new DialogInterface.OnClickListener() {
@@ -568,6 +559,15 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                 loadingLayout.setVisibility(View.GONE);
             }
         }).show();
+    }
+
+    public void finishDelete(){
+        if(academicsdeleted && postsDeleted && userDeletedInDb && friendsDeleted){
+            Intent intent = getIntent();
+            setResult(ACCOUNT_DELETED, intent);
+            loadingLayout.setVisibility(View.GONE);
+            finish();
+        }
     }
 
     public void resetEditAcademic(View view){
