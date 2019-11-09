@@ -42,6 +42,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -92,6 +93,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
     private EditText passwordForEditLogin;
     private EditText passwordForDeleteInput;
 
+    private WriteBatch batch;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
     private boolean academicsdeleted = false;
@@ -393,7 +395,6 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
         Log.d(TAG, "Inicio del for");
         if(isGoogleLoged){
             deleteGoogleAccount();
-
         } else {
             deletePasswordAccount(passwordConfirm);
         }
@@ -463,12 +464,13 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //TODO also delete posts
+                    batch = db.batch();
                     userDoc.collection(ACADEMICS_KEY).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             if (!queryDocumentSnapshots.isEmpty()){
                                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                    document.getReference().delete();
+                                    batch.delete(document.getReference());
                                 }
                             }
                             academicsdeleted = true;
@@ -511,7 +513,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                 for(DocumentSnapshot snapshot: myListOfDocuments){
                                     Post post = snapshot.toObject(Post.class);
                                     if(post.getPostedBy().equals(id)){
-                                        snapshot.getReference().delete();
+                                        batch.delete(snapshot.getReference());
                                     }
                                     else {
                                         post.getLikes().remove(id);
@@ -524,7 +526,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                                 i--;
                                             }
                                         }
-                                        snapshot.getReference().set(post);
+                                        batch.set(snapshot.getReference(), post);
                                     }
                                 }
                                 postsDeleted = true;
@@ -544,7 +546,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
                                     userItem.getFriendIds().remove(id);
                                     userItem.getFriendRequests().remove(id);
                                     userItem.getRequestsSent().remove(id);
-                                    snapshot.getReference().set(userItem);
+                                    batch.set(snapshot.getReference(),userItem);
                                 }
                                 friendsDeleted = true;
                                 finishDelete();
@@ -566,6 +568,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditAcadem
             Intent intent = getIntent();
             setResult(ACCOUNT_DELETED, intent);
             loadingLayout.setVisibility(View.GONE);
+            batch.commit();
             finish();
         }
     }
