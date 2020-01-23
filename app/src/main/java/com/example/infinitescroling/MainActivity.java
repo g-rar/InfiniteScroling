@@ -5,18 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.infinitescroling.fragments.FeedFragment;
 import com.example.infinitescroling.fragments.PageAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firebaseManager.setSQLiteDB(this.openOrCreateDatabase("Local Data", MODE_PRIVATE, null));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         db = FirebaseFirestore.getInstance();
@@ -86,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         int tabSelect = getIntent().getIntExtra("tabSelect",0);
-//        firebaseManager.updateModel();
         viewPager.setCurrentItem(tabSelect);
     }
 
@@ -107,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_logout:
+                firebaseManager.removeDeviceTokenInDB();
                 firebaseAuth.signOut();
                 mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

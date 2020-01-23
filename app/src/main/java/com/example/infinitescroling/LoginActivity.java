@@ -32,7 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String TAG = "Login activity: ";
+    private static final String TAG = "Login activity: ";
     private int CREAR_CUENTA = 1;
     private int RC_SIGN_IN = 7;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
