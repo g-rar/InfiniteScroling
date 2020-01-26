@@ -24,6 +24,7 @@ import com.example.infinitescroling.models.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,7 +53,7 @@ public class FeedFragment extends Fragment implements InfScrollUtil.ContentPagin
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View root = inflater.inflate(R.layout.fragment_feed, container, false);
-        Button btn = root.findViewById(R.id.button_makePost);
+        FloatingActionButton btn = root.findViewById(R.id.button_makePost);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
