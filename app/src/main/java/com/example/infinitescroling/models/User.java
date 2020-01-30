@@ -18,6 +18,7 @@ public class User {
     private ArrayList<String> friendIds;
     private ArrayList<String> friendRequests;
     private ArrayList<String> requestsSent;
+    private ArrayList<String> devices;
 
     public User(){
 
@@ -34,6 +35,7 @@ public class User {
         friendIds = new ArrayList<>();
         friendRequests = new ArrayList<>();
         requestsSent = new ArrayList<>();
+        devices = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String city, String gender, String email, Date birthDate, String phoneNumber, String profilePicture) {
@@ -48,6 +50,7 @@ public class User {
         friendIds = new ArrayList<>();
         friendRequests = new ArrayList<>();
         requestsSent = new ArrayList<>();
+        devices = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -136,6 +139,14 @@ public class User {
 
     public void setRequestsSent(ArrayList<String> requestsSent) {
         this.requestsSent = requestsSent;
+    }
+
+    public ArrayList<String> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(ArrayList<String> devices) {
+        this.devices = devices;
     }
 
 }
