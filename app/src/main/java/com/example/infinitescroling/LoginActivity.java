@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private int CREAR_CUENTA = 1;
     private int RC_SIGN_IN = 7;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private ISFirebaseManager firebaseManager = ISFirebaseManager.getInstance();
     private CollectionReference dbUsers = FirebaseFirestore.getInstance().collection("users");
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        firebaseManager.setSQLiteDB(this.openOrCreateDatabase("Local Data", MODE_PRIVATE, null));
 
         int deleted = getIntent().getIntExtra("deleted",0);
 
